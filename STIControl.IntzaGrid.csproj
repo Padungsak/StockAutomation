@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{A6295C5D-0674-44E7-9B9C-4B55BC0B7B95}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>STIControl.IntzaGrid</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="-Module-{B8D68750-D930-48C6-B4DE-E4E57D0E8722}.cs" />
+    <Compile Include="hSMemhKuKpwQGkHmvF\Gpbicqb1VlGm3Tejgv.cs" />
+    <Compile Include="IV976NPlHTZv2kNlS7\bGI4cmd7nhFykQkVM0.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="STIControl.CustomGrid\CustomGridActionList.cs" />
+    <Compile Include="STIControl.CustomGrid\IItemContainer.cs" />
+    <Compile Include="STIControl.CustomGrid\IntzaCustomGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="STIControl.CustomGrid\IntzaCustomGridDesigner.cs" />
+    <Compile Include="STIControl.CustomGrid\ItemGrid.cs" />
+    <Compile Include="STIControl.CustomGrid\ItemGridMouseEventArgs.cs" />
+    <Compile Include="STIControl.CustomGrid\ItemType.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\ColumnItem.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\ExpandGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="STIControl.ExpandTableGrid\FieldItem.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\FieldItemDragEventArgs.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\GridActionList2.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\IColumnContainer2.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\RecordItem.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\SpeedTableGridDesigner.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\SubRecordItem.cs" />
+    <Compile Include="STIControl.ExpandTableGrid\TableMouseEventArgs.cs" />
+    <Compile Include="STIControl.SortTableGrid\ColumnItem.cs" />
+    <Compile Include="STIControl.SortTableGrid\FieldItem.cs" />
+    <Compile Include="STIControl.SortTableGrid\FieldItemDragEventArgs.cs" />
+    <Compile Include="STIControl.SortTableGrid\GridActionList.cs" />
+    <Compile Include="STIControl.SortTableGrid\IColumnContainer.cs" />
+    <Compile Include="STIControl.SortTableGrid\RecordItem.cs" />
+    <Compile Include="STIControl.SortTableGrid\SortGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="STIControl.SortTableGrid\SortTableGridDesigner.cs" />
+    <Compile Include="STIControl.SortTableGrid\TableMouseEventArgs.cs" />
+    <Compile Include="STIControl\BitmapRegion.cs" />
+    <Compile Include="STIControl\DragDropManager.cs" />
+    <Compile Include="STIControl\DragItemData.cs" />
+    <Compile Include="STIControl\FlakeDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="STIControl\FormatType.cs" />
+    <Compile Include="STIControl\FormatUtil.cs" />
+    <Compile Include="STIControl\HScrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="STIControl\IntzaBaseItem.cs" />
+    <Compile Include="STIControl\IntzaGridHitTestInfo.cs" />
+    <Compile Include="STIControl\Resource.cs" />
+    <Compile Include="STIControl\Scrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="STIControl\ScrollbarControlDesigner.cs" />
+    <Compile Include="STIControl\SortType.cs" />
+    <Compile Include="STIControl\Win32DragHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="aR3nbf8dQp2feLmk31.lSfgApatkdxsVcGcrktoFd.resources" />
+    <EmbeddedResource Include="aR3nbf8dQp2feLmk31.rFohpatkdxsVcxLfJKhM7.resources" />
+    <EmbeddedResource Include="STIControl.CustomGrid\IntzaCustomGrid.resources" />
+    <EmbeddedResource Include="STIControl.ExpandTableGrid\ExpandGrid.resources" />
+    <EmbeddedResource Include="STIControl.SortTableGrid\SortGrid.resources" />
+    <EmbeddedResource Include="STIControl\FlakeDlg.resources" />
+    <EmbeddedResource Include="STIControl\HScrollbar.resources" />
+    <EmbeddedResource Include="STIControl\Resource.resources" />
+    <EmbeddedResource Include="STIControl\Scrollbar.resources" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

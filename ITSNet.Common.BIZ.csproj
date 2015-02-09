@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{A9E8AA91-8171-4731-A336-05679E338BE0}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>ITSNet.Common.BIZ</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="-Module-{BB094216-E9C0-4033-BCAB-CBC54A1C7FDD}.cs" />
+    <Compile Include="hSMemhKuKpwQGkHmvF\Gpbicqb1VlGm3Tejgv.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\AlertConstant.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\CancelStopOrderCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\MailAlertCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\OrderAlertCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\PortAlertCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\StockAlertCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\StopOrderCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\StopOrderConstant.cs" />
+    <Compile Include="ITSNet.Common.BIZ.AlertMessage\TechnicalAlertCommand.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\CTCIFormatConfiguration.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\BCMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\BU10MessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\CA8MessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\IUEMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\IUMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\LSMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\MIMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\POMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\SDMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\SSMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\STMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\SUMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\TCFMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage.TFEX\TPMessageTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\AAMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\BAMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\BCTextMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\BroadCastOrderMessageClient.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\COMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\DGWOrderReplyMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\IEMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\ISMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\LOMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\LSAccumulate.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\MarketInfo.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\NHMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\OLMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\OrderInfoClient.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\OrderReplyMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\OrderTFEXInfoClient.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\OSMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\PDMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\POMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\RealtimeConstant.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\RealtimeConstantTFEX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\SCMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\SSMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Configuration\ITSNet.Common.BIZ.RealtimeMessage\TPMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\AAMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\BAMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\BCTextMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\COMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\IEMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\ISMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\LOMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\LSAccumulate.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\MarketInfo.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\NHMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\OLMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\PDMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\POMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\SCMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\SSMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.RealtimeMessage_New\TPMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ.TAX\AutoTAX.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Tunnel\Echo.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Tunnel\EchoReply.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Tunnel\KickClient.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Tunnel\Register.cs" />
+    <Compile Include="ITSNet.Common.BIZ.Tunnel\Unregister.cs" />
+    <Compile Include="ITSNet.Common.BIZ\AfterCloseOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\ApproveOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\AssetBlockFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\AutoTManager.cs" />
+    <Compile Include="ITSNet.Common.BIZ\CancelOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\ChangeOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\ConfirmOfOrderCancelMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\ConfirmOfOrderChangeMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\CoreBranchMessageService.cs" />
+    <Compile Include="ITSNet.Common.BIZ\CrossingDealConfirmMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\CTCIOpcode.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DealConfirmationMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DGWCancelOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DGWCrossingDealConfirmMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DGWDealConfirmationMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DGWNewOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\DisApproveOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\ExerciseOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\FormatUtil.cs" />
+    <Compile Include="ITSNet.Common.BIZ\IBroadcastMessage.cs" />
+    <Compile Include="ITSNet.Common.BIZ\IFormatConfiguration.cs" />
+    <Compile Include="ITSNet.Common.BIZ\InternalOrderMMS.cs" />
+    <Compile Include="ITSNet.Common.BIZ\MessageAttribute.cs" />
+    <Compile Include="ITSNet.Common.BIZ\MessageFormatElement.cs" />
+    <Compile Include="ITSNet.Common.BIZ\MessageFormatElementCollection.cs" />
+    <Compile Include="ITSNet.Common.BIZ\NewOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\OrderConfirmationMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\OrderConstant.cs" />
+    <Compile Include="ITSNet.Common.BIZ\OrderMessageType.cs" />
+    <Compile Include="ITSNet.Common.BIZ\OrderReplyCode.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttAcknowledgmentMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttDealCancelReplyMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttDealCancelRequestMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttDealConfrimMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttDealReplyMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttSendApproveMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttSendAprroveCancelMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttSendCancelRequestMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\PuttSendNewOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\RejectOrderMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\RNMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\RPMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\RQMessageFormat.cs" />
+    <Compile Include="ITSNet.Common.BIZ\TfexAssetBlockFormat.cs" />
+    <Compile Include="IV976NPlHTZv2kNlS7\bGI4cmd7nhFykQkVM0.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="aR3nbf8dQp2feLmk31.lSfgApatkdxsVcGcrktoFd.resources" />
+    <EmbeddedResource Include="aR3nbf8dQp2feLmk31.rFohpatkdxsVcxLfJKhM7.resources" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
