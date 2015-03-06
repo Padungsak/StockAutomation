@@ -14,40 +14,6 @@ namespace i2TradePlus
 		private IContainer components = null;
 		private CefWebBrowser cefWebBrowser1;
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			this.cefWebBrowser1 = new CefWebBrowser();
-			base.SuspendLayout();
-			this.cefWebBrowser1.Location = new Point(12, 12);
-			this.cefWebBrowser1.Name = "cefWebBrowser1";
-			this.cefWebBrowser1.Size = new Size(152, 93);
-			this.cefWebBrowser1.TabIndex = 55;
-			this.cefWebBrowser1.Text = "cefWebBrowser1";
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			base.ClientSize = new Size(284, 262);
-			base.Controls.Add(this.cefWebBrowser1);
-			base.Name = "frmEservice";
-			this.Text = "frmEservice";
-			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmEservice_IDoShownDelay);
-			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmEservice_IDoLoadData);
-			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmEservice_IDoFontChanged);
-			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmEservice_IDoCustomSizeChanged);
-			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmEservice_IDoReActivated);
-			base.Controls.SetChildIndex(this.cefWebBrowser1, 0);
-			base.ResumeLayout(false);
-			base.PerformLayout();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
 		public frmEservice()
 		{
 			this.InitializeComponent();
@@ -170,6 +136,40 @@ namespace i2TradePlus
 				base.Show();
 				this.LoadEservice();
 			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			this.cefWebBrowser1 = new CefWebBrowser();
+			base.SuspendLayout();
+			this.cefWebBrowser1.Location = new Point(12, 12);
+			this.cefWebBrowser1.Name = "cefWebBrowser1";
+			this.cefWebBrowser1.Size = new Size(152, 93);
+			this.cefWebBrowser1.TabIndex = 55;
+			this.cefWebBrowser1.Text = "cefWebBrowser1";
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			base.ClientSize = new Size(284, 262);
+			base.Controls.Add(this.cefWebBrowser1);
+			base.Name = "frmEservice";
+			this.Text = "frmEservice";
+			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmEservice_IDoShownDelay);
+			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmEservice_IDoLoadData);
+			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmEservice_IDoFontChanged);
+			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmEservice_IDoCustomSizeChanged);
+			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmEservice_IDoReActivated);
+			base.Controls.SetChildIndex(this.cefWebBrowser1, 0);
+			base.ResumeLayout(false);
+			base.PerformLayout();
 		}
 	}
 }

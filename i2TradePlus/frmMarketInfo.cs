@@ -1482,7 +1482,7 @@ namespace i2TradePlus
 			itemGrid.FieldType = ItemType.Label;
 			itemGrid.FontColor = Color.LightGray;
 			itemGrid.FontStyle = FontStyle.Regular;
-			itemGrid.Height = 1;
+			itemGrid.Height = 1f;
 			itemGrid.IsBlink = 0;
 			itemGrid.Name = "lbBoard";
 			itemGrid.Text = "Board";
@@ -1490,7 +1490,7 @@ namespace i2TradePlus
 			itemGrid.Visible = true;
 			itemGrid.Width = 20;
 			itemGrid.X = 0;
-			itemGrid.Y = 0;
+			itemGrid.Y = 0f;
 			itemGrid2.AdjustFontSize = 0f;
 			itemGrid2.Alignment = StringAlignment.Center;
 			itemGrid2.BackColor = Color.FromArgb(45, 45, 45);
@@ -1498,7 +1498,7 @@ namespace i2TradePlus
 			itemGrid2.FieldType = ItemType.Label;
 			itemGrid2.FontColor = Color.LightGray;
 			itemGrid2.FontStyle = FontStyle.Regular;
-			itemGrid2.Height = 1;
+			itemGrid2.Height = 1f;
 			itemGrid2.IsBlink = 0;
 			itemGrid2.Name = "lbVolume";
 			itemGrid2.Text = "Volume";
@@ -1506,7 +1506,7 @@ namespace i2TradePlus
 			itemGrid2.Visible = true;
 			itemGrid2.Width = 27;
 			itemGrid2.X = 20;
-			itemGrid2.Y = 0;
+			itemGrid2.Y = 0f;
 			itemGrid3.AdjustFontSize = 0f;
 			itemGrid3.Alignment = StringAlignment.Center;
 			itemGrid3.BackColor = Color.FromArgb(45, 45, 45);
@@ -1514,7 +1514,7 @@ namespace i2TradePlus
 			itemGrid3.FieldType = ItemType.Label;
 			itemGrid3.FontColor = Color.LightGray;
 			itemGrid3.FontStyle = FontStyle.Regular;
-			itemGrid3.Height = 1;
+			itemGrid3.Height = 1f;
 			itemGrid3.IsBlink = 0;
 			itemGrid3.Name = "lbValue";
 			itemGrid3.Text = "Value";
@@ -1522,7 +1522,7 @@ namespace i2TradePlus
 			itemGrid3.Visible = true;
 			itemGrid3.Width = 33;
 			itemGrid3.X = 47;
-			itemGrid3.Y = 0;
+			itemGrid3.Y = 0f;
 			itemGrid4.AdjustFontSize = 0f;
 			itemGrid4.Alignment = StringAlignment.Center;
 			itemGrid4.BackColor = Color.FromArgb(45, 45, 45);
@@ -1530,7 +1530,7 @@ namespace i2TradePlus
 			itemGrid4.FieldType = ItemType.Text;
 			itemGrid4.FontColor = Color.LightGray;
 			itemGrid4.FontStyle = FontStyle.Regular;
-			itemGrid4.Height = 1;
+			itemGrid4.Height = 1f;
 			itemGrid4.IsBlink = 0;
 			itemGrid4.Name = "lbPvalue";
 			itemGrid4.Text = "%Value";
@@ -1538,7 +1538,7 @@ namespace i2TradePlus
 			itemGrid4.Visible = true;
 			itemGrid4.Width = 20;
 			itemGrid4.X = 80;
-			itemGrid4.Y = 0;
+			itemGrid4.Y = 0f;
 			itemGrid5.AdjustFontSize = 0f;
 			itemGrid5.Alignment = StringAlignment.Near;
 			itemGrid5.BackColor = Color.Black;
@@ -1546,7 +1546,7 @@ namespace i2TradePlus
 			itemGrid5.FieldType = ItemType.Label;
 			itemGrid5.FontColor = Color.Gainsboro;
 			itemGrid5.FontStyle = FontStyle.Regular;
-			itemGrid5.Height = 1;
+			itemGrid5.Height = 1f;
 			itemGrid5.IsBlink = 0;
 			itemGrid5.Name = "main_label";
 			itemGrid5.Text = "Main";
@@ -1554,7 +1554,7 @@ namespace i2TradePlus
 			itemGrid5.Visible = true;
 			itemGrid5.Width = 20;
 			itemGrid5.X = 0;
-			itemGrid5.Y = 1;
+			itemGrid5.Y = 1f;
 			itemGrid6.AdjustFontSize = 0f;
 			itemGrid6.Alignment = StringAlignment.Far;
 			itemGrid6.BackColor = Color.Black;
@@ -1562,7 +1562,7 @@ namespace i2TradePlus
 			itemGrid6.FieldType = ItemType.Text;
 			itemGrid6.FontColor = Color.Yellow;
 			itemGrid6.FontStyle = FontStyle.Regular;
-			itemGrid6.Height = 1;
+			itemGrid6.Height = 1f;
 			itemGrid6.IsBlink = 0;
 			itemGrid6.Name = "main_volume_text";
 			itemGrid6.Text = "";
@@ -1570,7 +1570,7 @@ namespace i2TradePlus
 			itemGrid6.Visible = true;
 			itemGrid6.Width = 27;
 			itemGrid6.X = 20;
-			itemGrid6.Y = 1;
+			itemGrid6.Y = 1f;
 			itemGrid7.AdjustFontSize = 0f;
 			itemGrid7.Alignment = StringAlignment.Far;
 			itemGrid7.BackColor = Color.Black;
@@ -1578,7 +1578,7 @@ namespace i2TradePlus
 			itemGrid7.FieldType = ItemType.Text;
 			itemGrid7.FontColor = Color.Yellow;
 			itemGrid7.FontStyle = FontStyle.Regular;
-			itemGrid7.Height = 1;
+			itemGrid7.Height = 1f;
 			itemGrid7.IsBlink = 0;
 			itemGrid7.Name = "main_value_text";
 			itemGrid7.Text = "";
@@ -1586,7 +1586,7 @@ namespace i2TradePlus
 			itemGrid7.Visible = true;
 			itemGrid7.Width = 33;
 			itemGrid7.X = 47;
-			itemGrid7.Y = 1;
+			itemGrid7.Y = 1f;
 			itemGrid8.AdjustFontSize = 0f;
 			itemGrid8.Alignment = StringAlignment.Far;
 			itemGrid8.BackColor = Color.Black;
@@ -1594,7 +1594,7 @@ namespace i2TradePlus
 			itemGrid8.FieldType = ItemType.Text;
 			itemGrid8.FontColor = Color.Yellow;
 			itemGrid8.FontStyle = FontStyle.Regular;
-			itemGrid8.Height = 1;
+			itemGrid8.Height = 1f;
 			itemGrid8.IsBlink = 0;
 			itemGrid8.Name = "main_pvalue_text";
 			itemGrid8.Text = "";
@@ -1602,7 +1602,7 @@ namespace i2TradePlus
 			itemGrid8.Visible = true;
 			itemGrid8.Width = 20;
 			itemGrid8.X = 80;
-			itemGrid8.Y = 1;
+			itemGrid8.Y = 1f;
 			itemGrid9.AdjustFontSize = 0f;
 			itemGrid9.Alignment = StringAlignment.Near;
 			itemGrid9.BackColor = Color.Black;
@@ -1610,7 +1610,7 @@ namespace i2TradePlus
 			itemGrid9.FieldType = ItemType.Label;
 			itemGrid9.FontColor = Color.Gainsboro;
 			itemGrid9.FontStyle = FontStyle.Regular;
-			itemGrid9.Height = 1;
+			itemGrid9.Height = 1f;
 			itemGrid9.IsBlink = 0;
 			itemGrid9.Name = "odd_label";
 			itemGrid9.Text = "OddLot";
@@ -1618,7 +1618,7 @@ namespace i2TradePlus
 			itemGrid9.Visible = true;
 			itemGrid9.Width = 20;
 			itemGrid9.X = 0;
-			itemGrid9.Y = 2;
+			itemGrid9.Y = 2f;
 			itemGrid10.AdjustFontSize = 0f;
 			itemGrid10.Alignment = StringAlignment.Far;
 			itemGrid10.BackColor = Color.Black;
@@ -1626,7 +1626,7 @@ namespace i2TradePlus
 			itemGrid10.FieldType = ItemType.Text;
 			itemGrid10.FontColor = Color.Yellow;
 			itemGrid10.FontStyle = FontStyle.Regular;
-			itemGrid10.Height = 1;
+			itemGrid10.Height = 1f;
 			itemGrid10.IsBlink = 0;
 			itemGrid10.Name = "odd_volume_text";
 			itemGrid10.Text = "";
@@ -1634,7 +1634,7 @@ namespace i2TradePlus
 			itemGrid10.Visible = true;
 			itemGrid10.Width = 27;
 			itemGrid10.X = 20;
-			itemGrid10.Y = 2;
+			itemGrid10.Y = 2f;
 			itemGrid11.AdjustFontSize = 0f;
 			itemGrid11.Alignment = StringAlignment.Far;
 			itemGrid11.BackColor = Color.Black;
@@ -1642,7 +1642,7 @@ namespace i2TradePlus
 			itemGrid11.FieldType = ItemType.Text;
 			itemGrid11.FontColor = Color.Yellow;
 			itemGrid11.FontStyle = FontStyle.Regular;
-			itemGrid11.Height = 1;
+			itemGrid11.Height = 1f;
 			itemGrid11.IsBlink = 0;
 			itemGrid11.Name = "odd_value_text";
 			itemGrid11.Text = "";
@@ -1650,7 +1650,7 @@ namespace i2TradePlus
 			itemGrid11.Visible = true;
 			itemGrid11.Width = 33;
 			itemGrid11.X = 47;
-			itemGrid11.Y = 2;
+			itemGrid11.Y = 2f;
 			itemGrid12.AdjustFontSize = 0f;
 			itemGrid12.Alignment = StringAlignment.Far;
 			itemGrid12.BackColor = Color.Black;
@@ -1658,7 +1658,7 @@ namespace i2TradePlus
 			itemGrid12.FieldType = ItemType.Text;
 			itemGrid12.FontColor = Color.Yellow;
 			itemGrid12.FontStyle = FontStyle.Regular;
-			itemGrid12.Height = 1;
+			itemGrid12.Height = 1f;
 			itemGrid12.IsBlink = 0;
 			itemGrid12.Name = "odd_pvalue_text";
 			itemGrid12.Text = "";
@@ -1666,7 +1666,7 @@ namespace i2TradePlus
 			itemGrid12.Visible = true;
 			itemGrid12.Width = 20;
 			itemGrid12.X = 80;
-			itemGrid12.Y = 2;
+			itemGrid12.Y = 2f;
 			itemGrid13.AdjustFontSize = 0f;
 			itemGrid13.Alignment = StringAlignment.Near;
 			itemGrid13.BackColor = Color.Black;
@@ -1674,7 +1674,7 @@ namespace i2TradePlus
 			itemGrid13.FieldType = ItemType.Label;
 			itemGrid13.FontColor = Color.Gainsboro;
 			itemGrid13.FontStyle = FontStyle.Regular;
-			itemGrid13.Height = 1;
+			itemGrid13.Height = 1f;
 			itemGrid13.IsBlink = 0;
 			itemGrid13.Name = "big_label";
 			itemGrid13.Text = "BigLot";
@@ -1682,7 +1682,7 @@ namespace i2TradePlus
 			itemGrid13.Visible = true;
 			itemGrid13.Width = 20;
 			itemGrid13.X = 0;
-			itemGrid13.Y = 3;
+			itemGrid13.Y = 3f;
 			itemGrid14.AdjustFontSize = 0f;
 			itemGrid14.Alignment = StringAlignment.Far;
 			itemGrid14.BackColor = Color.Black;
@@ -1690,7 +1690,7 @@ namespace i2TradePlus
 			itemGrid14.FieldType = ItemType.Text;
 			itemGrid14.FontColor = Color.Yellow;
 			itemGrid14.FontStyle = FontStyle.Regular;
-			itemGrid14.Height = 1;
+			itemGrid14.Height = 1f;
 			itemGrid14.IsBlink = 0;
 			itemGrid14.Name = "big_volume_text";
 			itemGrid14.Text = "";
@@ -1698,7 +1698,7 @@ namespace i2TradePlus
 			itemGrid14.Visible = true;
 			itemGrid14.Width = 27;
 			itemGrid14.X = 20;
-			itemGrid14.Y = 3;
+			itemGrid14.Y = 3f;
 			itemGrid15.AdjustFontSize = 0f;
 			itemGrid15.Alignment = StringAlignment.Far;
 			itemGrid15.BackColor = Color.Black;
@@ -1706,7 +1706,7 @@ namespace i2TradePlus
 			itemGrid15.FieldType = ItemType.Text;
 			itemGrid15.FontColor = Color.Yellow;
 			itemGrid15.FontStyle = FontStyle.Regular;
-			itemGrid15.Height = 1;
+			itemGrid15.Height = 1f;
 			itemGrid15.IsBlink = 0;
 			itemGrid15.Name = "big_value_text";
 			itemGrid15.Text = "";
@@ -1714,7 +1714,7 @@ namespace i2TradePlus
 			itemGrid15.Visible = true;
 			itemGrid15.Width = 33;
 			itemGrid15.X = 47;
-			itemGrid15.Y = 3;
+			itemGrid15.Y = 3f;
 			itemGrid16.AdjustFontSize = 0f;
 			itemGrid16.Alignment = StringAlignment.Far;
 			itemGrid16.BackColor = Color.Black;
@@ -1722,7 +1722,7 @@ namespace i2TradePlus
 			itemGrid16.FieldType = ItemType.Text;
 			itemGrid16.FontColor = Color.Yellow;
 			itemGrid16.FontStyle = FontStyle.Regular;
-			itemGrid16.Height = 1;
+			itemGrid16.Height = 1f;
 			itemGrid16.IsBlink = 0;
 			itemGrid16.Name = "big_pvalue_text";
 			itemGrid16.Text = "";
@@ -1730,7 +1730,7 @@ namespace i2TradePlus
 			itemGrid16.Visible = true;
 			itemGrid16.Width = 20;
 			itemGrid16.X = 80;
-			itemGrid16.Y = 3;
+			itemGrid16.Y = 3f;
 			itemGrid17.AdjustFontSize = 0f;
 			itemGrid17.Alignment = StringAlignment.Near;
 			itemGrid17.BackColor = Color.Black;
@@ -1738,7 +1738,7 @@ namespace i2TradePlus
 			itemGrid17.FieldType = ItemType.Label;
 			itemGrid17.FontColor = Color.Gainsboro;
 			itemGrid17.FontStyle = FontStyle.Regular;
-			itemGrid17.Height = 1;
+			itemGrid17.Height = 1f;
 			itemGrid17.IsBlink = 0;
 			itemGrid17.Name = "foreign_label";
 			itemGrid17.Text = "Foreign";
@@ -1746,7 +1746,7 @@ namespace i2TradePlus
 			itemGrid17.Visible = true;
 			itemGrid17.Width = 20;
 			itemGrid17.X = 0;
-			itemGrid17.Y = 4;
+			itemGrid17.Y = 4f;
 			itemGrid18.AdjustFontSize = 0f;
 			itemGrid18.Alignment = StringAlignment.Far;
 			itemGrid18.BackColor = Color.Black;
@@ -1754,7 +1754,7 @@ namespace i2TradePlus
 			itemGrid18.FieldType = ItemType.Text;
 			itemGrid18.FontColor = Color.Yellow;
 			itemGrid18.FontStyle = FontStyle.Regular;
-			itemGrid18.Height = 1;
+			itemGrid18.Height = 1f;
 			itemGrid18.IsBlink = 0;
 			itemGrid18.Name = "foreign_volume_text";
 			itemGrid18.Text = "";
@@ -1762,7 +1762,7 @@ namespace i2TradePlus
 			itemGrid18.Visible = true;
 			itemGrid18.Width = 27;
 			itemGrid18.X = 20;
-			itemGrid18.Y = 4;
+			itemGrid18.Y = 4f;
 			itemGrid19.AdjustFontSize = 0f;
 			itemGrid19.Alignment = StringAlignment.Far;
 			itemGrid19.BackColor = Color.Black;
@@ -1770,7 +1770,7 @@ namespace i2TradePlus
 			itemGrid19.FieldType = ItemType.Text;
 			itemGrid19.FontColor = Color.Yellow;
 			itemGrid19.FontStyle = FontStyle.Regular;
-			itemGrid19.Height = 1;
+			itemGrid19.Height = 1f;
 			itemGrid19.IsBlink = 0;
 			itemGrid19.Name = "foreign_value_text";
 			itemGrid19.Text = "";
@@ -1778,7 +1778,7 @@ namespace i2TradePlus
 			itemGrid19.Visible = true;
 			itemGrid19.Width = 33;
 			itemGrid19.X = 47;
-			itemGrid19.Y = 4;
+			itemGrid19.Y = 4f;
 			itemGrid20.AdjustFontSize = 0f;
 			itemGrid20.Alignment = StringAlignment.Far;
 			itemGrid20.BackColor = Color.Black;
@@ -1786,7 +1786,7 @@ namespace i2TradePlus
 			itemGrid20.FieldType = ItemType.Text;
 			itemGrid20.FontColor = Color.Yellow;
 			itemGrid20.FontStyle = FontStyle.Regular;
-			itemGrid20.Height = 1;
+			itemGrid20.Height = 1f;
 			itemGrid20.IsBlink = 0;
 			itemGrid20.Name = "foreign_pvalue_text";
 			itemGrid20.Text = "";
@@ -1794,7 +1794,7 @@ namespace i2TradePlus
 			itemGrid20.Visible = true;
 			itemGrid20.Width = 20;
 			itemGrid20.X = 80;
-			itemGrid20.Y = 4;
+			itemGrid20.Y = 4f;
 			itemGrid21.AdjustFontSize = 0f;
 			itemGrid21.Alignment = StringAlignment.Near;
 			itemGrid21.BackColor = Color.Black;
@@ -1802,7 +1802,7 @@ namespace i2TradePlus
 			itemGrid21.FieldType = ItemType.Label2;
 			itemGrid21.FontColor = Color.LightGray;
 			itemGrid21.FontStyle = FontStyle.Regular;
-			itemGrid21.Height = 1;
+			itemGrid21.Height = 1f;
 			itemGrid21.IsBlink = 0;
 			itemGrid21.Name = "tick_label";
 			itemGrid21.Text = "Tick";
@@ -1810,7 +1810,7 @@ namespace i2TradePlus
 			itemGrid21.Visible = true;
 			itemGrid21.Width = 11;
 			itemGrid21.X = 0;
-			itemGrid21.Y = 10;
+			itemGrid21.Y = 10f;
 			itemGrid22.AdjustFontSize = 0f;
 			itemGrid22.Alignment = StringAlignment.Near;
 			itemGrid22.BackColor = Color.Black;
@@ -1818,7 +1818,7 @@ namespace i2TradePlus
 			itemGrid22.FieldType = ItemType.Text;
 			itemGrid22.FontColor = Color.White;
 			itemGrid22.FontStyle = FontStyle.Regular;
-			itemGrid22.Height = 1;
+			itemGrid22.Height = 1f;
 			itemGrid22.IsBlink = 0;
 			itemGrid22.Name = "tick_text";
 			itemGrid22.Text = "";
@@ -1826,7 +1826,7 @@ namespace i2TradePlus
 			itemGrid22.Visible = true;
 			itemGrid22.Width = 15;
 			itemGrid22.X = 12;
-			itemGrid22.Y = 10;
+			itemGrid22.Y = 10f;
 			itemGrid23.AdjustFontSize = 0f;
 			itemGrid23.Alignment = StringAlignment.Near;
 			itemGrid23.BackColor = Color.Black;
@@ -1834,7 +1834,7 @@ namespace i2TradePlus
 			itemGrid23.FieldType = ItemType.Label2;
 			itemGrid23.FontColor = Color.LightGray;
 			itemGrid23.FontStyle = FontStyle.Regular;
-			itemGrid23.Height = 1;
+			itemGrid23.Height = 1f;
 			itemGrid23.IsBlink = 0;
 			itemGrid23.Name = "trin_label";
 			itemGrid23.Text = "Trin";
@@ -1842,7 +1842,7 @@ namespace i2TradePlus
 			itemGrid23.Visible = true;
 			itemGrid23.Width = 12;
 			itemGrid23.X = 30;
-			itemGrid23.Y = 10;
+			itemGrid23.Y = 10f;
 			itemGrid24.AdjustFontSize = 0f;
 			itemGrid24.Alignment = StringAlignment.Near;
 			itemGrid24.BackColor = Color.Black;
@@ -1850,7 +1850,7 @@ namespace i2TradePlus
 			itemGrid24.FieldType = ItemType.Text;
 			itemGrid24.FontColor = Color.White;
 			itemGrid24.FontStyle = FontStyle.Regular;
-			itemGrid24.Height = 1;
+			itemGrid24.Height = 1f;
 			itemGrid24.IsBlink = 0;
 			itemGrid24.Name = "trin_text";
 			itemGrid24.Text = "";
@@ -1858,7 +1858,7 @@ namespace i2TradePlus
 			itemGrid24.Visible = true;
 			itemGrid24.Width = 55;
 			itemGrid24.X = 43;
-			itemGrid24.Y = 10;
+			itemGrid24.Y = 10f;
 			itemGrid25.AdjustFontSize = 0f;
 			itemGrid25.Alignment = StringAlignment.Near;
 			itemGrid25.BackColor = Color.Black;
@@ -1866,7 +1866,7 @@ namespace i2TradePlus
 			itemGrid25.FieldType = ItemType.Label2;
 			itemGrid25.FontColor = Color.LightGray;
 			itemGrid25.FontStyle = FontStyle.Regular;
-			itemGrid25.Height = 1;
+			itemGrid25.Height = 1f;
 			itemGrid25.IsBlink = 0;
 			itemGrid25.Name = "up_label";
 			itemGrid25.Text = "Up";
@@ -1874,7 +1874,7 @@ namespace i2TradePlus
 			itemGrid25.Visible = true;
 			itemGrid25.Width = 11;
 			itemGrid25.X = 0;
-			itemGrid25.Y = 9;
+			itemGrid25.Y = 9f;
 			itemGrid26.AdjustFontSize = 0f;
 			itemGrid26.Alignment = StringAlignment.Near;
 			itemGrid26.BackColor = Color.Black;
@@ -1882,7 +1882,7 @@ namespace i2TradePlus
 			itemGrid26.FieldType = ItemType.Text;
 			itemGrid26.FontColor = Color.Lime;
 			itemGrid26.FontStyle = FontStyle.Regular;
-			itemGrid26.Height = 1;
+			itemGrid26.Height = 1f;
 			itemGrid26.IsBlink = 0;
 			itemGrid26.Name = "up_text";
 			itemGrid26.Text = "";
@@ -1890,7 +1890,7 @@ namespace i2TradePlus
 			itemGrid26.Visible = true;
 			itemGrid26.Width = 15;
 			itemGrid26.X = 12;
-			itemGrid26.Y = 9;
+			itemGrid26.Y = 9f;
 			itemGrid27.AdjustFontSize = 0f;
 			itemGrid27.Alignment = StringAlignment.Near;
 			itemGrid27.BackColor = Color.Black;
@@ -1898,7 +1898,7 @@ namespace i2TradePlus
 			itemGrid27.FieldType = ItemType.Label2;
 			itemGrid27.FontColor = Color.LightGray;
 			itemGrid27.FontStyle = FontStyle.Regular;
-			itemGrid27.Height = 1;
+			itemGrid27.Height = 1f;
 			itemGrid27.IsBlink = 0;
 			itemGrid27.Name = "down_label";
 			itemGrid27.Text = "Down";
@@ -1906,7 +1906,7 @@ namespace i2TradePlus
 			itemGrid27.Visible = true;
 			itemGrid27.Width = 12;
 			itemGrid27.X = 30;
-			itemGrid27.Y = 9;
+			itemGrid27.Y = 9f;
 			itemGrid28.AdjustFontSize = 0f;
 			itemGrid28.Alignment = StringAlignment.Near;
 			itemGrid28.BackColor = Color.Black;
@@ -1914,7 +1914,7 @@ namespace i2TradePlus
 			itemGrid28.FieldType = ItemType.Text;
 			itemGrid28.FontColor = Color.Red;
 			itemGrid28.FontStyle = FontStyle.Regular;
-			itemGrid28.Height = 1;
+			itemGrid28.Height = 1f;
 			itemGrid28.IsBlink = 0;
 			itemGrid28.Name = "down_text";
 			itemGrid28.Text = "";
@@ -1922,7 +1922,7 @@ namespace i2TradePlus
 			itemGrid28.Visible = true;
 			itemGrid28.Width = 15;
 			itemGrid28.X = 43;
-			itemGrid28.Y = 9;
+			itemGrid28.Y = 9f;
 			itemGrid29.AdjustFontSize = 0f;
 			itemGrid29.Alignment = StringAlignment.Near;
 			itemGrid29.BackColor = Color.Black;
@@ -1930,7 +1930,7 @@ namespace i2TradePlus
 			itemGrid29.FieldType = ItemType.Label2;
 			itemGrid29.FontColor = Color.LightGray;
 			itemGrid29.FontStyle = FontStyle.Regular;
-			itemGrid29.Height = 1;
+			itemGrid29.Height = 1f;
 			itemGrid29.IsBlink = 0;
 			itemGrid29.Name = "nochange_label";
 			itemGrid29.Text = "UnChg.";
@@ -1938,7 +1938,7 @@ namespace i2TradePlus
 			itemGrid29.Visible = true;
 			itemGrid29.Width = 15;
 			itemGrid29.X = 60;
-			itemGrid29.Y = 9;
+			itemGrid29.Y = 9f;
 			itemGrid30.AdjustFontSize = 0f;
 			itemGrid30.Alignment = StringAlignment.Near;
 			itemGrid30.BackColor = Color.Black;
@@ -1946,7 +1946,7 @@ namespace i2TradePlus
 			itemGrid30.FieldType = ItemType.Text;
 			itemGrid30.FontColor = Color.Yellow;
 			itemGrid30.FontStyle = FontStyle.Regular;
-			itemGrid30.Height = 1;
+			itemGrid30.Height = 1f;
 			itemGrid30.IsBlink = 0;
 			itemGrid30.Name = "nochange_text";
 			itemGrid30.Text = "";
@@ -1954,7 +1954,7 @@ namespace i2TradePlus
 			itemGrid30.Visible = true;
 			itemGrid30.Width = 13;
 			itemGrid30.X = 75;
-			itemGrid30.Y = 9;
+			itemGrid30.Y = 9f;
 			itemGrid31.AdjustFontSize = 0f;
 			itemGrid31.Alignment = StringAlignment.Near;
 			itemGrid31.BackColor = Color.Black;
@@ -1962,7 +1962,7 @@ namespace i2TradePlus
 			itemGrid31.FieldType = ItemType.Label2;
 			itemGrid31.FontColor = Color.LightGray;
 			itemGrid31.FontStyle = FontStyle.Regular;
-			itemGrid31.Height = 1;
+			itemGrid31.Height = 1f;
 			itemGrid31.IsBlink = 0;
 			itemGrid31.Name = "upvolume_label";
 			itemGrid31.Text = "Up Vol";
@@ -1970,7 +1970,7 @@ namespace i2TradePlus
 			itemGrid31.Visible = true;
 			itemGrid31.Width = 25;
 			itemGrid31.X = 0;
-			itemGrid31.Y = 6;
+			itemGrid31.Y = 6f;
 			itemGrid32.AdjustFontSize = 0f;
 			itemGrid32.Alignment = StringAlignment.Far;
 			itemGrid32.BackColor = Color.Black;
@@ -1978,7 +1978,7 @@ namespace i2TradePlus
 			itemGrid32.FieldType = ItemType.Text;
 			itemGrid32.FontColor = Color.Lime;
 			itemGrid32.FontStyle = FontStyle.Regular;
-			itemGrid32.Height = 1;
+			itemGrid32.Height = 1f;
 			itemGrid32.IsBlink = 0;
 			itemGrid32.Name = "upvolume_text";
 			itemGrid32.Text = "";
@@ -1986,7 +1986,7 @@ namespace i2TradePlus
 			itemGrid32.Visible = true;
 			itemGrid32.Width = 30;
 			itemGrid32.X = 25;
-			itemGrid32.Y = 6;
+			itemGrid32.Y = 6f;
 			itemGrid33.AdjustFontSize = 0f;
 			itemGrid33.Alignment = StringAlignment.Near;
 			itemGrid33.BackColor = Color.Black;
@@ -1994,7 +1994,7 @@ namespace i2TradePlus
 			itemGrid33.FieldType = ItemType.Label2;
 			itemGrid33.FontColor = Color.LightGray;
 			itemGrid33.FontStyle = FontStyle.Regular;
-			itemGrid33.Height = 1;
+			itemGrid33.Height = 1f;
 			itemGrid33.IsBlink = 0;
 			itemGrid33.Name = "downvolume_label";
 			itemGrid33.Text = "Down Vol";
@@ -2002,7 +2002,7 @@ namespace i2TradePlus
 			itemGrid33.Visible = true;
 			itemGrid33.Width = 25;
 			itemGrid33.X = 0;
-			itemGrid33.Y = 7;
+			itemGrid33.Y = 7f;
 			itemGrid34.AdjustFontSize = 0f;
 			itemGrid34.Alignment = StringAlignment.Far;
 			itemGrid34.BackColor = Color.Black;
@@ -2010,7 +2010,7 @@ namespace i2TradePlus
 			itemGrid34.FieldType = ItemType.Text;
 			itemGrid34.FontColor = Color.Red;
 			itemGrid34.FontStyle = FontStyle.Regular;
-			itemGrid34.Height = 1;
+			itemGrid34.Height = 1f;
 			itemGrid34.IsBlink = 0;
 			itemGrid34.Name = "downvolume_text";
 			itemGrid34.Text = "";
@@ -2018,7 +2018,7 @@ namespace i2TradePlus
 			itemGrid34.Visible = true;
 			itemGrid34.Width = 30;
 			itemGrid34.X = 25;
-			itemGrid34.Y = 7;
+			itemGrid34.Y = 7f;
 			itemGrid35.AdjustFontSize = 0f;
 			itemGrid35.Alignment = StringAlignment.Near;
 			itemGrid35.BackColor = Color.Black;
@@ -2026,7 +2026,7 @@ namespace i2TradePlus
 			itemGrid35.FieldType = ItemType.Label2;
 			itemGrid35.FontColor = Color.LightGray;
 			itemGrid35.FontStyle = FontStyle.Regular;
-			itemGrid35.Height = 1;
+			itemGrid35.Height = 1f;
 			itemGrid35.IsBlink = 0;
 			itemGrid35.Name = "nochg_volume_label";
 			itemGrid35.Text = "UnChg Vol";
@@ -2034,7 +2034,7 @@ namespace i2TradePlus
 			itemGrid35.Visible = true;
 			itemGrid35.Width = 25;
 			itemGrid35.X = 0;
-			itemGrid35.Y = 8;
+			itemGrid35.Y = 8f;
 			itemGrid36.AdjustFontSize = 0f;
 			itemGrid36.Alignment = StringAlignment.Far;
 			itemGrid36.BackColor = Color.Black;
@@ -2042,7 +2042,7 @@ namespace i2TradePlus
 			itemGrid36.FieldType = ItemType.Text;
 			itemGrid36.FontColor = Color.Yellow;
 			itemGrid36.FontStyle = FontStyle.Regular;
-			itemGrid36.Height = 1;
+			itemGrid36.Height = 1f;
 			itemGrid36.IsBlink = 0;
 			itemGrid36.Name = "nochg_volume_text";
 			itemGrid36.Text = "";
@@ -2050,7 +2050,7 @@ namespace i2TradePlus
 			itemGrid36.Visible = true;
 			itemGrid36.Width = 30;
 			itemGrid36.X = 25;
-			itemGrid36.Y = 8;
+			itemGrid36.Y = 8f;
 			itemGrid37.AdjustFontSize = 0f;
 			itemGrid37.Alignment = StringAlignment.Near;
 			itemGrid37.BackColor = Color.FromArgb(64, 64, 64);
@@ -2058,7 +2058,7 @@ namespace i2TradePlus
 			itemGrid37.FieldType = ItemType.Text;
 			itemGrid37.FontColor = Color.LightGray;
 			itemGrid37.FontStyle = FontStyle.Bold;
-			itemGrid37.Height = 1;
+			itemGrid37.Height = 1f;
 			itemGrid37.IsBlink = 0;
 			itemGrid37.Name = "sum_label";
 			itemGrid37.Text = "Total";
@@ -2066,7 +2066,7 @@ namespace i2TradePlus
 			itemGrid37.Visible = true;
 			itemGrid37.Width = 20;
 			itemGrid37.X = 0;
-			itemGrid37.Y = 5;
+			itemGrid37.Y = 5f;
 			itemGrid38.AdjustFontSize = 0f;
 			itemGrid38.Alignment = StringAlignment.Far;
 			itemGrid38.BackColor = Color.FromArgb(64, 64, 64);
@@ -2074,7 +2074,7 @@ namespace i2TradePlus
 			itemGrid38.FieldType = ItemType.Text;
 			itemGrid38.FontColor = Color.Yellow;
 			itemGrid38.FontStyle = FontStyle.Regular;
-			itemGrid38.Height = 1;
+			itemGrid38.Height = 1f;
 			itemGrid38.IsBlink = 0;
 			itemGrid38.Name = "sum_volume";
 			itemGrid38.Text = "";
@@ -2082,7 +2082,7 @@ namespace i2TradePlus
 			itemGrid38.Visible = true;
 			itemGrid38.Width = 27;
 			itemGrid38.X = 20;
-			itemGrid38.Y = 5;
+			itemGrid38.Y = 5f;
 			itemGrid39.AdjustFontSize = 0f;
 			itemGrid39.Alignment = StringAlignment.Far;
 			itemGrid39.BackColor = Color.FromArgb(64, 64, 64);
@@ -2090,7 +2090,7 @@ namespace i2TradePlus
 			itemGrid39.FieldType = ItemType.Text;
 			itemGrid39.FontColor = Color.Yellow;
 			itemGrid39.FontStyle = FontStyle.Regular;
-			itemGrid39.Height = 1;
+			itemGrid39.Height = 1f;
 			itemGrid39.IsBlink = 0;
 			itemGrid39.Name = "sum_value";
 			itemGrid39.Text = "";
@@ -2098,7 +2098,7 @@ namespace i2TradePlus
 			itemGrid39.Visible = true;
 			itemGrid39.Width = 33;
 			itemGrid39.X = 47;
-			itemGrid39.Y = 5;
+			itemGrid39.Y = 5f;
 			itemGrid40.AdjustFontSize = 0f;
 			itemGrid40.Alignment = StringAlignment.Near;
 			itemGrid40.BackColor = Color.FromArgb(64, 64, 64);
@@ -2106,7 +2106,7 @@ namespace i2TradePlus
 			itemGrid40.FieldType = ItemType.Text;
 			itemGrid40.FontColor = Color.White;
 			itemGrid40.FontStyle = FontStyle.Regular;
-			itemGrid40.Height = 1;
+			itemGrid40.Height = 1f;
 			itemGrid40.IsBlink = 0;
 			itemGrid40.Name = "sum_pvalue";
 			itemGrid40.Text = "";
@@ -2114,7 +2114,7 @@ namespace i2TradePlus
 			itemGrid40.Visible = true;
 			itemGrid40.Width = 20;
 			itemGrid40.X = 80;
-			itemGrid40.Y = 5;
+			itemGrid40.Y = 5f;
 			itemGrid41.AdjustFontSize = 0f;
 			itemGrid41.Alignment = StringAlignment.Near;
 			itemGrid41.BackColor = Color.Black;
@@ -2122,7 +2122,7 @@ namespace i2TradePlus
 			itemGrid41.FieldType = ItemType.Label2;
 			itemGrid41.FontColor = Color.LightGray;
 			itemGrid41.FontStyle = FontStyle.Regular;
-			itemGrid41.Height = 1;
+			itemGrid41.Height = 1f;
 			itemGrid41.IsBlink = 0;
 			itemGrid41.Name = "maival_label";
 			itemGrid41.Text = "MAI Val";
@@ -2130,7 +2130,7 @@ namespace i2TradePlus
 			itemGrid41.Visible = true;
 			itemGrid41.Width = 18;
 			itemGrid41.X = 57;
-			itemGrid41.Y = 6;
+			itemGrid41.Y = 6f;
 			itemGrid42.AdjustFontSize = 0f;
 			itemGrid42.Alignment = StringAlignment.Far;
 			itemGrid42.BackColor = Color.Black;
@@ -2138,7 +2138,7 @@ namespace i2TradePlus
 			itemGrid42.FieldType = ItemType.Text;
 			itemGrid42.FontColor = Color.Yellow;
 			itemGrid42.FontStyle = FontStyle.Regular;
-			itemGrid42.Height = 1;
+			itemGrid42.Height = 1f;
 			itemGrid42.IsBlink = 0;
 			itemGrid42.Name = "maival_text";
 			itemGrid42.Text = "";
@@ -2146,7 +2146,7 @@ namespace i2TradePlus
 			itemGrid42.Visible = true;
 			itemGrid42.Width = 25;
 			itemGrid42.X = 75;
-			itemGrid42.Y = 6;
+			itemGrid42.Y = 6f;
 			this.intzaMarketInfo.Items.Add(itemGrid);
 			this.intzaMarketInfo.Items.Add(itemGrid2);
 			this.intzaMarketInfo.Items.Add(itemGrid3);

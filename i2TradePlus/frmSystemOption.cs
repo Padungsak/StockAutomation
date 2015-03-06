@@ -11,6 +11,10 @@ namespace i2TradePlus
 {
 	public class frmSystemOption : Form
 	{
+		private Font defFont = null;
+		private string passwordDescription = "   รูปแบบการกำหนด Password\r\n\r\n1. รหัสต้องมีความยาวไม่น้อยกว่า {0} ตัว\r\n2. รหัสต้องมีตัวอักษร A-Z หรือ a-z , 0-9 \r\n3. รหัสต้องมีอักขระพิเศษ เช่น @ , ! ,# ,* , |\r\n  ตัวอย่าง เช่น   Sti@123";
+		private string pincodeDescription = "   รูปแบบการกำหนด Password\r\n\r\n1. รหัสต้องมีความยาวไม่น้อยกว่า {0} ตัว";
+		private static Form[] formSmartClientCollection = null;
 		private IContainer components = null;
 		private Button btnCancel;
 		private Button btnOk;
@@ -96,10 +100,6 @@ namespace i2TradePlus
 		private Button btnResetColor;
 		private TabPage tabHotkey;
 		private TemplateTreeMenus templateTreeMenus1;
-		private Font defFont = null;
-		private string passwordDescription = "   รูปแบบการกำหนด Password\r\n\r\n1. รหัสต้องมีความยาวไม่น้อยกว่า {0} ตัว\r\n2. รหัสต้องมีตัวอักษร A-Z หรือ a-z , 0-9 \r\n3. รหัสต้องมีอักขระพิเศษ เช่น @ , ! ,# ,* , |\r\n  ตัวอย่าง เช่น   Sti@123";
-		private string pincodeDescription = "   รูปแบบการกำหนด Password\r\n\r\n1. รหัสต้องมีความยาวไม่น้อยกว่า {0} ตัว";
-		private static Form[] formSmartClientCollection = null;
 		public static Form[] FormSmartClientCollection
 		{
 			[MethodImpl(MethodImplOptions.NoInlining)]
@@ -111,6 +111,516 @@ namespace i2TradePlus
 			set
 			{
 				frmSystemOption.formSmartClientCollection = value;
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public frmSystemOption()
+		{
+			try
+			{
+				this.InitializeComponent();
+				this.pwdEntryChangePassword.MinimumPasswordLength = ApplicationInfo.MinPasswordLength;
+				this.pwdEntryChangePincode.MinimumPincodeLength = ApplicationInfo.MinPincodeLength;
+				this.lblPwdDescription.Text = string.Format(this.passwordDescription, this.pwdEntryChangePassword.MinimumPasswordLength);
+				this.lblPincodeDescription.Text = string.Format(this.pincodeDescription, this.pwdEntryChangePincode.MinimumPincodeLength);
+				if (ApplicationInfo.UserLoginMode == "T")
+				{
+					this.pwdEntryChangePassword.IsCustomer = false;
+				}
+				else
+				{
+					this.pwdEntryChangePassword.IsCustomer = true;
+				}
+				this.tabControl1.TabPages.Remove(this.tabPagePassword);
+				this.tabControl1.TabPages.Remove(this.tabPagePincode);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmSystemOption_Shown(object sender, EventArgs e)
+		{
+			this.LoadProfileConfig();
+			this.ChangeLanguage();
+			this.templateTreeMenus1.Initial();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmSystemOption_FormClosing(object sender, FormClosingEventArgs e)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnOk_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.SaveProxySetting();
+				FontStyle style = FontStyle.Regular;
+				if (this.cbDefaultFontStyle.Text == "Bold")
+				{
+					style = FontStyle.Bold;
+				}
+				Font font = new Font(this.cbDefaultFontName.Text, (float)Convert.ToInt32(this.cbDefaultFontSize.Text), style);
+				if (!font.Equals(Settings.Default.Default_Font))
+				{
+					Settings.Default.Default_Font = font;
+					TemplateManager.Instance.CurrentActiveTemplateView.SetFont();
+				}
+				int num;
+				int.TryParse(this.cbMaxViewOrderRows.Text, out num);
+				if (num >= 20 && num <= 9999)
+				{
+					Settings.Default.ViewOrderRows = num;
+				}
+				Settings.Default.IsWriteErrorLog = this.chkIsWriteLog.Checked;
+				this.SetBlinkTP2AllForm();
+				Settings.Default.Save();
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("SaveProfileConfig", ex);
+			}
+			base.Close();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			base.Close();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnFontDialog_Click(object sender, EventArgs e)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void LoadProfileConfig()
+		{
+			if (base.InvokeRequired)
+			{
+				base.Invoke(new MethodInvoker(this.LoadProfileConfig));
+			}
+			else
+			{
+				try
+				{
+					this.defFont = Settings.Default.Default_Font;
+					this.cbDefaultFontName.Text = Settings.Default.Default_Font.Name;
+					this.cbDefaultFontStyle.Text = Settings.Default.Default_Font.Style.ToString();
+					this.cbDefaultFontSize.Text = Math.Round((double)Settings.Default.Default_Font.Size).ToString();
+					if (ApplicationInfo.UserLoginMode == "I")
+					{
+						this.tabControl1.TabPages.Remove(this.tabPagePassword);
+						this.tabControl1.TabPages.Remove(this.tabPagePincode);
+					}
+					else
+					{
+						if (ApplicationInfo.UserLoginMode == "C")
+						{
+							this.lblPwdDescription.Visible = true;
+							this.lblPincodeDescription.Visible = true;
+						}
+						else
+						{
+							if (ApplicationInfo.UserLoginMode == "T")
+							{
+								this.lblPwdDescription.Visible = false;
+								this.tabControl1.TabPages.Remove(this.tabPagePincode);
+							}
+						}
+					}
+					this.chkIsWriteLog.Checked = Settings.Default.IsWriteErrorLog;
+					this.InitializeServerList();
+					this.rdoPush.Checked = ApplicationInfo.IsPushMode;
+					this.rdoPoll.Checked = !this.rdoPush.Checked;
+					this.cbMaxViewOrderRows.Text = Settings.Default.ViewOrderRows.ToString();
+					this.lbAutoGetOrderInfoInterval.Text = ApplicationInfo.AutoGetOrderInfoInterval.ToString();
+					this.cbBidOfferColorBlink.Checked = ApplicationInfo.IsSupportTPBlinkColor;
+					this.lbHeaderColor.BackColor = Settings.Default.HeaderBackGColor;
+					this.lbGridColor.BackColor = Settings.Default.GridColor;
+					this.lbFontHeaderColor.BackColor = Settings.Default.HeaderFontColor;
+					this.OpenProxySetting();
+				}
+				catch (Exception ex)
+				{
+					this.ShowError("LoadProfileConfig", ex);
+				}
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private string DisplayKeyFormat(Keys key)
+		{
+			string[] array = key.ToString().Split(new char[]
+			{
+				','
+			});
+			string text = (array.Length > 1) ? string.Format("{0}+{1}", array[1], array[0]) : array[0];
+			return text.Trim();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				if (this.tabControl1.SelectedTab.Name.ToLower() == "tabpagepincode")
+				{
+					this.pwdEntryChangePassword.IsPincode = true;
+				}
+				else
+				{
+					this.pwdEntryChangePassword.IsPincode = false;
+				}
+				if (this.tabControl1.SelectedTab == this.tabPageError)
+				{
+					if (this.lsvError.Items.Count != ExceptionManager.Items.Count)
+					{
+						this.ShowErrorToGrid();
+					}
+				}
+				else
+				{
+					if (this.tabControl1.SelectedTab == this.tabConnection)
+					{
+						if (ApplicationInfo.IsPushMode)
+						{
+							if (ApplicationInfo.TunnelCounter <= this.lsbTunnelServer.Items.Count)
+							{
+								this.lsbTunnelServer.SelectedIndex = ApplicationInfo.TunnelCounter;
+							}
+						}
+						else
+						{
+							this.lsbTunnelServer.SelectedIndex = -1;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("tabControl1_SelectedIndexChanged", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void lnkOpenErrorLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ShowError(string methodName, Exception ex)
+		{
+			ExceptionManager.Show(new ErrorItem(DateTime.Now, base.Name, methodName, ex.Message, ex.ToString()));
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeServerList()
+		{
+			try
+			{
+				this.lsbTunnelServer.Items.Clear();
+				int num = 0;
+				foreach (TunnelInfo current in ApplicationInfo.TunnelHosts)
+				{
+					this.lsbTunnelServer.Items.Add(string.Concat(new object[]
+					{
+						"Node ",
+						++num,
+						" ==> IP : ",
+						current.HostIP,
+						" Port : ",
+						current.Port
+					}));
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("InitializeServerList", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OpenProxySetting()
+		{
+			string registryStringValue = BusinessServiceFactory.GetRegistryStringValue(Registry.CurrentUser, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable");
+			bool arg_39_0 = !string.IsNullOrEmpty(registryStringValue) && registryStringValue == "1";
+			if (!string.IsNullOrEmpty(Settings.Default.ProxyHost))
+			{
+				this.txtAddress.Text = Settings.Default.ProxyHost;
+				this.txtPort.Text = Settings.Default.ProxyPort.ToString();
+			}
+			else
+			{
+				string registryStringValue2 = BusinessServiceFactory.GetRegistryStringValue(Registry.CurrentUser, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer");
+				if (!string.IsNullOrEmpty(registryStringValue2))
+				{
+					string[] array = registryStringValue2.Split(new char[]
+					{
+						':'
+					});
+					if (array != null && array.Length > 1)
+					{
+						this.txtAddress.Text = array[0];
+						this.txtPort.Text = array[1];
+					}
+				}
+			}
+			this.txtUserName.Text = Settings.Default.ProxyUsername;
+			this.txtPassword.Text = Settings.Default.ProxyPassword;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void SaveProxySetting()
+		{
+			try
+			{
+				Settings.Default.ProxyHost = this.txtAddress.Text;
+				Settings.Default.ProxyPort = (string.IsNullOrEmpty(this.txtPort.Text) ? 1080 : Convert.ToInt32(this.txtPort.Text));
+				Settings.Default.ProxyUsername = this.txtUserName.Text;
+				ApplicationInfo.ProxyPassword = this.txtPassword.Text;
+				Settings.Default.ProxyPassword = this.txtPassword.Text;
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("SaveProxySetting", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ChangeLanguage()
+		{
+			if (base.InvokeRequired)
+			{
+				base.Invoke(new MethodInvoker(this.ChangeLanguage));
+			}
+			else
+			{
+				try
+				{
+					if (this.rdoLangThai.Checked)
+					{
+						this.lbNameFont.Text = "ชื่อ";
+						this.lbFontStyle.Text = "รูปแบบ";
+						this.lbFontSize.Text = "ขนาด";
+						this.cbBidOfferColorBlink.Text = "เปิดการทำงาน";
+						this.gbFont.Text = "ตัวอักษร";
+						this.groupBox2.Text = "สีกระพริบบอกการเสนอซื้อ ยกเลิก หรือจับคู่";
+						this.lbBid.Text = "ใส่";
+						this.lbQuoteCancel.Text = "ถอน";
+						this.lbOffer.Text = "จับคู่";
+						this.lbMaxViewOrderRows.Text = "จำนวนรายการสูงสุดต่อหน้า";
+						this.lbPullBuySell.Text = "ดึงข้อมูลรายการซื้อ/ขายแบบอัตโนมัติหลังส่งคำสั่งเป็นเวลา (วินาที)";
+						this.gbException.Text = "การจัดการข้อผิดพลาด";
+						this.chkIsWriteLog.Text = "เก็บบันทึกรายการข้อผิดพลาดแบบอัตโนมัติ";
+						this.gbTable.Text = "ตาราง";
+					}
+					else
+					{
+						this.lbNameFont.Text = "Name";
+						this.lbFontStyle.Text = "Style";
+						this.lbFontSize.Text = "Size";
+						this.cbBidOfferColorBlink.Text = "Active";
+						this.gbFont.Text = "Font";
+						this.groupBox2.Text = "Bid-Offer Bussiness Field Color";
+						this.lbBid.Text = "Bid";
+						this.lbQuoteCancel.Text = "Quote Cancel";
+						this.lbOffer.Text = "Offer";
+						this.lbMaxViewOrderRows.Text = "The max number of transaction per page";
+						this.lbPullBuySell.Text = "Pull Buy/Sell data automatically after sending order for (seconds)";
+						this.gbException.Text = "Error Management";
+						this.chkIsWriteLog.Text = "Save Error transaction automatically.";
+						this.gbTable.Text = "Table";
+					}
+				}
+				catch
+				{
+				}
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void rdoLangThai_CheckedChanged(object sender, EventArgs e)
+		{
+			this.ChangeLanguage();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void SetBlinkTP2AllForm()
+		{
+			try
+			{
+				ApplicationInfo.IsSupportTPBlinkColor = this.cbBidOfferColorBlink.Checked;
+				if (TemplateManager.Instance.TemplateViews.ContainsKey("Market Watch"))
+				{
+					TemplateView templateView = TemplateManager.Instance.TemplateViews["Market Watch"];
+					if (templateView != null)
+					{
+						(templateView.FormObj as frmMarketWatch).SetBlinkModeTopPrice();
+					}
+				}
+				if (TemplateManager.Instance.TemplateViews.ContainsKey("Top BBO"))
+				{
+					TemplateView templateView = TemplateManager.Instance.TemplateViews["Top BBO"];
+					if (templateView != null)
+					{
+						(templateView.FormObj as frmTopBBOs).SetBlinkModeTopPrice();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("SetBlinkTP2AllForm", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnRefreshError_Click(object sender, EventArgs e)
+		{
+			this.ShowErrorToGrid();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ShowErrorToGrid()
+		{
+			if (base.InvokeRequired)
+			{
+				base.Invoke(new MethodInvoker(this.ShowErrorToGrid));
+			}
+			else
+			{
+				try
+				{
+					this.lsvError.Items.Clear();
+					foreach (ErrorItem current in ExceptionManager.Items)
+					{
+						string[] array = new string[4];
+						string[] arg_7A_0 = array;
+						int arg_7A_1 = 0;
+						DateTime time = current.Time;
+						arg_7A_0[arg_7A_1] = time.ToLongTimeString();
+						array[1] = current.Information;
+						array[2] = current.ModuleName;
+						array[3] = current.Function;
+						ListViewItem listViewItem = new ListViewItem(array);
+						listViewItem.Tag = current.Description;
+						this.lsvError.Items.Add(listViewItem);
+					}
+				}
+				catch
+				{
+				}
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnClearErrorList_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				ExceptionManager.Items.Clear();
+				this.ShowErrorToGrid();
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void lsvError_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			try
+			{
+				if (this.lsvError.SelectedItems.Count > 0)
+				{
+					this.txtError.Text = string.Format("Time : {0}\r\nModule & Function : {1}-{2}\r\nInfomation : {3}\r\nDescription : {4}", new object[]
+					{
+						this.lsvError.SelectedItems[0].SubItems[0].Text,
+						this.lsvError.SelectedItems[0].SubItems[2].Text,
+						this.lsvError.SelectedItems[0].SubItems[3].Text,
+						this.lsvError.SelectedItems[0].SubItems[1].Text,
+						this.lsvError.SelectedItems[0].Tag
+					});
+					this.gbDescription.Visible = true;
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void lnkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			this.gbDescription.Visible = false;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnHeader_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.colorDialog1.Color = Settings.Default.HeaderBackGColor;
+				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
+				{
+					Settings.Default.HeaderBackGColor = this.colorDialog1.Color;
+					this.lbHeaderColor.BackColor = this.colorDialog1.Color;
+					this.SetColorToControl();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("btnHeader_Click", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnGridColor_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.colorDialog1.Color = Settings.Default.GridColor;
+				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
+				{
+					Settings.Default.GridColor = this.colorDialog1.Color;
+					this.lbGridColor.BackColor = this.colorDialog1.Color;
+					this.SetColorToControl();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("btnGridColor_Click", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnFontHeaderColor_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.colorDialog1.Color = Settings.Default.HeaderFontColor;
+				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
+				{
+					Settings.Default.HeaderFontColor = this.colorDialog1.Color;
+					this.lbFontHeaderColor.BackColor = this.colorDialog1.Color;
+					this.SetColorToControl();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("btnFontHeaderColor_Click", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnResetColor_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				Settings.Default.HeaderBackGColor = Color.FromArgb(100, 100, 100);
+				Settings.Default.HeaderFontColor = Color.LightGray;
+				Settings.Default.GridColor = Color.FromArgb(45, 45, 45);
+				this.lbGridColor.BackColor = Settings.Default.GridColor;
+				this.lbFontHeaderColor.BackColor = Settings.Default.HeaderFontColor;
+				this.lbHeaderColor.BackColor = Settings.Default.HeaderBackGColor;
+				this.SetColorToControl();
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("btnResetColor_Click", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void SetColorToControl()
+		{
+			try
+			{
+				((ClientBaseForm)TemplateManager.Instance.CurrentActiveTemplateView.FormObj).SetHeaderColor(true);
+				TemplateManager.Instance.MainForm.SetHeaderToChild();
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("SetColorToControl", ex);
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -958,516 +1468,6 @@ namespace i2TradePlus
 			this.gbException.PerformLayout();
 			base.ResumeLayout(false);
 			base.PerformLayout();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public frmSystemOption()
-		{
-			try
-			{
-				this.InitializeComponent();
-				this.pwdEntryChangePassword.MinimumPasswordLength = ApplicationInfo.MinPasswordLength;
-				this.pwdEntryChangePincode.MinimumPincodeLength = ApplicationInfo.MinPincodeLength;
-				this.lblPwdDescription.Text = string.Format(this.passwordDescription, this.pwdEntryChangePassword.MinimumPasswordLength);
-				this.lblPincodeDescription.Text = string.Format(this.pincodeDescription, this.pwdEntryChangePincode.MinimumPincodeLength);
-				if (ApplicationInfo.UserLoginMode == "T")
-				{
-					this.pwdEntryChangePassword.IsCustomer = false;
-				}
-				else
-				{
-					this.pwdEntryChangePassword.IsCustomer = true;
-				}
-				this.tabControl1.TabPages.Remove(this.tabPagePassword);
-				this.tabControl1.TabPages.Remove(this.tabPagePincode);
-			}
-			catch (Exception ex)
-			{
-				throw ex;
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmSystemOption_Shown(object sender, EventArgs e)
-		{
-			this.LoadProfileConfig();
-			this.ChangeLanguage();
-			this.templateTreeMenus1.Initial();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmSystemOption_FormClosing(object sender, FormClosingEventArgs e)
-		{
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnOk_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.SaveProxySetting();
-				FontStyle style = FontStyle.Regular;
-				if (this.cbDefaultFontStyle.Text == "Bold")
-				{
-					style = FontStyle.Bold;
-				}
-				Font font = new Font(this.cbDefaultFontName.Text, (float)Convert.ToInt32(this.cbDefaultFontSize.Text), style);
-				if (!font.Equals(Settings.Default.Default_Font))
-				{
-					Settings.Default.Default_Font = font;
-					TemplateManager.Instance.CurrentActiveTemplateView.SetFont();
-				}
-				int num;
-				int.TryParse(this.cbMaxViewOrderRows.Text, out num);
-				if (num >= 20 && num <= 9999)
-				{
-					Settings.Default.ViewOrderRows = num;
-				}
-				Settings.Default.IsWriteErrorLog = this.chkIsWriteLog.Checked;
-				this.SetBlinkTP2AllForm();
-				Settings.Default.Save();
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("SaveProfileConfig", ex);
-			}
-			base.Close();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			base.Close();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnFontDialog_Click(object sender, EventArgs e)
-		{
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void LoadProfileConfig()
-		{
-			if (base.InvokeRequired)
-			{
-				base.Invoke(new MethodInvoker(this.LoadProfileConfig));
-			}
-			else
-			{
-				try
-				{
-					this.defFont = Settings.Default.Default_Font;
-					this.cbDefaultFontName.Text = Settings.Default.Default_Font.Name;
-					this.cbDefaultFontStyle.Text = Settings.Default.Default_Font.Style.ToString();
-					this.cbDefaultFontSize.Text = Math.Round((double)Settings.Default.Default_Font.Size).ToString();
-					if (ApplicationInfo.UserLoginMode == "I")
-					{
-						this.tabControl1.TabPages.Remove(this.tabPagePassword);
-						this.tabControl1.TabPages.Remove(this.tabPagePincode);
-					}
-					else
-					{
-						if (ApplicationInfo.UserLoginMode == "C")
-						{
-							this.lblPwdDescription.Visible = true;
-							this.lblPincodeDescription.Visible = true;
-						}
-						else
-						{
-							if (ApplicationInfo.UserLoginMode == "T")
-							{
-								this.lblPwdDescription.Visible = false;
-								this.tabControl1.TabPages.Remove(this.tabPagePincode);
-							}
-						}
-					}
-					this.chkIsWriteLog.Checked = Settings.Default.IsWriteErrorLog;
-					this.InitializeServerList();
-					this.rdoPush.Checked = ApplicationInfo.IsPushMode;
-					this.rdoPoll.Checked = !this.rdoPush.Checked;
-					this.cbMaxViewOrderRows.Text = Settings.Default.ViewOrderRows.ToString();
-					this.lbAutoGetOrderInfoInterval.Text = ApplicationInfo.AutoGetOrderInfoInterval.ToString();
-					this.cbBidOfferColorBlink.Checked = ApplicationInfo.IsSupportTPBlinkColor;
-					this.lbHeaderColor.BackColor = Settings.Default.HeaderBackGColor;
-					this.lbGridColor.BackColor = Settings.Default.GridColor;
-					this.lbFontHeaderColor.BackColor = Settings.Default.HeaderFontColor;
-					this.OpenProxySetting();
-				}
-				catch (Exception ex)
-				{
-					this.ShowError("LoadProfileConfig", ex);
-				}
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private string DisplayKeyFormat(Keys key)
-		{
-			string[] array = key.ToString().Split(new char[]
-			{
-				','
-			});
-			string text = (array.Length > 1) ? string.Format("{0}+{1}", array[1], array[0]) : array[0];
-			return text.Trim();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				if (this.tabControl1.SelectedTab.Name.ToLower() == "tabpagepincode")
-				{
-					this.pwdEntryChangePassword.IsPincode = true;
-				}
-				else
-				{
-					this.pwdEntryChangePassword.IsPincode = false;
-				}
-				if (this.tabControl1.SelectedTab == this.tabPageError)
-				{
-					if (this.lsvError.Items.Count != ExceptionManager.Items.Count)
-					{
-						this.ShowErrorToGrid();
-					}
-				}
-				else
-				{
-					if (this.tabControl1.SelectedTab == this.tabConnection)
-					{
-						if (ApplicationInfo.IsPushMode)
-						{
-							if (ApplicationInfo.TunnelCounter <= this.lsbTunnelServer.Items.Count)
-							{
-								this.lsbTunnelServer.SelectedIndex = ApplicationInfo.TunnelCounter;
-							}
-						}
-						else
-						{
-							this.lsbTunnelServer.SelectedIndex = -1;
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("tabControl1_SelectedIndexChanged", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void lnkOpenErrorLog_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ShowError(string methodName, Exception ex)
-		{
-			ExceptionManager.Show(new ErrorItem(DateTime.Now, base.Name, methodName, ex.Message, ex.ToString()));
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeServerList()
-		{
-			try
-			{
-				this.lsbTunnelServer.Items.Clear();
-				int num = 0;
-				foreach (TunnelInfo current in ApplicationInfo.TunnelHosts)
-				{
-					this.lsbTunnelServer.Items.Add(string.Concat(new object[]
-					{
-						"Node ",
-						++num,
-						" ==> IP : ",
-						current.HostIP,
-						" Port : ",
-						current.Port
-					}));
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("InitializeServerList", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void OpenProxySetting()
-		{
-			string registryStringValue = BusinessServiceFactory.GetRegistryStringValue(Registry.CurrentUser, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable");
-			bool arg_39_0 = !string.IsNullOrEmpty(registryStringValue) && registryStringValue == "1";
-			if (!string.IsNullOrEmpty(Settings.Default.ProxyHost))
-			{
-				this.txtAddress.Text = Settings.Default.ProxyHost;
-				this.txtPort.Text = Settings.Default.ProxyPort.ToString();
-			}
-			else
-			{
-				string registryStringValue2 = BusinessServiceFactory.GetRegistryStringValue(Registry.CurrentUser, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer");
-				if (!string.IsNullOrEmpty(registryStringValue2))
-				{
-					string[] array = registryStringValue2.Split(new char[]
-					{
-						':'
-					});
-					if (array != null && array.Length > 1)
-					{
-						this.txtAddress.Text = array[0];
-						this.txtPort.Text = array[1];
-					}
-				}
-			}
-			this.txtUserName.Text = Settings.Default.ProxyUsername;
-			this.txtPassword.Text = Settings.Default.ProxyPassword;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void SaveProxySetting()
-		{
-			try
-			{
-				Settings.Default.ProxyHost = this.txtAddress.Text;
-				Settings.Default.ProxyPort = (string.IsNullOrEmpty(this.txtPort.Text) ? 1080 : Convert.ToInt32(this.txtPort.Text));
-				Settings.Default.ProxyUsername = this.txtUserName.Text;
-				ApplicationInfo.ProxyPassword = this.txtPassword.Text;
-				Settings.Default.ProxyPassword = this.txtPassword.Text;
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("SaveProxySetting", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ChangeLanguage()
-		{
-			if (base.InvokeRequired)
-			{
-				base.Invoke(new MethodInvoker(this.ChangeLanguage));
-			}
-			else
-			{
-				try
-				{
-					if (this.rdoLangThai.Checked)
-					{
-						this.lbNameFont.Text = "ชื่อ";
-						this.lbFontStyle.Text = "รูปแบบ";
-						this.lbFontSize.Text = "ขนาด";
-						this.cbBidOfferColorBlink.Text = "เปิดการทำงาน";
-						this.gbFont.Text = "ตัวอักษร";
-						this.groupBox2.Text = "สีกระพริบบอกการเสนอซื้อ ยกเลิก หรือจับคู่";
-						this.lbBid.Text = "ใส่";
-						this.lbQuoteCancel.Text = "ถอน";
-						this.lbOffer.Text = "จับคู่";
-						this.lbMaxViewOrderRows.Text = "จำนวนรายการสูงสุดต่อหน้า";
-						this.lbPullBuySell.Text = "ดึงข้อมูลรายการซื้อ/ขายแบบอัตโนมัติหลังส่งคำสั่งเป็นเวลา (วินาที)";
-						this.gbException.Text = "การจัดการข้อผิดพลาด";
-						this.chkIsWriteLog.Text = "เก็บบันทึกรายการข้อผิดพลาดแบบอัตโนมัติ";
-						this.gbTable.Text = "ตาราง";
-					}
-					else
-					{
-						this.lbNameFont.Text = "Name";
-						this.lbFontStyle.Text = "Style";
-						this.lbFontSize.Text = "Size";
-						this.cbBidOfferColorBlink.Text = "Active";
-						this.gbFont.Text = "Font";
-						this.groupBox2.Text = "Bid-Offer Bussiness Field Color";
-						this.lbBid.Text = "Bid";
-						this.lbQuoteCancel.Text = "Quote Cancel";
-						this.lbOffer.Text = "Offer";
-						this.lbMaxViewOrderRows.Text = "The max number of transaction per page";
-						this.lbPullBuySell.Text = "Pull Buy/Sell data automatically after sending order for (seconds)";
-						this.gbException.Text = "Error Management";
-						this.chkIsWriteLog.Text = "Save Error transaction automatically.";
-						this.gbTable.Text = "Table";
-					}
-				}
-				catch
-				{
-				}
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void rdoLangThai_CheckedChanged(object sender, EventArgs e)
-		{
-			this.ChangeLanguage();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void SetBlinkTP2AllForm()
-		{
-			try
-			{
-				ApplicationInfo.IsSupportTPBlinkColor = this.cbBidOfferColorBlink.Checked;
-				if (TemplateManager.Instance.TemplateViews.ContainsKey("Market Watch"))
-				{
-					TemplateView templateView = TemplateManager.Instance.TemplateViews["Market Watch"];
-					if (templateView != null)
-					{
-						(templateView.FormObj as frmMarketWatch).SetBlinkModeTopPrice();
-					}
-				}
-				if (TemplateManager.Instance.TemplateViews.ContainsKey("Top BBO"))
-				{
-					TemplateView templateView = TemplateManager.Instance.TemplateViews["Top BBO"];
-					if (templateView != null)
-					{
-						(templateView.FormObj as frmTopBBOs).SetBlinkModeTopPrice();
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("SetBlinkTP2AllForm", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnRefreshError_Click(object sender, EventArgs e)
-		{
-			this.ShowErrorToGrid();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ShowErrorToGrid()
-		{
-			if (base.InvokeRequired)
-			{
-				base.Invoke(new MethodInvoker(this.ShowErrorToGrid));
-			}
-			else
-			{
-				try
-				{
-					this.lsvError.Items.Clear();
-					foreach (ErrorItem current in ExceptionManager.Items)
-					{
-						string[] array = new string[4];
-						string[] arg_7A_0 = array;
-						int arg_7A_1 = 0;
-						DateTime time = current.Time;
-						arg_7A_0[arg_7A_1] = time.ToLongTimeString();
-						array[1] = current.Information;
-						array[2] = current.ModuleName;
-						array[3] = current.Function;
-						ListViewItem listViewItem = new ListViewItem(array);
-						listViewItem.Tag = current.Description;
-						this.lsvError.Items.Add(listViewItem);
-					}
-				}
-				catch
-				{
-				}
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnClearErrorList_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				ExceptionManager.Items.Clear();
-				this.ShowErrorToGrid();
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void lsvError_MouseDoubleClick(object sender, MouseEventArgs e)
-		{
-			try
-			{
-				if (this.lsvError.SelectedItems.Count > 0)
-				{
-					this.txtError.Text = string.Format("Time : {0}\r\nModule & Function : {1}-{2}\r\nInfomation : {3}\r\nDescription : {4}", new object[]
-					{
-						this.lsvError.SelectedItems[0].SubItems[0].Text,
-						this.lsvError.SelectedItems[0].SubItems[2].Text,
-						this.lsvError.SelectedItems[0].SubItems[3].Text,
-						this.lsvError.SelectedItems[0].SubItems[1].Text,
-						this.lsvError.SelectedItems[0].Tag
-					});
-					this.gbDescription.Visible = true;
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void lnkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-		{
-			this.gbDescription.Visible = false;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnHeader_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.colorDialog1.Color = Settings.Default.HeaderBackGColor;
-				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
-				{
-					Settings.Default.HeaderBackGColor = this.colorDialog1.Color;
-					this.lbHeaderColor.BackColor = this.colorDialog1.Color;
-					this.SetColorToControl();
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("btnHeader_Click", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnGridColor_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.colorDialog1.Color = Settings.Default.GridColor;
-				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
-				{
-					Settings.Default.GridColor = this.colorDialog1.Color;
-					this.lbGridColor.BackColor = this.colorDialog1.Color;
-					this.SetColorToControl();
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("btnGridColor_Click", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnFontHeaderColor_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.colorDialog1.Color = Settings.Default.HeaderFontColor;
-				if (this.colorDialog1.ShowDialog() == DialogResult.OK)
-				{
-					Settings.Default.HeaderFontColor = this.colorDialog1.Color;
-					this.lbFontHeaderColor.BackColor = this.colorDialog1.Color;
-					this.SetColorToControl();
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("btnFontHeaderColor_Click", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnResetColor_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				Settings.Default.HeaderBackGColor = Color.FromArgb(100, 100, 100);
-				Settings.Default.HeaderFontColor = Color.LightGray;
-				Settings.Default.GridColor = Color.FromArgb(45, 45, 45);
-				this.lbGridColor.BackColor = Settings.Default.GridColor;
-				this.lbFontHeaderColor.BackColor = Settings.Default.HeaderFontColor;
-				this.lbHeaderColor.BackColor = Settings.Default.HeaderBackGColor;
-				this.SetColorToControl();
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("btnResetColor_Click", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void SetColorToControl()
-		{
-			try
-			{
-				((ClientBaseForm)TemplateManager.Instance.CurrentActiveTemplateView.FormObj).SetHeaderColor(true);
-				TemplateManager.Instance.MainForm.SetHeaderToChild();
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("SetColorToControl", ex);
-			}
 		}
 	}
 }

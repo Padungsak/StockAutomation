@@ -22,16 +22,6 @@ namespace i2TradePlus
 			InvalidVersion
 		}
 		private delegate void ShowSplashMessageCallback(string message);
-		private BackgroundWorker bgwLoading = null;
-		private BackgroundWorker bgwCheckProxy = null;
-		private string _userId = string.Empty;
-		private string _userPassword = string.Empty;
-		private frmSplash splashForm = null;
-		private bool _isRequireProxy = false;
-		private bool _isRetryProxey = false;
-		private frmLogIn.LoginResult _loginResult = frmLogIn.LoginResult.Fail;
-		private string _loginResultMessage = string.Empty;
-		private frmMain frm = null;
 		private IContainer components = null;
 		private Label lbCopyRight;
 		private TextBox txtPassword;
@@ -56,6 +46,292 @@ namespace i2TradePlus
 		private Label lblNote;
 		private PictureBox pictureBox1;
 		private CheckBox chbSupportTfex;
+		private BackgroundWorker bgwLoading = null;
+		private BackgroundWorker bgwCheckProxy = null;
+		private string _userId = string.Empty;
+		private string _userPassword = string.Empty;
+		private frmSplash splashForm = null;
+		private bool _isRequireProxy = false;
+		private bool _isRetryProxey = false;
+		private frmLogIn.LoginResult _loginResult = frmLogIn.LoginResult.Fail;
+		private string _loginResultMessage = string.Empty;
+		private frmMain frm = null;
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(frmLogIn));
+			this.lbCopyRight = new Label();
+			this.txtPassword = new TextBox();
+			this.txtUserID = new TextBox();
+			this.btnCancel = new Button();
+			this.btnLogin = new Button();
+			this.lbUserID = new Label();
+			this.lbPassword = new Label();
+			this.pnLogin = new Panel();
+			this.chbSupportTfex = new CheckBox();
+			this.pictureBox1 = new PictureBox();
+			this.chkSettingProxy = new CheckBox();
+			this.label1 = new Label();
+			this.chkRememberPwd = new CheckBox();
+			this.txtProxyPort = new TextBox();
+			this.txtProxyHost = new TextBox();
+			this.txtProxyPassword = new TextBox();
+			this.txtProxyUserName = new TextBox();
+			this.label4 = new Label();
+			this.label5 = new Label();
+			this.label3 = new Label();
+			this.label2 = new Label();
+			this.gbProxy = new GroupBox();
+			this.lblNote = new Label();
+			this.pnLogin.SuspendLayout();
+			((ISupportInitialize)this.pictureBox1).BeginInit();
+			this.gbProxy.SuspendLayout();
+			base.SuspendLayout();
+			this.lbCopyRight.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
+			this.lbCopyRight.BackColor = Color.Transparent;
+			this.lbCopyRight.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbCopyRight.ForeColor = Color.LightGray;
+			this.lbCopyRight.Location = new Point(3, 218);
+			this.lbCopyRight.Name = "lbCopyRight";
+			this.lbCopyRight.Size = new Size(449, 22);
+			this.lbCopyRight.TabIndex = 15;
+			this.lbCopyRight.Text = "Copyright 2008 STI Revolution Co.,Ltd  All rights reserved";
+			this.lbCopyRight.TextAlign = ContentAlignment.BottomCenter;
+			this.lbCopyRight.UseCompatibleTextRendering = true;
+			this.txtPassword.BorderStyle = BorderStyle.FixedSingle;
+			this.txtPassword.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.txtPassword.Location = new Point(182, 109);
+			this.txtPassword.MaxLength = 16;
+			this.txtPassword.Name = "txtPassword";
+			this.txtPassword.Size = new Size(170, 27);
+			this.txtPassword.TabIndex = 2;
+			this.txtPassword.UseSystemPasswordChar = true;
+			this.txtPassword.KeyDown += new KeyEventHandler(this.txtPassword_KeyDown);
+			this.txtPassword.Leave += new EventHandler(this.txtPassword_Leave);
+			this.txtPassword.Enter += new EventHandler(this.txtPassword_Enter);
+			this.txtUserID.BackColor = Color.White;
+			this.txtUserID.BorderStyle = BorderStyle.FixedSingle;
+			this.txtUserID.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.txtUserID.Location = new Point(182, 79);
+			this.txtUserID.MaxLength = 50;
+			this.txtUserID.Name = "txtUserID";
+			this.txtUserID.Size = new Size(170, 27);
+			this.txtUserID.TabIndex = 1;
+			this.txtUserID.KeyDown += new KeyEventHandler(this.txtUserID_KeyDown);
+			this.txtUserID.Leave += new EventHandler(this.txtUserID_Leave);
+			this.txtUserID.Enter += new EventHandler(this.txtUserID_Enter);
+			this.btnCancel.AutoSize = true;
+			this.btnCancel.BackColor = SystemColors.Info;
+			this.btnCancel.Cursor = Cursors.Arrow;
+			this.btnCancel.DialogResult = DialogResult.Cancel;
+			this.btnCancel.FlatStyle = FlatStyle.Flat;
+			this.btnCancel.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.btnCancel.Location = new Point(245, 174);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new Size(81, 31);
+			this.btnCancel.TabIndex = 4;
+			this.btnCancel.Text = "Cancel";
+			this.btnCancel.UseVisualStyleBackColor = false;
+			this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
+			this.btnLogin.AutoSize = true;
+			this.btnLogin.BackColor = SystemColors.Info;
+			this.btnLogin.Cursor = Cursors.Arrow;
+			this.btnLogin.FlatStyle = FlatStyle.Flat;
+			this.btnLogin.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.btnLogin.Location = new Point(141, 174);
+			this.btnLogin.Name = "btnLogin";
+			this.btnLogin.Size = new Size(81, 31);
+			this.btnLogin.TabIndex = 3;
+			this.btnLogin.Text = "Ok";
+			this.btnLogin.UseVisualStyleBackColor = false;
+			this.btnLogin.Click += new EventHandler(this.btnOk_Click);
+			this.lbUserID.AutoSize = true;
+			this.lbUserID.BackColor = Color.Transparent;
+			this.lbUserID.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbUserID.ForeColor = Color.LightGray;
+			this.lbUserID.Location = new Point(92, 82);
+			this.lbUserID.Name = "lbUserID";
+			this.lbUserID.Size = new Size(93, 19);
+			this.lbUserID.TabIndex = 9;
+			this.lbUserID.Text = "Username :";
+			this.lbPassword.AutoSize = true;
+			this.lbPassword.BackColor = Color.Transparent;
+			this.lbPassword.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbPassword.ForeColor = Color.LightGray;
+			this.lbPassword.Location = new Point(95, 113);
+			this.lbPassword.Name = "lbPassword";
+			this.lbPassword.Size = new Size(90, 19);
+			this.lbPassword.TabIndex = 10;
+			this.lbPassword.Text = "Password :";
+			this.pnLogin.BackColor = Color.Transparent;
+			this.pnLogin.BorderStyle = BorderStyle.FixedSingle;
+			this.pnLogin.Controls.Add(this.chbSupportTfex);
+			this.pnLogin.Controls.Add(this.pictureBox1);
+			this.pnLogin.Controls.Add(this.chkSettingProxy);
+			this.pnLogin.Controls.Add(this.label1);
+			this.pnLogin.Controls.Add(this.lbCopyRight);
+			this.pnLogin.Controls.Add(this.txtPassword);
+			this.pnLogin.Controls.Add(this.txtUserID);
+			this.pnLogin.Controls.Add(this.lbUserID);
+			this.pnLogin.Controls.Add(this.btnCancel);
+			this.pnLogin.Controls.Add(this.lbPassword);
+			this.pnLogin.Controls.Add(this.btnLogin);
+			this.pnLogin.Cursor = Cursors.Default;
+			this.pnLogin.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.pnLogin.Location = new Point(0, 0);
+			this.pnLogin.Name = "pnLogin";
+			this.pnLogin.Size = new Size(457, 249);
+			this.pnLogin.TabIndex = 20;
+			this.pnLogin.Paint += new PaintEventHandler(this.pnLogin_Paint);
+			this.chbSupportTfex.AutoSize = true;
+			this.chbSupportTfex.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.chbSupportTfex.ForeColor = Color.FromArgb(255, 128, 0);
+			this.chbSupportTfex.Location = new Point(139, 145);
+			this.chbSupportTfex.Name = "chbSupportTfex";
+			this.chbSupportTfex.Size = new Size(122, 21);
+			this.chbSupportTfex.TabIndex = 25;
+			this.chbSupportTfex.Text = "Support TFEX";
+			this.chbSupportTfex.UseVisualStyleBackColor = true;
+			this.pictureBox1.Image = (Image)componentResourceManager.GetObject("pictureBox1.Image");
+			this.pictureBox1.Location = new Point(135, 6);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new Size(203, 46);
+			this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+			this.pictureBox1.TabIndex = 24;
+			this.pictureBox1.TabStop = false;
+			this.chkSettingProxy.AutoSize = true;
+			this.chkSettingProxy.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.chkSettingProxy.ForeColor = Color.LightGray;
+			this.chkSettingProxy.Location = new Point(262, 145);
+			this.chkSettingProxy.Name = "chkSettingProxy";
+			this.chkSettingProxy.Size = new Size(116, 21);
+			this.chkSettingProxy.TabIndex = 23;
+			this.chkSettingProxy.Text = "Setting Proxy";
+			this.chkSettingProxy.UseVisualStyleBackColor = true;
+			this.chkSettingProxy.CheckedChanged += new EventHandler(this.chkSetingProxy_CheckedChanged);
+			this.label1.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
+			this.label1.BackColor = Color.Transparent;
+			this.label1.Font = new Font("Arial", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.label1.ForeColor = Color.LightGray;
+			this.label1.Location = new Point(11, 54);
+			this.label1.Name = "label1";
+			this.label1.Size = new Size(437, 21);
+			this.label1.TabIndex = 22;
+			this.label1.Text = "Internet Trading Workstation";
+			this.label1.TextAlign = ContentAlignment.MiddleCenter;
+			this.label1.UseCompatibleTextRendering = true;
+			this.chkRememberPwd.AutoSize = true;
+			this.chkRememberPwd.Location = new Point(260, 140);
+			this.chkRememberPwd.Name = "chkRememberPwd";
+			this.chkRememberPwd.Size = new Size(192, 24);
+			this.chkRememberPwd.TabIndex = 8;
+			this.chkRememberPwd.Text = "Remember Password";
+			this.chkRememberPwd.UseVisualStyleBackColor = true;
+			this.txtProxyPort.BorderStyle = BorderStyle.FixedSingle;
+			this.txtProxyPort.Location = new Point(260, 52);
+			this.txtProxyPort.Name = "txtProxyPort";
+			this.txtProxyPort.Size = new Size(125, 26);
+			this.txtProxyPort.TabIndex = 7;
+			this.txtProxyHost.BorderStyle = BorderStyle.FixedSingle;
+			this.txtProxyHost.Location = new Point(260, 24);
+			this.txtProxyHost.Name = "txtProxyHost";
+			this.txtProxyHost.Size = new Size(125, 26);
+			this.txtProxyHost.TabIndex = 6;
+			this.txtProxyPassword.BorderStyle = BorderStyle.FixedSingle;
+			this.txtProxyPassword.Location = new Point(261, 106);
+			this.txtProxyPassword.Name = "txtProxyPassword";
+			this.txtProxyPassword.PasswordChar = '*';
+			this.txtProxyPassword.Size = new Size(125, 26);
+			this.txtProxyPassword.TabIndex = 9;
+			this.txtProxyPassword.KeyUp += new KeyEventHandler(this.txtProxyPassword_KeyUp);
+			this.txtProxyUserName.BorderStyle = BorderStyle.FixedSingle;
+			this.txtProxyUserName.Location = new Point(261, 78);
+			this.txtProxyUserName.Name = "txtProxyUserName";
+			this.txtProxyUserName.Size = new Size(125, 26);
+			this.txtProxyUserName.TabIndex = 8;
+			this.label4.AutoSize = true;
+			this.label4.Location = new Point(179, 108);
+			this.label4.Name = "label4";
+			this.label4.Size = new Size(83, 20);
+			this.label4.TabIndex = 3;
+			this.label4.Text = "Password";
+			this.label5.AutoSize = true;
+			this.label5.Location = new Point(170, 81);
+			this.label5.Name = "label5";
+			this.label5.Size = new Size(94, 20);
+			this.label5.TabIndex = 2;
+			this.label5.Text = "User Name";
+			this.label3.AutoSize = true;
+			this.label3.Location = new Point(215, 54);
+			this.label3.Name = "label3";
+			this.label3.Size = new Size(40, 20);
+			this.label3.TabIndex = 2;
+			this.label3.Text = "Port";
+			this.label2.AutoSize = true;
+			this.label2.Location = new Point(188, 27);
+			this.label2.Name = "label2";
+			this.label2.Size = new Size(71, 20);
+			this.label2.TabIndex = 1;
+			this.label2.Text = "Address";
+			this.gbProxy.BackColor = SystemColors.Control;
+			this.gbProxy.Controls.Add(this.txtProxyPassword);
+			this.gbProxy.Controls.Add(this.lblNote);
+			this.gbProxy.Controls.Add(this.label4);
+			this.gbProxy.Controls.Add(this.txtProxyUserName);
+			this.gbProxy.Controls.Add(this.chkRememberPwd);
+			this.gbProxy.Controls.Add(this.label2);
+			this.gbProxy.Controls.Add(this.label5);
+			this.gbProxy.Controls.Add(this.txtProxyPort);
+			this.gbProxy.Controls.Add(this.label3);
+			this.gbProxy.Controls.Add(this.txtProxyHost);
+			this.gbProxy.Cursor = Cursors.Default;
+			this.gbProxy.Location = new Point(7, 0);
+			this.gbProxy.Name = "gbProxy";
+			this.gbProxy.Size = new Size(442, 173);
+			this.gbProxy.TabIndex = 21;
+			this.gbProxy.TabStop = false;
+			this.gbProxy.Text = "Proxy Setting";
+			this.gbProxy.Visible = false;
+			this.lblNote.BackColor = Color.FromArgb(255, 255, 192);
+			this.lblNote.Location = new Point(6, 22);
+			this.lblNote.Name = "lblNote";
+			this.lblNote.Size = new Size(146, 147);
+			this.lblNote.TabIndex = 10;
+			this.lblNote.Text = "\r\nคำแนะนำ\r\n   ในกรณีที่ต้องมีการเชื่อมต่อ \r\n Internet ผ่าน Proxy\r\n ท่านสามารถสอบถามข้อมูล\r\n เกี่ยวกับการใช้งาน Proxy \r\n ได้จาก ผู้ดูแลระบบของท่าน";
+			base.AutoScaleDimensions = new SizeF(9f, 20f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			this.AutoSize = true;
+			this.BackColor = Color.FromArgb(50, 50, 50);
+			base.ClientSize = new Size(457, 249);
+			base.ControlBox = false;
+			base.Controls.Add(this.pnLogin);
+			base.Controls.Add(this.gbProxy);
+			this.Cursor = Cursors.NoMove2D;
+			this.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			base.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+			base.Icon = (Icon)componentResourceManager.GetObject("$this.Icon");
+			base.MaximizeBox = false;
+			base.Name = "frmLogIn";
+			base.StartPosition = FormStartPosition.CenterScreen;
+			this.Text = "i2Trade Plus";
+			base.Load += new EventHandler(this.frmLogIn_Load);
+			base.Shown += new EventHandler(this.frmLogIn_Shown);
+			this.pnLogin.ResumeLayout(false);
+			this.pnLogin.PerformLayout();
+			((ISupportInitialize)this.pictureBox1).EndInit();
+			this.gbProxy.ResumeLayout(false);
+			this.gbProxy.PerformLayout();
+			base.ResumeLayout(false);
+		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public frmLogIn()
 		{
@@ -294,13 +570,13 @@ namespace i2TradePlus
 			{
 				if (BrokerId == 4)
 				{
-					host = "https://tradings.maybank-ke.co.th/i2trade/i2info_MBKET_PLUS_3_0_16_0.ashx";
+					host = "https://tradings.maybank-ke.co.th/i2trade/i2info_MBKET_PLUS_3_0_17_0.ashx";
 				}
 				else
 				{
 					if (BrokerId == 1)
 					{
-						host = "http://www.cns.co.th/i2trade/i2info_CNS_PLUS_3_0_16_0.ashx";
+						host = "http://www.cns.co.th/i2trade/i2info_CNS_PLUS_3_0_17_0.ashx";
 					}
 					else
 					{
@@ -312,7 +588,7 @@ namespace i2TradePlus
 						{
 							if (BrokerId == 3)
 							{
-								host = "https://sso.osk188.co.th/i2trade/i2info_RHBOSK_PLUS_3_0_16_0.ashx";
+								host = "https://sso.osk188.co.th/i2trade/i2info_RHBOSK_PLUS_3_0_17_0.ashx";
 							}
 							else
 							{
@@ -326,24 +602,24 @@ namespace i2TradePlus
 									{
 										if (ApplicationInfo.Isi2infoLink2)
 										{
-											host = "https://asp.asiaplus.co.th/aspapp/i2trade/i2info_ASP_PLUS_3_0_16_0_second_i2info.php";
+											host = "https://asp.asiaplus.co.th/aspapp/i2trade/i2info_ASP_PLUS_3_0_17_0_second_i2info.php";
 										}
 										else
 										{
-											host = "https://asp.asiaplus.co.th/aspapp/i2trade/i2info_ASP_PLUS_3_0_16_0.php";
+											host = "https://asp.asiaplus.co.th/aspapp/i2trade/i2info_ASP_PLUS_3_0_17_0.php";
 										}
 									}
 									else
 									{
 										if (BrokerId == 7)
 										{
-											host = "https://www.aira.co.th/i2trade/i2info_AIRA_PLUS_3_0_16_0.ashx";
+											host = "https://www.aira.co.th/i2trade/i2info_AIRA_PLUS_3_0_17_0.ashx";
 										}
 										else
 										{
 											if (BrokerId == 10)
 											{
-												host = "https://trading.aws.co.th/i2trade/i2info_AWS_PLUS_3_0_16_0.ashx";
+												host = "https://trading.aws.co.th/i2trade/i2info_AWS_PLUS_3_0_17_0.ashx";
 											}
 											else
 											{
@@ -355,31 +631,31 @@ namespace i2TradePlus
 												{
 													if (BrokerId == 88)
 													{
-														host = "http://www.i2trade.com/i2trade/i2info_PLUS_3_0_16_0.ashx";
+														host = "http://www.i2trade.com/i2trade/i2info_DEMO_PLUS_3_0_17_0.ashx";
 													}
 													else
 													{
 														if (BrokerId == 11)
 														{
-															host = "https://itrade.cimbsecurities.co.th/i2trade/i2info_CIMB_PLUS_3_0_16_0.ashx";
+															host = "https://itrade.cimbsecurities.co.th/i2trade/i2info_CIMBS_PLUS_3_0_17_0.ashx";
 														}
 														else
 														{
 															if (BrokerId == 12)
 															{
-																host = "https://sso.kktrade.co.th/i2trade/i2info_KKTRADE_PLUS_3_0_16.ashx";
+																host = "https://sso.kktrade.co.th/i2trade/i2info_KKTRADE_PLUS_3_0_17.ashx";
 															}
 															else
 															{
 																if (BrokerId == 13)
 																{
-																	host = "http://www.lhsec.co.th/i2trade/i2info_LHS_PLUS_3_0_16_0.ashx";
+																	host = "http://www.lhsec.co.th/i2trade/i2info_LHSec_PLUS_3_0_17_0.ashx";
 																}
 																else
 																{
 																	if (BrokerId == 14)
 																	{
-																		host = "http://aecs.com/i2trade/i2info_AEC_PLUS_3_0_16_0.ashx";
+																		host = "http://www.aecs.com/i2trade/i2info_AECS_PLUS_3_0_17_0.ashx";
 																	}
 																}
 															}
@@ -725,9 +1001,16 @@ namespace i2TradePlus
 								case "supporteservicepc":
 									ApplicationInfo.IsSupportEservice = (dataRow["control_value"].ToString() == "Y");
 									break;
-								case "sendheartbeatmonitor":
-									ApplicationInfo.SendHeartBeatMonitor = (dataRow["control_value"].ToString() == "Y");
+								case "hbinterval":
+								{
+									int num3;
+									int.TryParse(dataRow["control_value"].ToString(), out num3);
+									if (num3 > 0)
+									{
+										ApplicationInfo.SendHeartBeatInterval = num3;
+									}
 									break;
+								}
 								}
 							}
 						}
@@ -1119,282 +1402,6 @@ namespace i2TradePlus
 			{
 				e.Graphics.DrawRectangle(Pens.Gainsboro, e.ClipRectangle.Left, e.ClipRectangle.Top, e.ClipRectangle.Width - 1, e.ClipRectangle.Height - 1);
 			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(frmLogIn));
-			this.lbCopyRight = new Label();
-			this.txtPassword = new TextBox();
-			this.txtUserID = new TextBox();
-			this.btnCancel = new Button();
-			this.btnLogin = new Button();
-			this.lbUserID = new Label();
-			this.lbPassword = new Label();
-			this.pnLogin = new Panel();
-			this.chbSupportTfex = new CheckBox();
-			this.pictureBox1 = new PictureBox();
-			this.chkSettingProxy = new CheckBox();
-			this.label1 = new Label();
-			this.chkRememberPwd = new CheckBox();
-			this.txtProxyPort = new TextBox();
-			this.txtProxyHost = new TextBox();
-			this.txtProxyPassword = new TextBox();
-			this.txtProxyUserName = new TextBox();
-			this.label4 = new Label();
-			this.label5 = new Label();
-			this.label3 = new Label();
-			this.label2 = new Label();
-			this.gbProxy = new GroupBox();
-			this.lblNote = new Label();
-			this.pnLogin.SuspendLayout();
-			((ISupportInitialize)this.pictureBox1).BeginInit();
-			this.gbProxy.SuspendLayout();
-			base.SuspendLayout();
-			this.lbCopyRight.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
-			this.lbCopyRight.BackColor = Color.Transparent;
-			this.lbCopyRight.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbCopyRight.ForeColor = Color.LightGray;
-			this.lbCopyRight.Location = new Point(3, 218);
-			this.lbCopyRight.Name = "lbCopyRight";
-			this.lbCopyRight.Size = new Size(449, 22);
-			this.lbCopyRight.TabIndex = 15;
-			this.lbCopyRight.Text = "Copyright 2008 STI Revolution Co.,Ltd  All rights reserved";
-			this.lbCopyRight.TextAlign = ContentAlignment.BottomCenter;
-			this.lbCopyRight.UseCompatibleTextRendering = true;
-			this.txtPassword.BorderStyle = BorderStyle.FixedSingle;
-			this.txtPassword.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.txtPassword.Location = new Point(182, 109);
-			this.txtPassword.MaxLength = 16;
-			this.txtPassword.Name = "txtPassword";
-			this.txtPassword.Size = new Size(170, 27);
-			this.txtPassword.TabIndex = 2;
-			this.txtPassword.UseSystemPasswordChar = true;
-			this.txtPassword.KeyDown += new KeyEventHandler(this.txtPassword_KeyDown);
-			this.txtPassword.Leave += new EventHandler(this.txtPassword_Leave);
-			this.txtPassword.Enter += new EventHandler(this.txtPassword_Enter);
-			this.txtUserID.BackColor = Color.White;
-			this.txtUserID.BorderStyle = BorderStyle.FixedSingle;
-			this.txtUserID.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.txtUserID.Location = new Point(182, 79);
-			this.txtUserID.MaxLength = 50;
-			this.txtUserID.Name = "txtUserID";
-			this.txtUserID.Size = new Size(170, 27);
-			this.txtUserID.TabIndex = 1;
-			this.txtUserID.KeyDown += new KeyEventHandler(this.txtUserID_KeyDown);
-			this.txtUserID.Leave += new EventHandler(this.txtUserID_Leave);
-			this.txtUserID.Enter += new EventHandler(this.txtUserID_Enter);
-			this.btnCancel.AutoSize = true;
-			this.btnCancel.BackColor = SystemColors.Info;
-			this.btnCancel.Cursor = Cursors.Arrow;
-			this.btnCancel.DialogResult = DialogResult.Cancel;
-			this.btnCancel.FlatStyle = FlatStyle.Flat;
-			this.btnCancel.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.btnCancel.Location = new Point(245, 174);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new Size(81, 31);
-			this.btnCancel.TabIndex = 4;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = false;
-			this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
-			this.btnLogin.AutoSize = true;
-			this.btnLogin.BackColor = SystemColors.Info;
-			this.btnLogin.Cursor = Cursors.Arrow;
-			this.btnLogin.FlatStyle = FlatStyle.Flat;
-			this.btnLogin.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.btnLogin.Location = new Point(141, 174);
-			this.btnLogin.Name = "btnLogin";
-			this.btnLogin.Size = new Size(81, 31);
-			this.btnLogin.TabIndex = 3;
-			this.btnLogin.Text = "Ok";
-			this.btnLogin.UseVisualStyleBackColor = false;
-			this.btnLogin.Click += new EventHandler(this.btnOk_Click);
-			this.lbUserID.AutoSize = true;
-			this.lbUserID.BackColor = Color.Transparent;
-			this.lbUserID.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbUserID.ForeColor = Color.LightGray;
-			this.lbUserID.Location = new Point(92, 82);
-			this.lbUserID.Name = "lbUserID";
-			this.lbUserID.Size = new Size(93, 19);
-			this.lbUserID.TabIndex = 9;
-			this.lbUserID.Text = "Username :";
-			this.lbPassword.AutoSize = true;
-			this.lbPassword.BackColor = Color.Transparent;
-			this.lbPassword.Font = new Font("Arial", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbPassword.ForeColor = Color.LightGray;
-			this.lbPassword.Location = new Point(95, 113);
-			this.lbPassword.Name = "lbPassword";
-			this.lbPassword.Size = new Size(90, 19);
-			this.lbPassword.TabIndex = 10;
-			this.lbPassword.Text = "Password :";
-			this.pnLogin.BackColor = Color.Transparent;
-			this.pnLogin.BorderStyle = BorderStyle.FixedSingle;
-			this.pnLogin.Controls.Add(this.chbSupportTfex);
-			this.pnLogin.Controls.Add(this.pictureBox1);
-			this.pnLogin.Controls.Add(this.chkSettingProxy);
-			this.pnLogin.Controls.Add(this.label1);
-			this.pnLogin.Controls.Add(this.lbCopyRight);
-			this.pnLogin.Controls.Add(this.txtPassword);
-			this.pnLogin.Controls.Add(this.txtUserID);
-			this.pnLogin.Controls.Add(this.lbUserID);
-			this.pnLogin.Controls.Add(this.btnCancel);
-			this.pnLogin.Controls.Add(this.lbPassword);
-			this.pnLogin.Controls.Add(this.btnLogin);
-			this.pnLogin.Cursor = Cursors.Default;
-			this.pnLogin.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.pnLogin.Location = new Point(0, 0);
-			this.pnLogin.Name = "pnLogin";
-			this.pnLogin.Size = new Size(457, 249);
-			this.pnLogin.TabIndex = 20;
-			this.pnLogin.Paint += new PaintEventHandler(this.pnLogin_Paint);
-			this.chbSupportTfex.AutoSize = true;
-			this.chbSupportTfex.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.chbSupportTfex.ForeColor = Color.FromArgb(255, 128, 0);
-			this.chbSupportTfex.Location = new Point(139, 145);
-			this.chbSupportTfex.Name = "chbSupportTfex";
-			this.chbSupportTfex.Size = new Size(122, 21);
-			this.chbSupportTfex.TabIndex = 25;
-			this.chbSupportTfex.Text = "Support TFEX";
-			this.chbSupportTfex.UseVisualStyleBackColor = true;
-			this.pictureBox1.Image = (Image)componentResourceManager.GetObject("pictureBox1.Image");
-			this.pictureBox1.Location = new Point(135, 6);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new Size(203, 46);
-			this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-			this.pictureBox1.TabIndex = 24;
-			this.pictureBox1.TabStop = false;
-			this.chkSettingProxy.AutoSize = true;
-			this.chkSettingProxy.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.chkSettingProxy.ForeColor = Color.LightGray;
-			this.chkSettingProxy.Location = new Point(262, 145);
-			this.chkSettingProxy.Name = "chkSettingProxy";
-			this.chkSettingProxy.Size = new Size(116, 21);
-			this.chkSettingProxy.TabIndex = 23;
-			this.chkSettingProxy.Text = "Setting Proxy";
-			this.chkSettingProxy.UseVisualStyleBackColor = true;
-			this.chkSettingProxy.CheckedChanged += new EventHandler(this.chkSetingProxy_CheckedChanged);
-			this.label1.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
-			this.label1.BackColor = Color.Transparent;
-			this.label1.Font = new Font("Arial", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.label1.ForeColor = Color.LightGray;
-			this.label1.Location = new Point(11, 54);
-			this.label1.Name = "label1";
-			this.label1.Size = new Size(437, 21);
-			this.label1.TabIndex = 22;
-			this.label1.Text = "Internet Trading Workstation";
-			this.label1.TextAlign = ContentAlignment.MiddleCenter;
-			this.label1.UseCompatibleTextRendering = true;
-			this.chkRememberPwd.AutoSize = true;
-			this.chkRememberPwd.Location = new Point(260, 140);
-			this.chkRememberPwd.Name = "chkRememberPwd";
-			this.chkRememberPwd.Size = new Size(192, 24);
-			this.chkRememberPwd.TabIndex = 8;
-			this.chkRememberPwd.Text = "Remember Password";
-			this.chkRememberPwd.UseVisualStyleBackColor = true;
-			this.txtProxyPort.BorderStyle = BorderStyle.FixedSingle;
-			this.txtProxyPort.Location = new Point(260, 52);
-			this.txtProxyPort.Name = "txtProxyPort";
-			this.txtProxyPort.Size = new Size(125, 26);
-			this.txtProxyPort.TabIndex = 7;
-			this.txtProxyHost.BorderStyle = BorderStyle.FixedSingle;
-			this.txtProxyHost.Location = new Point(260, 24);
-			this.txtProxyHost.Name = "txtProxyHost";
-			this.txtProxyHost.Size = new Size(125, 26);
-			this.txtProxyHost.TabIndex = 6;
-			this.txtProxyPassword.BorderStyle = BorderStyle.FixedSingle;
-			this.txtProxyPassword.Location = new Point(261, 106);
-			this.txtProxyPassword.Name = "txtProxyPassword";
-			this.txtProxyPassword.PasswordChar = '*';
-			this.txtProxyPassword.Size = new Size(125, 26);
-			this.txtProxyPassword.TabIndex = 9;
-			this.txtProxyPassword.KeyUp += new KeyEventHandler(this.txtProxyPassword_KeyUp);
-			this.txtProxyUserName.BorderStyle = BorderStyle.FixedSingle;
-			this.txtProxyUserName.Location = new Point(261, 78);
-			this.txtProxyUserName.Name = "txtProxyUserName";
-			this.txtProxyUserName.Size = new Size(125, 26);
-			this.txtProxyUserName.TabIndex = 8;
-			this.label4.AutoSize = true;
-			this.label4.Location = new Point(179, 108);
-			this.label4.Name = "label4";
-			this.label4.Size = new Size(83, 20);
-			this.label4.TabIndex = 3;
-			this.label4.Text = "Password";
-			this.label5.AutoSize = true;
-			this.label5.Location = new Point(170, 81);
-			this.label5.Name = "label5";
-			this.label5.Size = new Size(94, 20);
-			this.label5.TabIndex = 2;
-			this.label5.Text = "User Name";
-			this.label3.AutoSize = true;
-			this.label3.Location = new Point(215, 54);
-			this.label3.Name = "label3";
-			this.label3.Size = new Size(40, 20);
-			this.label3.TabIndex = 2;
-			this.label3.Text = "Port";
-			this.label2.AutoSize = true;
-			this.label2.Location = new Point(188, 27);
-			this.label2.Name = "label2";
-			this.label2.Size = new Size(71, 20);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Address";
-			this.gbProxy.BackColor = SystemColors.Control;
-			this.gbProxy.Controls.Add(this.txtProxyPassword);
-			this.gbProxy.Controls.Add(this.lblNote);
-			this.gbProxy.Controls.Add(this.label4);
-			this.gbProxy.Controls.Add(this.txtProxyUserName);
-			this.gbProxy.Controls.Add(this.chkRememberPwd);
-			this.gbProxy.Controls.Add(this.label2);
-			this.gbProxy.Controls.Add(this.label5);
-			this.gbProxy.Controls.Add(this.txtProxyPort);
-			this.gbProxy.Controls.Add(this.label3);
-			this.gbProxy.Controls.Add(this.txtProxyHost);
-			this.gbProxy.Cursor = Cursors.Default;
-			this.gbProxy.Location = new Point(7, 0);
-			this.gbProxy.Name = "gbProxy";
-			this.gbProxy.Size = new Size(442, 173);
-			this.gbProxy.TabIndex = 21;
-			this.gbProxy.TabStop = false;
-			this.gbProxy.Text = "Proxy Setting";
-			this.gbProxy.Visible = false;
-			this.lblNote.BackColor = Color.FromArgb(255, 255, 192);
-			this.lblNote.Location = new Point(6, 22);
-			this.lblNote.Name = "lblNote";
-			this.lblNote.Size = new Size(146, 147);
-			this.lblNote.TabIndex = 10;
-			this.lblNote.Text = "\r\nคำแนะนำ\r\n   ในกรณีที่ต้องมีการเชื่อมต่อ \r\n Internet ผ่าน Proxy\r\n ท่านสามารถสอบถามข้อมูล\r\n เกี่ยวกับการใช้งาน Proxy \r\n ได้จาก ผู้ดูแลระบบของท่าน";
-			base.AutoScaleDimensions = new SizeF(9f, 20f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			this.AutoSize = true;
-			this.BackColor = Color.FromArgb(50, 50, 50);
-			base.ClientSize = new Size(457, 249);
-			base.ControlBox = false;
-			base.Controls.Add(this.pnLogin);
-			base.Controls.Add(this.gbProxy);
-			this.Cursor = Cursors.NoMove2D;
-			this.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			base.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-			base.Icon = (Icon)componentResourceManager.GetObject("$this.Icon");
-			base.MaximizeBox = false;
-			base.Name = "frmLogIn";
-			base.StartPosition = FormStartPosition.CenterScreen;
-			this.Text = "i2Trade Plus";
-			base.Load += new EventHandler(this.frmLogIn_Load);
-			base.Shown += new EventHandler(this.frmLogIn_Shown);
-			this.pnLogin.ResumeLayout(false);
-			this.pnLogin.PerformLayout();
-			((ISupportInitialize)this.pictureBox1).EndInit();
-			this.gbProxy.ResumeLayout(false);
-			this.gbProxy.PerformLayout();
-			base.ResumeLayout(false);
 		}
 	}
 }

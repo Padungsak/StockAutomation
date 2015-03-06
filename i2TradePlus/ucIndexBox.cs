@@ -12,12 +12,6 @@ namespace i2TradePlus
 	public class ucIndexBox : UserControl
 	{
 		private delegate void DrawTFEXCallback(Graphics g);
-		private IContainer components = null;
-		private Button btnSwap;
-		private Button btnSelect;
-		private Panel panel1;
-		private Timer timerSwapSET;
-		private ContextMenuStrip contextMenuStrip1;
 		private int displayType = 1;
 		private string _displaySET = "SET";
 		private int _displaySector = 1;
@@ -30,6 +24,12 @@ namespace i2TradePlus
 		private DateTime _goldUpdateLastTime = DateTime.MinValue;
 		private bool _active = false;
 		private BBOTFEXCurrency _goldSpotValue = null;
+		private IContainer components = null;
+		private Button btnSwap;
+		private Button btnSelect;
+		private Panel panel1;
+		private Timer timerSwapSET;
+		private ContextMenuStrip contextMenuStrip1;
 		public int DisplayType
 		{
 			[MethodImpl(MethodImplOptions.NoInlining)]
@@ -132,77 +132,6 @@ namespace i2TradePlus
 					base.Invalidate();
 				}
 			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			this.components = new Container();
-			this.btnSwap = new Button();
-			this.btnSelect = new Button();
-			this.panel1 = new Panel();
-			this.timerSwapSET = new Timer(this.components);
-			this.contextMenuStrip1 = new ContextMenuStrip(this.components);
-			this.panel1.SuspendLayout();
-			base.SuspendLayout();
-			this.btnSwap.Cursor = Cursors.Hand;
-			this.btnSwap.Dock = DockStyle.Top;
-			this.btnSwap.FlatAppearance.BorderSize = 0;
-			this.btnSwap.FlatStyle = FlatStyle.Flat;
-			this.btnSwap.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.btnSwap.ForeColor = Color.DarkGray;
-			this.btnSwap.Location = new Point(0, 0);
-			this.btnSwap.Margin = new Padding(2, 2, 2, 2);
-			this.btnSwap.Name = "btnSwap";
-			this.btnSwap.Size = new Size(40, 20);
-			this.btnSwap.TabIndex = 0;
-			this.btnSwap.Text = "Swap";
-			this.btnSwap.UseVisualStyleBackColor = true;
-			this.btnSwap.Click += new EventHandler(this.btnSwap_Click);
-			this.btnSelect.Cursor = Cursors.Hand;
-			this.btnSelect.Dock = DockStyle.Bottom;
-			this.btnSelect.FlatAppearance.BorderSize = 0;
-			this.btnSelect.FlatStyle = FlatStyle.Flat;
-			this.btnSelect.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.btnSelect.ForeColor = Color.DarkGray;
-			this.btnSelect.Location = new Point(0, 22);
-			this.btnSelect.Margin = new Padding(2, 2, 2, 2);
-			this.btnSelect.Name = "btnSelect";
-			this.btnSelect.Size = new Size(40, 20);
-			this.btnSelect.TabIndex = 1;
-			this.btnSelect.Text = "Select";
-			this.btnSelect.UseVisualStyleBackColor = true;
-			this.btnSelect.Click += new EventHandler(this.btnSelect_Click);
-			this.panel1.BackColor = Color.FromArgb(20, 20, 20);
-			this.panel1.Controls.Add(this.btnSwap);
-			this.panel1.Controls.Add(this.btnSelect);
-			this.panel1.Location = new Point(2, 2);
-			this.panel1.Margin = new Padding(2, 2, 2, 2);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new Size(40, 42);
-			this.panel1.TabIndex = 2;
-			this.timerSwapSET.Interval = 15000;
-			this.timerSwapSET.Tick += new EventHandler(this.timerSwapSET_Tick);
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new Size(61, 4);
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			this.BackColor = Color.Black;
-			base.Controls.Add(this.panel1);
-			base.Name = "ucIndexBox";
-			base.Size = new Size(265, 46);
-			base.Paint += new PaintEventHandler(this.ucIndexBox_Paint);
-			base.SizeChanged += new EventHandler(this.ucIndexBox_SizeChanged);
-			this.panel1.ResumeLayout(false);
-			base.ResumeLayout(false);
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public ucIndexBox()
@@ -1124,6 +1053,77 @@ namespace i2TradePlus
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void ucIndexBox_SizeChanged(object sender, EventArgs e)
 		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			this.components = new Container();
+			this.btnSwap = new Button();
+			this.btnSelect = new Button();
+			this.panel1 = new Panel();
+			this.timerSwapSET = new Timer(this.components);
+			this.contextMenuStrip1 = new ContextMenuStrip(this.components);
+			this.panel1.SuspendLayout();
+			base.SuspendLayout();
+			this.btnSwap.Cursor = Cursors.Hand;
+			this.btnSwap.Dock = DockStyle.Top;
+			this.btnSwap.FlatAppearance.BorderSize = 0;
+			this.btnSwap.FlatStyle = FlatStyle.Flat;
+			this.btnSwap.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.btnSwap.ForeColor = Color.DarkGray;
+			this.btnSwap.Location = new Point(0, 0);
+			this.btnSwap.Margin = new Padding(2, 2, 2, 2);
+			this.btnSwap.Name = "btnSwap";
+			this.btnSwap.Size = new Size(40, 20);
+			this.btnSwap.TabIndex = 0;
+			this.btnSwap.Text = "Swap";
+			this.btnSwap.UseVisualStyleBackColor = true;
+			this.btnSwap.Click += new EventHandler(this.btnSwap_Click);
+			this.btnSelect.Cursor = Cursors.Hand;
+			this.btnSelect.Dock = DockStyle.Bottom;
+			this.btnSelect.FlatAppearance.BorderSize = 0;
+			this.btnSelect.FlatStyle = FlatStyle.Flat;
+			this.btnSelect.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.btnSelect.ForeColor = Color.DarkGray;
+			this.btnSelect.Location = new Point(0, 22);
+			this.btnSelect.Margin = new Padding(2, 2, 2, 2);
+			this.btnSelect.Name = "btnSelect";
+			this.btnSelect.Size = new Size(40, 20);
+			this.btnSelect.TabIndex = 1;
+			this.btnSelect.Text = "Select";
+			this.btnSelect.UseVisualStyleBackColor = true;
+			this.btnSelect.Click += new EventHandler(this.btnSelect_Click);
+			this.panel1.BackColor = Color.FromArgb(20, 20, 20);
+			this.panel1.Controls.Add(this.btnSwap);
+			this.panel1.Controls.Add(this.btnSelect);
+			this.panel1.Location = new Point(2, 2);
+			this.panel1.Margin = new Padding(2, 2, 2, 2);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new Size(40, 42);
+			this.panel1.TabIndex = 2;
+			this.timerSwapSET.Interval = 15000;
+			this.timerSwapSET.Tick += new EventHandler(this.timerSwapSET_Tick);
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new Size(61, 4);
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			this.BackColor = Color.Black;
+			base.Controls.Add(this.panel1);
+			base.Name = "ucIndexBox";
+			base.Size = new Size(265, 46);
+			base.Paint += new PaintEventHandler(this.ucIndexBox_Paint);
+			base.SizeChanged += new EventHandler(this.ucIndexBox_SizeChanged);
+			this.panel1.ResumeLayout(false);
+			base.ResumeLayout(false);
 		}
 	}
 }

@@ -17,38 +17,11 @@ namespace i2TradePlus.FixForm
 		private const int USE_CTRL = 2;
 		private const int USE_SHIFT = 4;
 		private const int USE_WIN = 8;
-		private XtBrowser xtbNews;
 		private short mHotKeyId = 0;
 		private Timer tmLoad = null;
 		private string _url = string.Empty;
 		private bool _isNews = false;
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			this.xtbNews = new XtBrowser();
-			base.SuspendLayout();
-			this.xtbNews.Dock = DockStyle.Fill;
-			this.xtbNews.Location = new Point(0, 0);
-			this.xtbNews.Name = "xtbNews";
-			this.xtbNews.Size = new Size(740, 544);
-			this.xtbNews.TabIndex = 0;
-			this.xtbNews.Url = null;
-			this.xtbNews.SearchStockClicked += new XtBrowser.SearchStockClickEventCallBack(this.xtbNews_SearchStockClicked);
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			base.ClientSize = new Size(740, 544);
-			base.Controls.Add(this.xtbNews);
-			base.Name = "frmBrowser";
-			this.Text = "frmi2Browser";
-			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmi2Browser_IDoShownDelay);
-			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmi2Browser_IDoLoadData);
-			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmi2Browser_IDoFontChanged);
-			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmi2Browser_IDoCustomSizeChanged);
-			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmi2Browser_IDoReActivated);
-			base.Controls.SetChildIndex(this.xtbNews, 0);
-			base.ResumeLayout(false);
-			base.PerformLayout();
-		}
+		private XtBrowser xtbNews;
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public frmBrowser()
 		{
@@ -312,6 +285,33 @@ namespace i2TradePlus.FixForm
 		private void xtbNews_SearchStockClicked(bool isNews, string symbol)
 		{
 			this.CallSymbolLink(isNews, symbol);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			this.xtbNews = new XtBrowser();
+			base.SuspendLayout();
+			this.xtbNews.Dock = DockStyle.Fill;
+			this.xtbNews.Location = new Point(0, 0);
+			this.xtbNews.Name = "xtbNews";
+			this.xtbNews.Size = new Size(740, 544);
+			this.xtbNews.TabIndex = 0;
+			this.xtbNews.Url = null;
+			this.xtbNews.SearchStockClicked += new XtBrowser.SearchStockClickEventCallBack(this.xtbNews_SearchStockClicked);
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			base.ClientSize = new Size(740, 544);
+			base.Controls.Add(this.xtbNews);
+			base.Name = "frmBrowser";
+			this.Text = "frmi2Browser";
+			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmi2Browser_IDoShownDelay);
+			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmi2Browser_IDoLoadData);
+			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmi2Browser_IDoFontChanged);
+			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmi2Browser_IDoCustomSizeChanged);
+			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmi2Browser_IDoReActivated);
+			base.Controls.SetChildIndex(this.xtbNews, 0);
+			base.ResumeLayout(false);
+			base.PerformLayout();
 		}
 	}
 }

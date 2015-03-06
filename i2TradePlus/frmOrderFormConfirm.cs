@@ -17,14 +17,6 @@ namespace i2TradePlus
 			WaitingForm
 		}
 		private delegate void ShowTextCallBack(string message);
-		private DialogResult result = DialogResult.None;
-		private frmOrderFormConfirm.OpenStyle openFormStyle = frmOrderFormConfirm.OpenStyle.ShowBox;
-		private string _ossMessage = string.Empty;
-		private string _stockThreshold = string.Empty;
-		private string _orderParam = string.Empty;
-		private string _message = string.Empty;
-		private bool _isShowPin = false;
-		private Timer tmCloseForm = null;
 		private IContainer components = null;
 		private Button btnCancel;
 		private Button btnOk;
@@ -42,6 +34,14 @@ namespace i2TradePlus
 		private Label lbOrderString;
 		private Label lbOSS;
 		private Label lbOSSLabel;
+		private DialogResult result = DialogResult.None;
+		private frmOrderFormConfirm.OpenStyle openFormStyle = frmOrderFormConfirm.OpenStyle.ShowBox;
+		private string _ossMessage = string.Empty;
+		private string _stockThreshold = string.Empty;
+		private string _orderParam = string.Empty;
+		private string _message = string.Empty;
+		private bool _isShowPin = false;
+		private Timer tmCloseForm = null;
 		public DialogResult Result
 		{
 			[MethodImpl(MethodImplOptions.NoInlining)]
@@ -96,6 +96,216 @@ namespace i2TradePlus
 			{
 				this._orderParam = value;
 			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(frmOrderFormConfirm));
+			this.btnCancel = new Button();
+			this.btnOk = new Button();
+			this.btnNo = new Button();
+			this.lbPincode = new Label();
+			this.tbPincode = new TextBox();
+			this.chbSavePincode = new CheckBox();
+			this.gbSavePingDisclaimer = new GroupBox();
+			this.btnSavePinDisAgree = new Button();
+			this.btnSavePinAgree = new Button();
+			this.lbSavePin = new Label();
+			this.panel1 = new Panel();
+			this.lbOSS = new Label();
+			this.lbOSSLabel = new Label();
+			this.lbStockTH = new Label();
+			this.lbStockTHlabel = new Label();
+			this.lbOrderString = new Label();
+			this.gbSavePingDisclaimer.SuspendLayout();
+			this.panel1.SuspendLayout();
+			base.SuspendLayout();
+			this.btnCancel.BackColor = Color.WhiteSmoke;
+			this.btnCancel.FlatAppearance.BorderColor = Color.Gray;
+			this.btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnCancel.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnCancel.FlatStyle = FlatStyle.Flat;
+			this.btnCancel.Location = new Point(272, 197);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new Size(87, 29);
+			this.btnCancel.TabIndex = 2;
+			this.btnCancel.Text = "Cancel";
+			this.btnCancel.UseVisualStyleBackColor = false;
+			this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
+			this.btnCancel.Leave += new EventHandler(this.Button_Leave);
+			this.btnCancel.Enter += new EventHandler(this.Button_Enter);
+			this.btnOk.BackColor = Color.WhiteSmoke;
+			this.btnOk.FlatAppearance.BorderColor = Color.Gray;
+			this.btnOk.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnOk.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnOk.FlatStyle = FlatStyle.Flat;
+			this.btnOk.Location = new Point(51, 198);
+			this.btnOk.Name = "btnOk";
+			this.btnOk.Size = new Size(87, 29);
+			this.btnOk.TabIndex = 0;
+			this.btnOk.Text = "Yes";
+			this.btnOk.UseVisualStyleBackColor = false;
+			this.btnOk.Click += new EventHandler(this.btnOk_Click);
+			this.btnOk.Leave += new EventHandler(this.Button_Leave);
+			this.btnOk.Enter += new EventHandler(this.Button_Enter);
+			this.btnNo.BackColor = Color.WhiteSmoke;
+			this.btnNo.FlatAppearance.BorderColor = Color.Gray;
+			this.btnNo.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnNo.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnNo.FlatStyle = FlatStyle.Flat;
+			this.btnNo.Location = new Point(160, 197);
+			this.btnNo.Name = "btnNo";
+			this.btnNo.Size = new Size(87, 29);
+			this.btnNo.TabIndex = 1;
+			this.btnNo.Text = "No";
+			this.btnNo.UseVisualStyleBackColor = false;
+			this.btnNo.Click += new EventHandler(this.btnNo_Click);
+			this.btnNo.Leave += new EventHandler(this.Button_Leave);
+			this.btnNo.Enter += new EventHandler(this.Button_Enter);
+			this.lbPincode.AutoSize = true;
+			this.lbPincode.Location = new Point(10, 203);
+			this.lbPincode.Name = "lbPincode";
+			this.lbPincode.Size = new Size(32, 21);
+			this.lbPincode.TabIndex = 2;
+			this.lbPincode.Text = "Pin";
+			this.tbPincode.Location = new Point(39, 200);
+			this.tbPincode.MaxLength = 10;
+			this.tbPincode.Name = "tbPincode";
+			this.tbPincode.PasswordChar = '*';
+			this.tbPincode.Size = new Size(72, 27);
+			this.tbPincode.TabIndex = 0;
+			this.tbPincode.KeyDown += new KeyEventHandler(this.tbPincode_KeyDown);
+			this.tbPincode.Leave += new EventHandler(this.Button_Leave);
+			this.tbPincode.Enter += new EventHandler(this.Button_Enter);
+			this.chbSavePincode.AutoSize = true;
+			this.chbSavePincode.Location = new Point(116, 202);
+			this.chbSavePincode.Name = "chbSavePincode";
+			this.chbSavePincode.Size = new Size(67, 25);
+			this.chbSavePincode.TabIndex = 0;
+			this.chbSavePincode.TabStop = false;
+			this.chbSavePincode.Text = "Save";
+			this.chbSavePincode.UseVisualStyleBackColor = true;
+			this.chbSavePincode.Click += new EventHandler(this.chbSavePincode_Click);
+			this.gbSavePingDisclaimer.BackColor = Color.FromArgb(224, 224, 224);
+			this.gbSavePingDisclaimer.Controls.Add(this.btnSavePinDisAgree);
+			this.gbSavePingDisclaimer.Controls.Add(this.btnSavePinAgree);
+			this.gbSavePingDisclaimer.Controls.Add(this.lbSavePin);
+			this.gbSavePingDisclaimer.Dock = DockStyle.Fill;
+			this.gbSavePingDisclaimer.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.gbSavePingDisclaimer.Location = new Point(0, 0);
+			this.gbSavePingDisclaimer.Name = "gbSavePingDisclaimer";
+			this.gbSavePingDisclaimer.Size = new Size(479, 231);
+			this.gbSavePingDisclaimer.TabIndex = 7;
+			this.gbSavePingDisclaimer.TabStop = false;
+			this.gbSavePingDisclaimer.Text = "Disclaimer";
+			this.gbSavePingDisclaimer.Visible = false;
+			this.btnSavePinDisAgree.Location = new Point(200, 72);
+			this.btnSavePinDisAgree.Name = "btnSavePinDisAgree";
+			this.btnSavePinDisAgree.Size = new Size(96, 23);
+			this.btnSavePinDisAgree.TabIndex = 2;
+			this.btnSavePinDisAgree.Text = "I DISAGREE";
+			this.btnSavePinDisAgree.UseVisualStyleBackColor = true;
+			this.btnSavePinDisAgree.Click += new EventHandler(this.btnSavePinDisAgree_Click);
+			this.btnSavePinAgree.Location = new Point(114, 72);
+			this.btnSavePinAgree.Name = "btnSavePinAgree";
+			this.btnSavePinAgree.Size = new Size(72, 23);
+			this.btnSavePinAgree.TabIndex = 1;
+			this.btnSavePinAgree.Text = "I AGREE";
+			this.btnSavePinAgree.UseVisualStyleBackColor = true;
+			this.btnSavePinAgree.Click += new EventHandler(this.btnSavePinAgree_Click);
+			this.lbSavePin.AutoSize = true;
+			this.lbSavePin.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbSavePin.Location = new Point(6, -19);
+			this.lbSavePin.Name = "lbSavePin";
+			this.lbSavePin.Size = new Size(508, 108);
+			this.lbSavePin.TabIndex = 0;
+			this.lbSavePin.Text = componentResourceManager.GetString("lbSavePin.Text");
+			this.panel1.BackColor = Color.FromArgb(10, 10, 10);
+			this.panel1.Controls.Add(this.lbOSS);
+			this.panel1.Controls.Add(this.lbOSSLabel);
+			this.panel1.Controls.Add(this.lbStockTH);
+			this.panel1.Controls.Add(this.lbStockTHlabel);
+			this.panel1.Controls.Add(this.lbOrderString);
+			this.panel1.Location = new Point(0, 0);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new Size(478, 190);
+			this.panel1.TabIndex = 8;
+			this.lbOSS.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
+			this.lbOSS.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbOSS.ForeColor = Color.FromArgb(255, 128, 0);
+			this.lbOSS.Location = new Point(24, 159);
+			this.lbOSS.Name = "lbOSS";
+			this.lbOSS.Size = new Size(443, 23);
+			this.lbOSS.TabIndex = 6;
+			this.lbOSS.Text = "Warning String";
+			this.lbOSSLabel.AutoSize = true;
+			this.lbOSSLabel.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbOSSLabel.ForeColor = Color.LightGray;
+			this.lbOSSLabel.Location = new Point(8, 141);
+			this.lbOSSLabel.Name = "lbOSSLabel";
+			this.lbOSSLabel.Size = new Size(140, 21);
+			this.lbOSSLabel.TabIndex = 5;
+			this.lbOSSLabel.Text = "Order Screening :";
+			this.lbStockTH.AutoSize = true;
+			this.lbStockTH.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbStockTH.ForeColor = Color.Red;
+			this.lbStockTH.Location = new Point(24, 118);
+			this.lbStockTH.Name = "lbStockTH";
+			this.lbStockTH.Size = new Size(137, 23);
+			this.lbStockTH.TabIndex = 4;
+			this.lbStockTH.Text = "Warning String";
+			this.lbStockTHlabel.AutoSize = true;
+			this.lbStockTHlabel.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbStockTHlabel.ForeColor = Color.LightGray;
+			this.lbStockTHlabel.Location = new Point(8, 97);
+			this.lbStockTHlabel.Name = "lbStockTHlabel";
+			this.lbStockTHlabel.Size = new Size(110, 21);
+			this.lbStockTHlabel.TabIndex = 3;
+			this.lbStockTHlabel.Text = "Risk Control :";
+			this.lbOrderString.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
+			this.lbOrderString.AutoSize = true;
+			this.lbOrderString.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbOrderString.ForeColor = Color.Yellow;
+			this.lbOrderString.Location = new Point(8, 5);
+			this.lbOrderString.Name = "lbOrderString";
+			this.lbOrderString.Size = new Size(114, 23);
+			this.lbOrderString.TabIndex = 0;
+			this.lbOrderString.Text = "Order String";
+			base.AutoScaleDimensions = new SizeF(9f, 19f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			base.ClientSize = new Size(479, 231);
+			base.Controls.Add(this.panel1);
+			base.Controls.Add(this.chbSavePincode);
+			base.Controls.Add(this.tbPincode);
+			base.Controls.Add(this.lbPincode);
+			base.Controls.Add(this.btnNo);
+			base.Controls.Add(this.btnOk);
+			base.Controls.Add(this.btnCancel);
+			base.Controls.Add(this.gbSavePingDisclaimer);
+			this.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			base.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+			base.KeyPreview = true;
+			base.Name = "frmOrderFormConfirm";
+			base.StartPosition = FormStartPosition.Manual;
+			this.Text = "Order Confirmation";
+			base.Load += new EventHandler(this.frmOrderFormConfirm_Load);
+			base.Shown += new EventHandler(this.frmOrderFormConfirm_Shown);
+			base.KeyDown += new KeyEventHandler(this.frmOrderFormConfirm_KeyDown);
+			this.gbSavePingDisclaimer.ResumeLayout(false);
+			this.gbSavePingDisclaimer.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			base.ResumeLayout(false);
+			base.PerformLayout();
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public frmOrderFormConfirm(string message, frmOrderFormConfirm.OpenStyle openStyle)
@@ -342,6 +552,10 @@ namespace i2TradePlus
 				try
 				{
 					base.Enabled = false;
+					if (!Settings.Default.BSBoxSavePincode)
+					{
+						ApplicationInfo.UserPincodeLastEntry = string.Empty;
+					}
 					if (this.tmCloseForm == null)
 					{
 						this.tmCloseForm = new Timer();
@@ -393,14 +607,7 @@ namespace i2TradePlus
 				else
 				{
 					this.chbSavePincode.Checked = Settings.Default.BSBoxSavePincode;
-					if (Settings.Default.BSBoxSavePincode)
-					{
-						this.tbPincode.Text = ApplicationInfo.UserPincodeLastEntry;
-					}
-					else
-					{
-						this.tbPincode.Text = string.Empty;
-					}
+					this.tbPincode.Text = ApplicationInfo.UserPincodeLastEntry;
 				}
 			}
 			if (this.tbPincode.Visible && this.tbPincode.Text == string.Empty)
@@ -526,216 +733,6 @@ namespace i2TradePlus
 		protected void ShowError(string functionName, Exception ex)
 		{
 			ExceptionManager.Show(new ErrorItem(DateTime.Now, base.Name, functionName, ex.Message, ex.ToString()));
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(frmOrderFormConfirm));
-			this.btnCancel = new Button();
-			this.btnOk = new Button();
-			this.btnNo = new Button();
-			this.lbPincode = new Label();
-			this.tbPincode = new TextBox();
-			this.chbSavePincode = new CheckBox();
-			this.gbSavePingDisclaimer = new GroupBox();
-			this.btnSavePinDisAgree = new Button();
-			this.btnSavePinAgree = new Button();
-			this.lbSavePin = new Label();
-			this.panel1 = new Panel();
-			this.lbOSS = new Label();
-			this.lbOSSLabel = new Label();
-			this.lbStockTH = new Label();
-			this.lbStockTHlabel = new Label();
-			this.lbOrderString = new Label();
-			this.gbSavePingDisclaimer.SuspendLayout();
-			this.panel1.SuspendLayout();
-			base.SuspendLayout();
-			this.btnCancel.BackColor = Color.WhiteSmoke;
-			this.btnCancel.FlatAppearance.BorderColor = Color.Gray;
-			this.btnCancel.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnCancel.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnCancel.FlatStyle = FlatStyle.Flat;
-			this.btnCancel.Location = new Point(272, 197);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Size = new Size(87, 29);
-			this.btnCancel.TabIndex = 2;
-			this.btnCancel.Text = "Cancel";
-			this.btnCancel.UseVisualStyleBackColor = false;
-			this.btnCancel.Click += new EventHandler(this.btnCancel_Click);
-			this.btnCancel.Leave += new EventHandler(this.Button_Leave);
-			this.btnCancel.Enter += new EventHandler(this.Button_Enter);
-			this.btnOk.BackColor = Color.WhiteSmoke;
-			this.btnOk.FlatAppearance.BorderColor = Color.Gray;
-			this.btnOk.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnOk.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnOk.FlatStyle = FlatStyle.Flat;
-			this.btnOk.Location = new Point(51, 198);
-			this.btnOk.Name = "btnOk";
-			this.btnOk.Size = new Size(87, 29);
-			this.btnOk.TabIndex = 0;
-			this.btnOk.Text = "Yes";
-			this.btnOk.UseVisualStyleBackColor = false;
-			this.btnOk.Click += new EventHandler(this.btnOk_Click);
-			this.btnOk.Leave += new EventHandler(this.Button_Leave);
-			this.btnOk.Enter += new EventHandler(this.Button_Enter);
-			this.btnNo.BackColor = Color.WhiteSmoke;
-			this.btnNo.FlatAppearance.BorderColor = Color.Gray;
-			this.btnNo.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnNo.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnNo.FlatStyle = FlatStyle.Flat;
-			this.btnNo.Location = new Point(160, 197);
-			this.btnNo.Name = "btnNo";
-			this.btnNo.Size = new Size(87, 29);
-			this.btnNo.TabIndex = 1;
-			this.btnNo.Text = "No";
-			this.btnNo.UseVisualStyleBackColor = false;
-			this.btnNo.Click += new EventHandler(this.btnNo_Click);
-			this.btnNo.Leave += new EventHandler(this.Button_Leave);
-			this.btnNo.Enter += new EventHandler(this.Button_Enter);
-			this.lbPincode.AutoSize = true;
-			this.lbPincode.Location = new Point(10, 203);
-			this.lbPincode.Name = "lbPincode";
-			this.lbPincode.Size = new Size(32, 21);
-			this.lbPincode.TabIndex = 2;
-			this.lbPincode.Text = "Pin";
-			this.tbPincode.Location = new Point(39, 200);
-			this.tbPincode.MaxLength = 10;
-			this.tbPincode.Name = "tbPincode";
-			this.tbPincode.PasswordChar = '*';
-			this.tbPincode.Size = new Size(72, 27);
-			this.tbPincode.TabIndex = 0;
-			this.tbPincode.KeyDown += new KeyEventHandler(this.tbPincode_KeyDown);
-			this.tbPincode.Leave += new EventHandler(this.Button_Leave);
-			this.tbPincode.Enter += new EventHandler(this.Button_Enter);
-			this.chbSavePincode.AutoSize = true;
-			this.chbSavePincode.Location = new Point(116, 202);
-			this.chbSavePincode.Name = "chbSavePincode";
-			this.chbSavePincode.Size = new Size(67, 25);
-			this.chbSavePincode.TabIndex = 0;
-			this.chbSavePincode.TabStop = false;
-			this.chbSavePincode.Text = "Save";
-			this.chbSavePincode.UseVisualStyleBackColor = true;
-			this.chbSavePincode.Click += new EventHandler(this.chbSavePincode_Click);
-			this.gbSavePingDisclaimer.BackColor = Color.FromArgb(224, 224, 224);
-			this.gbSavePingDisclaimer.Controls.Add(this.btnSavePinDisAgree);
-			this.gbSavePingDisclaimer.Controls.Add(this.btnSavePinAgree);
-			this.gbSavePingDisclaimer.Controls.Add(this.lbSavePin);
-			this.gbSavePingDisclaimer.Dock = DockStyle.Fill;
-			this.gbSavePingDisclaimer.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.gbSavePingDisclaimer.Location = new Point(0, 0);
-			this.gbSavePingDisclaimer.Name = "gbSavePingDisclaimer";
-			this.gbSavePingDisclaimer.Size = new Size(479, 231);
-			this.gbSavePingDisclaimer.TabIndex = 7;
-			this.gbSavePingDisclaimer.TabStop = false;
-			this.gbSavePingDisclaimer.Text = "Disclaimer";
-			this.gbSavePingDisclaimer.Visible = false;
-			this.btnSavePinDisAgree.Location = new Point(200, 72);
-			this.btnSavePinDisAgree.Name = "btnSavePinDisAgree";
-			this.btnSavePinDisAgree.Size = new Size(96, 23);
-			this.btnSavePinDisAgree.TabIndex = 2;
-			this.btnSavePinDisAgree.Text = "I DISAGREE";
-			this.btnSavePinDisAgree.UseVisualStyleBackColor = true;
-			this.btnSavePinDisAgree.Click += new EventHandler(this.btnSavePinDisAgree_Click);
-			this.btnSavePinAgree.Location = new Point(114, 72);
-			this.btnSavePinAgree.Name = "btnSavePinAgree";
-			this.btnSavePinAgree.Size = new Size(72, 23);
-			this.btnSavePinAgree.TabIndex = 1;
-			this.btnSavePinAgree.Text = "I AGREE";
-			this.btnSavePinAgree.UseVisualStyleBackColor = true;
-			this.btnSavePinAgree.Click += new EventHandler(this.btnSavePinAgree_Click);
-			this.lbSavePin.AutoSize = true;
-			this.lbSavePin.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbSavePin.Location = new Point(6, -19);
-			this.lbSavePin.Name = "lbSavePin";
-			this.lbSavePin.Size = new Size(508, 108);
-			this.lbSavePin.TabIndex = 0;
-			this.lbSavePin.Text = componentResourceManager.GetString("lbSavePin.Text");
-			this.panel1.BackColor = Color.FromArgb(10, 10, 10);
-			this.panel1.Controls.Add(this.lbOSS);
-			this.panel1.Controls.Add(this.lbOSSLabel);
-			this.panel1.Controls.Add(this.lbStockTH);
-			this.panel1.Controls.Add(this.lbStockTHlabel);
-			this.panel1.Controls.Add(this.lbOrderString);
-			this.panel1.Location = new Point(0, 0);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new Size(478, 190);
-			this.panel1.TabIndex = 8;
-			this.lbOSS.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
-			this.lbOSS.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbOSS.ForeColor = Color.FromArgb(255, 128, 0);
-			this.lbOSS.Location = new Point(24, 159);
-			this.lbOSS.Name = "lbOSS";
-			this.lbOSS.Size = new Size(443, 23);
-			this.lbOSS.TabIndex = 6;
-			this.lbOSS.Text = "Warning String";
-			this.lbOSSLabel.AutoSize = true;
-			this.lbOSSLabel.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbOSSLabel.ForeColor = Color.LightGray;
-			this.lbOSSLabel.Location = new Point(8, 141);
-			this.lbOSSLabel.Name = "lbOSSLabel";
-			this.lbOSSLabel.Size = new Size(140, 21);
-			this.lbOSSLabel.TabIndex = 5;
-			this.lbOSSLabel.Text = "Order Screening :";
-			this.lbStockTH.AutoSize = true;
-			this.lbStockTH.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbStockTH.ForeColor = Color.Red;
-			this.lbStockTH.Location = new Point(24, 118);
-			this.lbStockTH.Name = "lbStockTH";
-			this.lbStockTH.Size = new Size(137, 23);
-			this.lbStockTH.TabIndex = 4;
-			this.lbStockTH.Text = "Warning String";
-			this.lbStockTHlabel.AutoSize = true;
-			this.lbStockTHlabel.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbStockTHlabel.ForeColor = Color.LightGray;
-			this.lbStockTHlabel.Location = new Point(8, 97);
-			this.lbStockTHlabel.Name = "lbStockTHlabel";
-			this.lbStockTHlabel.Size = new Size(110, 21);
-			this.lbStockTHlabel.TabIndex = 3;
-			this.lbStockTHlabel.Text = "Risk Control :";
-			this.lbOrderString.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
-			this.lbOrderString.AutoSize = true;
-			this.lbOrderString.Font = new Font("Tahoma", 11.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbOrderString.ForeColor = Color.Yellow;
-			this.lbOrderString.Location = new Point(8, 5);
-			this.lbOrderString.Name = "lbOrderString";
-			this.lbOrderString.Size = new Size(114, 23);
-			this.lbOrderString.TabIndex = 0;
-			this.lbOrderString.Text = "Order String";
-			base.AutoScaleDimensions = new SizeF(9f, 19f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			base.ClientSize = new Size(479, 231);
-			base.Controls.Add(this.panel1);
-			base.Controls.Add(this.chbSavePincode);
-			base.Controls.Add(this.tbPincode);
-			base.Controls.Add(this.lbPincode);
-			base.Controls.Add(this.btnNo);
-			base.Controls.Add(this.btnOk);
-			base.Controls.Add(this.btnCancel);
-			base.Controls.Add(this.gbSavePingDisclaimer);
-			this.Font = new Font("Tahoma", 9.75f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			base.FormBorderStyle = FormBorderStyle.FixedToolWindow;
-			base.KeyPreview = true;
-			base.Name = "frmOrderFormConfirm";
-			base.StartPosition = FormStartPosition.Manual;
-			this.Text = "Order Confirmation";
-			base.Load += new EventHandler(this.frmOrderFormConfirm_Load);
-			base.Shown += new EventHandler(this.frmOrderFormConfirm_Shown);
-			base.KeyDown += new KeyEventHandler(this.frmOrderFormConfirm_KeyDown);
-			this.gbSavePingDisclaimer.ResumeLayout(false);
-			this.gbSavePingDisclaimer.PerformLayout();
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			base.ResumeLayout(false);
-			base.PerformLayout();
 		}
 	}
 }

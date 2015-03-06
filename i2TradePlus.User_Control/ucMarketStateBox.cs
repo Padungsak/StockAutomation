@@ -91,82 +91,6 @@ namespace i2TradePlus.User_Control
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			this.components = new Container();
-			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(ucMarketStateBox));
-			this.lbTimerServer = new Label();
-			this.lbPushMode = new Label();
-			this.toolTip1 = new ToolTip(this.components);
-			this.tmerServer = new Timer(this.components);
-			this.alertStockControl = new AlertStockUC();
-			base.SuspendLayout();
-			this.lbTimerServer.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
-			this.lbTimerServer.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbTimerServer.ForeColor = Color.WhiteSmoke;
-			this.lbTimerServer.ImageAlign = ContentAlignment.MiddleLeft;
-			this.lbTimerServer.Location = new Point(5, 2);
-			this.lbTimerServer.Name = "lbTimerServer";
-			this.lbTimerServer.Size = new Size(62, 41);
-			this.lbTimerServer.TabIndex = 61;
-			this.lbTimerServer.Text = "00:00:00";
-			this.lbTimerServer.TextAlign = ContentAlignment.MiddleCenter;
-			this.lbPushMode.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
-			this.lbPushMode.AutoSize = true;
-			this.lbPushMode.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
-			this.lbPushMode.ForeColor = Color.LightGray;
-			this.lbPushMode.Location = new Point(124, 15);
-			this.lbPushMode.Margin = new Padding(1, 0, 1, 0);
-			this.lbPushMode.Name = "lbPushMode";
-			this.lbPushMode.Size = new Size(41, 15);
-			this.lbPushMode.TabIndex = 59;
-			this.lbPushMode.Text = "PUSH";
-			this.lbPushMode.TextAlign = ContentAlignment.MiddleCenter;
-			this.lbPushMode.Click += new EventHandler(this.lbPushMode_Click);
-			this.tmerServer.Interval = 1000;
-			this.tmerServer.Tick += new EventHandler(this.tmerServer_Tick);
-			this.alertStockControl.AlterMessageCount = 0;
-			this.alertStockControl.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
-			this.alertStockControl.BackColor = Color.Transparent;
-			this.alertStockControl.BlinkColor = Color.OrangeRed;
-			this.alertStockControl.BlinkImage = (Image)componentResourceManager.GetObject("alertStockControl.BlinkImage");
-			this.alertStockControl.Border = BorderStyle.None;
-			this.alertStockControl.DisplayImage = (Image)componentResourceManager.GetObject("alertStockControl.DisplayImage");
-			this.alertStockControl.ForeColor = SystemColors.Control;
-			this.alertStockControl.IsAllowBlink = false;
-			this.alertStockControl.IsStarted = false;
-			this.alertStockControl.Location = new Point(70, 3);
-			this.alertStockControl.Margin = new Padding(1, 0, 1, 0);
-			this.alertStockControl.Name = "alertStockControl";
-			this.alertStockControl.NormalColor = Color.Transparent;
-			this.alertStockControl.NormalImage = (Image)componentResourceManager.GetObject("alertStockControl.NormalImage");
-			this.alertStockControl.Size = new Size(40, 39);
-			this.alertStockControl.TabIndex = 58;
-            this.alertStockControl.AlertClick += new EventHandler(this.alertStockControl_AlertClick);
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			this.BackColor = Color.Black;
-			base.Controls.Add(this.lbTimerServer);
-			base.Controls.Add(this.lbPushMode);
-			base.Controls.Add(this.alertStockControl);
-			base.Name = "ucMarketStateBox";
-			base.Size = new Size(168, 46);
-			base.Load += new EventHandler(this.ucMarketStateBox_Load);
-			base.Paint += new PaintEventHandler(this.ucMarketStateBox_Paint);
-			base.Resize += new EventHandler(this.ucMarketStateBox_Resize);
-			base.ResumeLayout(false);
-			base.PerformLayout();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
 		public ucMarketStateBox()
 		{
 			this.InitializeComponent();
@@ -322,6 +246,82 @@ namespace i2TradePlus.User_Control
 		private void ucMarketStateBox_Resize(object sender, EventArgs e)
 		{
 			this.lbPushMode.Top = (base.Height - this.lbPushMode.Height) / 2;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			this.components = new Container();
+			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(ucMarketStateBox));
+			this.lbTimerServer = new Label();
+			this.lbPushMode = new Label();
+			this.toolTip1 = new ToolTip(this.components);
+			this.tmerServer = new Timer(this.components);
+			this.alertStockControl = new AlertStockUC();
+			base.SuspendLayout();
+			this.lbTimerServer.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
+			this.lbTimerServer.Font = new Font("Arial", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbTimerServer.ForeColor = Color.WhiteSmoke;
+			this.lbTimerServer.ImageAlign = ContentAlignment.MiddleLeft;
+			this.lbTimerServer.Location = new Point(5, 2);
+			this.lbTimerServer.Name = "lbTimerServer";
+			this.lbTimerServer.Size = new Size(62, 41);
+			this.lbTimerServer.TabIndex = 61;
+			this.lbTimerServer.Text = "00:00:00";
+			this.lbTimerServer.TextAlign = ContentAlignment.MiddleCenter;
+			this.lbPushMode.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
+			this.lbPushMode.AutoSize = true;
+			this.lbPushMode.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 0);
+			this.lbPushMode.ForeColor = Color.LightGray;
+			this.lbPushMode.Location = new Point(124, 15);
+			this.lbPushMode.Margin = new Padding(1, 0, 1, 0);
+			this.lbPushMode.Name = "lbPushMode";
+			this.lbPushMode.Size = new Size(41, 15);
+			this.lbPushMode.TabIndex = 59;
+			this.lbPushMode.Text = "PUSH";
+			this.lbPushMode.TextAlign = ContentAlignment.MiddleCenter;
+			this.lbPushMode.Click += new EventHandler(this.lbPushMode_Click);
+			this.tmerServer.Interval = 1000;
+			this.tmerServer.Tick += new EventHandler(this.tmerServer_Tick);
+			this.alertStockControl.AlterMessageCount = 0;
+			this.alertStockControl.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left);
+			this.alertStockControl.BackColor = Color.Transparent;
+			this.alertStockControl.BlinkColor = Color.OrangeRed;
+			this.alertStockControl.BlinkImage = (Image)componentResourceManager.GetObject("alertStockControl.BlinkImage");
+			this.alertStockControl.Border = BorderStyle.None;
+			this.alertStockControl.DisplayImage = (Image)componentResourceManager.GetObject("alertStockControl.DisplayImage");
+			this.alertStockControl.ForeColor = SystemColors.Control;
+			this.alertStockControl.IsAllowBlink = false;
+			this.alertStockControl.IsStarted = false;
+			this.alertStockControl.Location = new Point(70, 3);
+			this.alertStockControl.Margin = new Padding(1, 0, 1, 0);
+			this.alertStockControl.Name = "alertStockControl";
+			this.alertStockControl.NormalColor = Color.Transparent;
+			this.alertStockControl.NormalImage = (Image)componentResourceManager.GetObject("alertStockControl.NormalImage");
+			this.alertStockControl.Size = new Size(40, 39);
+			this.alertStockControl.TabIndex = 58;
+			this.alertStockControl.AlertClick += new EventHandler(this.alertStockControl_AlertClick);
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			this.BackColor = Color.Black;
+			base.Controls.Add(this.lbTimerServer);
+			base.Controls.Add(this.lbPushMode);
+			base.Controls.Add(this.alertStockControl);
+			base.Name = "ucMarketStateBox";
+			base.Size = new Size(168, 46);
+			base.Load += new EventHandler(this.ucMarketStateBox_Load);
+			base.Paint += new PaintEventHandler(this.ucMarketStateBox_Paint);
+			base.Resize += new EventHandler(this.ucMarketStateBox_Resize);
+			base.ResumeLayout(false);
+			base.PerformLayout();
 		}
 	}
 }

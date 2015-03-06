@@ -15,7 +15,6 @@ namespace ITSNet.Wins.Controls
 		private const int DEFAULT_OUTER_CIRCLE_RADIUS = 10;
 		private const int DEFAULT_NUMBER_OF_SPOKE = 10;
 		private const int DEFAULT_SPOKE_THICKNESS = 4;
-		private IContainer components = null;
 		private Color DEFAULT_COLOR = Color.DarkGray;
 		private Timer aTimer;
 		private bool aTimerActive;
@@ -28,6 +27,7 @@ namespace ITSNet.Wins.Controls
 		private Color aColor;
 		private Color[] aColors;
 		private double[] aAngles;
+		private IContainer components = null;
 		[Category("LoadingCircle"), Description("Sets the color of spoke."), TypeConverter("System.Drawing.ColorConverter")]
 		public Color Color
 		{
@@ -156,15 +156,6 @@ namespace ITSNet.Wins.Controls
 					this.aTimer.Interval = value;
 				}
 			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public LoadingCircleControl()
@@ -305,6 +296,15 @@ namespace ITSNet.Wins.Controls
 			}
 			this.GenerateColorsPallet();
 			base.Invalidate();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
 		}
 	}
 }

@@ -58,575 +58,6 @@ namespace i2TradePlus
 		private Button btnClear;
 		private Button btnSendOrder;
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public frmAutoTrade()
-		{
-			this.InitializeComponent();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public frmAutoTrade(Dictionary<string, object> propertiesValue) : base(propertiesValue)
-		{
-			this.InitializeComponent();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoLoadData()
-		{
-			this.ReloadData();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoShownDelay()
-		{
-			this.SetResize(true, true);
-			base.Show();
-			base.IsLoadingData = false;
-			base.OpenedForm();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoReActivated()
-		{
-			if (!base.IsLoadingData)
-			{
-				this.SetResize(this.IsWidthChanged, this.IsHeightChanged);
-				base.Show();
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoCustomSizeChanged()
-		{
-			if (!base.IsLoadingData)
-			{
-				this.SetResize(this.IsWidthChanged, this.IsHeightChanged);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoFontChanged()
-		{
-			if (!base.IsLoadingData)
-			{
-				this.SetResize(true, true);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmAutoTrade_IDoMainFormKeyUp(KeyEventArgs e)
-		{
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void ReceiveMessage(IBroadcastMessage message, StockList.StockInformation realtimeStockInfo)
-		{
-            int i = 1;
-            i++;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void ReceiveTfexMessage(IBroadcastMessage message, SeriesList.SeriesInformation realtimeSeriesInfo)
-		{
-            int i = 1;
-            i++;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void SetResize(bool isWidthChanged, bool isHeightChanged)
-		{
-			try
-			{
-				if (isWidthChanged)
-				{
-					this.Font = Settings.Default.Default_Font;
-					int num = 5;
-					int num2 = num + 3;
-					this.lbPattern.Location = new Point(5, 5);
-					this.cbPlatle.Location = new Point(this.lbPattern.Right + 2, 3);
-					this.cbStopOrderField.Location = new Point(this.lbStopOrderField.Right + 2, 3);
-					this.lbStopPriceLable.Location = new Point(this.cbStopOrderField.Right + 5, 6);
-					this.cbStopOrderPrice.Location = new Point(this.lbStopPriceLable.Right + 5, 3);
-					this.chbLimit.Location = new Point(this.cbStopOrderPrice.Right + 5, 4);
-					this.panelStopOrder.Height = this.cbStopOrderPrice.Bottom + this.cbStopOrderPrice.Top;
-					this.rbBuy.Location = new Point(10, num + 1);
-					this.rbSell.Location = new Point(this.rbBuy.Right + 2, this.rbSell.Top = num + 1);
-					if (ApplicationInfo.SuuportSBL == "Y" && ApplicationInfo.AccInfo.CurrentAccountType == "B")
-					{
-						this.rbShort.Location = new Point(this.rbSell.Right + 2, num + 1);
-						this.rbCover.Location = new Point(this.rbShort.Right + 2, num + 1);
-						this.lbStock.Location = new Point(this.rbCover.Right + 5, num2);
-					}
-					else
-					{
-						this.lbStock.Location = new Point(this.rbSell.Right + 5, num2);
-					}
-					this.cbStock.Location = new Point(this.lbStock.Right + 5, num - 1);
-					this.lbVolume.Location = new Point(this.cbStock.Right + 10, num2);
-					this.btnVolDec.Location = new Point(this.lbVolume.Right + 3, num2 + 1);
-					this.tbVolume.Location = new Point(this.btnVolDec.Right + 2, num);
-					this.btnVolInc.Location = new Point(this.tbVolume.Right + 2, num2 + 1);
-					this.lbPrice.Location = new Point(this.btnVolInc.Right + 10, num2);
-					this.btnPriceDec.Location = new Point(this.lbPrice.Right + 2, num2 + 1);
-					this.cbPrice.Location = new Point(this.btnPriceDec.Right + 1, num - 1);
-					this.btnPriceInc.Location = new Point(this.cbPrice.Right + 2, num2 + 1);
-					this.btnClear.Location = new Point(this.panelTop.Width - this.btnClear.Width - 5, 2);
-					this.btnSendOrder.Location = new Point(this.btnClear.Left - this.btnSendOrder.Width - 5, 2);
-					this.tbPin.Location = new Point(this.btnSendOrder.Left - this.tbPin.Width - 5, 3);
-					this.lbPin.Location = new Point(this.tbPin.Left - this.lbPin.Width - 5, 5);
-					this.panelStopOrder.SetBounds(2, this.btnSendOrder.Bottom + 5, base.Width - 4, this.cbStopOrderField.Bottom + this.cbStopOrderField.Top);
-					this.panelOrderBox.SetBounds(2, this.panelStopOrder.Bottom + 2, base.Width - 4, this.cbStock.Bottom + this.cbStock.Top);
-					this.panelTop.Height = this.panelOrderBox.Bottom + 10;
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ReloadData()
-		{
-			try
-			{
-				ApplicationInfo.WebAlertService.ViewStopOrderCompleted -= new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
-				ApplicationInfo.WebAlertService.ViewStopOrderCompleted += new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
-				ApplicationInfo.WebAlertService.ViewStopOrderAsync(ApplicationInfo.UserLoginID, "", 0);
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("RequestWeb", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void MyWebService_ViewStopOrderCompleted(object sender, ViewStopOrderCompletedEventArgs e)
-		{
-			try
-			{
-				ApplicationInfo.WebAlertService.ViewStopOrderCompleted -= new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
-				if (e.Error == null)
-				{
-					using (DataSet dataSet = new DataSet())
-					{
-						MyDataHelper.StringToDataSet(e.Result.ToString(), dataSet);
-						if (dataSet.Tables.Contains("ORDERS"))
-						{
-							this.intzaStopOrder.SortColumnName = string.Empty;
-							this.intzaStopOrder.BeginUpdate();
-							this.intzaStopOrder.Rows = dataSet.Tables["ORDERS"].Rows.Count;
-							int num = 0;
-							foreach (DataRow dr in dataSet.Tables["ORDERS"].Rows)
-							{
-								this.UpdateStopOrderToGrid(dr, num, false);
-								num++;
-							}
-							this.intzaStopOrder.Redraw();
-							if (this.intzaStopOrder.Rows > 0)
-							{
-								this.intzaStopOrder.Focus();
-								this.intzaStopOrder.SetFocusItem(0);
-							}
-						}
-						dataSet.Clear();
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.intzaStopOrder.Redraw();
-				this.ShowError("ViewStopOrderCompleted", ex);
-			}
-			base.IsLoadingData = false;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void UpdateStopOrderToGrid(DataRow dr, int i, bool isRedraw)
-		{
-			try
-			{
-				long num = 0L;
-				long num2 = 0L;
-				long num3 = 0L;
-				string text = string.Empty;
-				string text2 = string.Empty;
-				string text3 = string.Empty;
-				long.TryParse(dr["ref_no"].ToString(), out num3);
-				RecordItem recordItem;
-				if (i == -1)
-				{
-					recordItem = this.intzaStopOrder.Find("ref_no", num3.ToString());
-					if (recordItem == null)
-					{
-						recordItem = this.intzaStopOrder.AddRecord(1, false);
-					}
-				}
-				else
-				{
-					recordItem = this.intzaStopOrder.Records(i);
-				}
-				recordItem.Fields("ref_no").Text = num3;
-				text = dr["ord_side"].ToString();
-				recordItem.Fields("side").Text = text;
-				StockList.StockInformation stockInformation = ApplicationInfo.StockInfo[Convert.ToInt32(dr["stock"].ToString())];
-				if (Utilities.PriceFormat(dr["ord_ttf"].ToString()) == string.Empty)
-				{
-					recordItem.Fields("stock").Text = stockInformation.Symbol;
-				}
-				else
-				{
-					recordItem.Fields("stock").Text = stockInformation.Symbol + "(" + dr["ord_ttf"].ToString() + ")";
-				}
-				long.TryParse(dr["ord_volume"].ToString(), out num);
-				recordItem.Fields("volume").Text = num;
-				long.TryParse(dr["ord_pubvol"].ToString(), out num2);
-				recordItem.Fields("pubvol").Text = num2;
-				recordItem.Fields("limit").Text = (Convert.ToBoolean(dr["limit"].ToString()) ? "Y" : "N");
-				string text4 = dr["ord_condition"].ToString();
-				if (text4 != null)
-				{
-					if (text4 == "I")
-					{
-						recordItem.Fields("price_cond").Text = "IOC";
-						goto IL_2B4;
-					}
-					if (text4 == "F")
-					{
-						recordItem.Fields("price_cond").Text = "FOK";
-						goto IL_2B4;
-					}
-				}
-				recordItem.Fields("price_cond").Text = dr["ord_condition"].ToString();
-				IL_2B4:
-				text3 = dr["status"].ToString().Trim();
-				text4 = text3;
-				if (text4 != null)
-				{
-					if (!(text4 == "PO"))
-					{
-						if (!(text4 == "O"))
-						{
-							if (!(text4 == "F"))
-							{
-								if (!(text4 == "S"))
-								{
-									if (!(text4 == "M"))
-									{
-										if (text4 == "X")
-										{
-											text2 = "Cancel";
-										}
-									}
-									else
-									{
-										text2 = "InComplete";
-									}
-								}
-								else
-								{
-									text2 = "Sent";
-								}
-							}
-							else
-							{
-								text2 = "Fail";
-							}
-						}
-						else
-						{
-							text2 = "Pending";
-						}
-					}
-					else
-					{
-						text2 = "Wait";
-					}
-				}
-				recordItem.Fields("status").Text = text2;
-				recordItem.Fields("price").Text = Utilities.PriceFormat(dr["ord_price"].ToString());
-				recordItem.Fields("sent_time").Text = Utilities.GetTime(dr["time"].ToString());
-				recordItem.Fields("matched_time").Text = Utilities.GetTime(dr["mtime"].ToString());
-				string text5 = "  ";
-				int num4 = 0;
-				int.TryParse(dr["field_type"].ToString(), out num4);
-				if (num4 == 1 || num4 == 4 || num4 == 5 || num4 == 6)
-				{
-					text5 += "Last";
-				}
-				else
-				{
-					text5 += "Unknow";
-				}
-				int num5 = 0;
-				int.TryParse(dr["operator_type"].ToString(), out num5);
-				if (num5 == 1)
-				{
-					text5 += " >= ";
-				}
-				else
-				{
-					if (num5 == 2)
-					{
-						text5 += " <= ";
-					}
-					else
-					{
-						if (num5 == 3)
-						{
-							text5 += " > ";
-						}
-						else
-						{
-							if (num5 == 4)
-							{
-								text5 += " < ";
-							}
-						}
-					}
-				}
-				if (num4 == 4 || num4 == 5 || num4 == 6)
-				{
-					if (num4 == 4)
-					{
-						text5 += "SMA ";
-					}
-					else
-					{
-						if (num4 == 5)
-						{
-							text5 += "Break High ";
-						}
-						else
-						{
-							if (num4 == 6)
-							{
-								text5 += "Break Low ";
-							}
-						}
-					}
-					text5 += Utilities.PriceFormat(dr["price"].ToString());
-					decimal num6 = 0m;
-					decimal.TryParse(dr["sma_currprice"].ToString(), out num6);
-					if (num6 > 0m)
-					{
-						text5 = text5 + " (@" + Utilities.PriceFormat(num6) + " )";
-					}
-					else
-					{
-						text5 += " (...)";
-					}
-				}
-				else
-				{
-					text5 += Utilities.PriceFormat(dr["price"].ToString());
-				}
-				recordItem.Fields("condition").Text = text5;
-				if (num4 == 1)
-				{
-					recordItem.Fields("con_price").Text = dr["price"].ToString();
-				}
-				else
-				{
-					if (num4 == 4)
-					{
-						recordItem.Fields("con_price").Text = dr["sma_currprice"].ToString();
-					}
-				}
-				if (num5 == 1)
-				{
-					recordItem.Fields("con_operator").Text = ">=";
-				}
-				else
-				{
-					if (num5 == 2)
-					{
-						recordItem.Fields("con_operator").Text = "<=";
-					}
-					else
-					{
-						if (num5 == 3)
-						{
-							recordItem.Fields("con_operator").Text = ">";
-						}
-						else
-						{
-							if (num5 == 4)
-							{
-								recordItem.Fields("con_operator").Text = "<";
-							}
-						}
-					}
-				}
-				recordItem.Fields("ttf").Text = dr["ord_ttf"].ToString().Trim();
-				recordItem.Fields("order_no").Text = ((dr["order_number"].ToString() == "0") ? "" : dr["order_number"].ToString());
-				recordItem.Fields("error").Text = dr["message"].ToString().Trim();
-				recordItem.Fields("ref_no").FontColor = Color.White;
-				if (text == "B")
-				{
-					recordItem.Fields("side").FontColor = Color.Lime;
-				}
-				else
-				{
-					if (text == "S")
-					{
-						recordItem.Fields("side").FontColor = Color.Red;
-					}
-					else
-					{
-						if (text == "C")
-						{
-							recordItem.Fields("side").FontColor = Color.Cyan;
-						}
-						else
-						{
-							if (text == "H")
-							{
-								recordItem.Fields("side").FontColor = Color.Pink;
-							}
-							else
-							{
-								recordItem.Fields("side").FontColor = Color.Yellow;
-							}
-						}
-					}
-				}
-				recordItem.Fields("stock").FontColor = Color.LightGray;
-				recordItem.Fields("volume").FontColor = Color.LightGray;
-				recordItem.Fields("price").FontColor = Color.LightGray;
-				recordItem.Fields("limit").FontColor = Color.LightGray;
-				recordItem.Fields("sent_time").FontColor = Color.LightGray;
-				recordItem.Fields("matched_time").FontColor = Color.LightGray;
-				recordItem.Fields("status").FontColor = Color.Cyan;
-				recordItem.Fields("order_no").FontColor = Color.Yellow;
-				recordItem.Fields("error").FontColor = Color.Red;
-				recordItem.Fields("condition").FontColor = Color.Yellow;
-				recordItem.Fields("price_cond").FontColor = Color.LightGray;
-				recordItem.Fields("pubvol").FontColor = Color.LightGray;
-				recordItem.Fields("ttf").FontColor = Color.LightGray;
-				if (text3 == "PO" || text3 == "O")
-				{
-					recordItem.Fields("checkbox").Text = "0";
-				}
-				else
-				{
-					recordItem.Fields("checkbox").Text = "";
-				}
-				recordItem.Changed = true;
-				if (isRedraw)
-				{
-					this.intzaStopOrder.Redraw();
-				}
-			}
-			catch (Exception ex)
-			{
-				this.intzaStopOrder.Redraw();
-				this.ShowError("UpdateToControl", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void panelStopOrder_Paint(object sender, PaintEventArgs e)
-		{
-			try
-			{
-				e.Graphics.Clear(this.panelTop.BackColor);
-				e.Graphics.DrawRectangle(Pens.DimGray, 0, 0, this.panelStopOrder.Width - 1, this.panelStopOrder.Height - 1);
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void cbStopOrderField_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				if (this.cbStopOrderField.SelectedIndex > -1)
-				{
-					if (this.cbStopOrderField.Text.ToLower().IndexOf("sma") > 0)
-					{
-						this.lbStopPriceLable.Text = "Periods";
-						this.cbStopOrderPrice.Items.Clear();
-						this.cbStopOrderPrice.Text = string.Empty;
-						for (int i = 2; i <= 200; i++)
-						{
-							if ((i >= 2 && i <= 50) || i == 75 || i == 200)
-							{
-								this.cbStopOrderPrice.Items.Add(i.ToString());
-							}
-						}
-					}
-					else
-					{
-						if (this.cbStopOrderField.Text.ToLower().IndexOf("break") > 0)
-						{
-							this.lbStopPriceLable.Text = "Periods";
-							this.cbStopOrderPrice.Items.Clear();
-							this.cbStopOrderPrice.Text = string.Empty;
-							for (int j = 2; j <= 20; j++)
-							{
-								this.cbStopOrderPrice.Items.Add(j.ToString());
-							}
-						}
-						else
-						{
-							this.lbStopPriceLable.Text = "Price";
-							this.cbStopOrderPrice.Items.Clear();
-						}
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("cbStopOrderField_SelectedIndexChanged", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void controlOrder_Enter(object sender, EventArgs e)
-		{
-			try
-			{
-				((Control)sender).BackColor = Color.Yellow;
-				((Control)sender).ForeColor = Color.Black;
-				if (sender.GetType() == typeof(TextBox))
-				{
-					((TextBox)sender).SelectAll();
-				}
-				if (sender.Equals(this.cbPrice))
-				{
-					if (this.tbPin.Text == string.Empty && ApplicationInfo.UserPincodeLastEntry != string.Empty)
-					{
-						this.tbPin.Text = ApplicationInfo.UserPincodeLastEntry;
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("controlOrder_Enter", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void controlOrder_Leave(object sender, EventArgs e)
-		{
-			try
-			{
-				if (sender.GetType() == typeof(CheckBox))
-				{
-					((Control)sender).BackColor = Color.Transparent;
-					if (this.panelOrderBox.BackColor == Color.Maroon || this.panelOrderBox.BackColor == Color.DarkGreen)
-					{
-						((Control)sender).ForeColor = Color.White;
-					}
-					else
-					{
-						((Control)sender).ForeColor = Color.Black;
-					}
-				}
-				else
-				{
-					if (sender.GetType() == typeof(ComboBox))
-					{
-						((Control)sender).BackColor = Color.FromArgb(224, 224, 224);
-						((Control)sender).ForeColor = Color.Black;
-					}
-					else
-					{
-						((Control)sender).BackColor = Color.FromArgb(224, 224, 224);
-						((Control)sender).ForeColor = Color.Black;
-					}
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("controlOrder_Leave", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && this.components != null)
@@ -1448,6 +879,571 @@ namespace i2TradePlus
 			this.tStripMenu.PerformLayout();
 			base.ResumeLayout(false);
 			base.PerformLayout();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public frmAutoTrade()
+		{
+			this.InitializeComponent();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public frmAutoTrade(Dictionary<string, object> propertiesValue) : base(propertiesValue)
+		{
+			this.InitializeComponent();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoLoadData()
+		{
+			this.ReloadData();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoShownDelay()
+		{
+			this.SetResize(true, true);
+			base.Show();
+			base.IsLoadingData = false;
+			base.OpenedForm();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoReActivated()
+		{
+			if (!base.IsLoadingData)
+			{
+				this.SetResize(this.IsWidthChanged, this.IsHeightChanged);
+				base.Show();
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoCustomSizeChanged()
+		{
+			if (!base.IsLoadingData)
+			{
+				this.SetResize(this.IsWidthChanged, this.IsHeightChanged);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoFontChanged()
+		{
+			if (!base.IsLoadingData)
+			{
+				this.SetResize(true, true);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void frmAutoTrade_IDoMainFormKeyUp(KeyEventArgs e)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void ReceiveMessage(IBroadcastMessage message, StockList.StockInformation realtimeStockInfo)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void ReceiveTfexMessage(IBroadcastMessage message, SeriesList.SeriesInformation realtimeSeriesInfo)
+		{
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void SetResize(bool isWidthChanged, bool isHeightChanged)
+		{
+			try
+			{
+				if (isWidthChanged)
+				{
+					this.Font = Settings.Default.Default_Font;
+					int num = 5;
+					int num2 = num + 3;
+					this.lbPattern.Location = new Point(5, 5);
+					this.cbPlatle.Location = new Point(this.lbPattern.Right + 2, 3);
+					this.cbStopOrderField.Location = new Point(this.lbStopOrderField.Right + 2, 3);
+					this.lbStopPriceLable.Location = new Point(this.cbStopOrderField.Right + 5, 6);
+					this.cbStopOrderPrice.Location = new Point(this.lbStopPriceLable.Right + 5, 3);
+					this.chbLimit.Location = new Point(this.cbStopOrderPrice.Right + 5, 4);
+					this.panelStopOrder.Height = this.cbStopOrderPrice.Bottom + this.cbStopOrderPrice.Top;
+					this.rbBuy.Location = new Point(10, num + 1);
+					this.rbSell.Location = new Point(this.rbBuy.Right + 2, this.rbSell.Top = num + 1);
+					if (ApplicationInfo.SuuportSBL == "Y" && ApplicationInfo.AccInfo.CurrentAccountType == "B")
+					{
+						this.rbShort.Location = new Point(this.rbSell.Right + 2, num + 1);
+						this.rbCover.Location = new Point(this.rbShort.Right + 2, num + 1);
+						this.lbStock.Location = new Point(this.rbCover.Right + 5, num2);
+					}
+					else
+					{
+						this.lbStock.Location = new Point(this.rbSell.Right + 5, num2);
+					}
+					this.cbStock.Location = new Point(this.lbStock.Right + 5, num - 1);
+					this.lbVolume.Location = new Point(this.cbStock.Right + 10, num2);
+					this.btnVolDec.Location = new Point(this.lbVolume.Right + 3, num2 + 1);
+					this.tbVolume.Location = new Point(this.btnVolDec.Right + 2, num);
+					this.btnVolInc.Location = new Point(this.tbVolume.Right + 2, num2 + 1);
+					this.lbPrice.Location = new Point(this.btnVolInc.Right + 10, num2);
+					this.btnPriceDec.Location = new Point(this.lbPrice.Right + 2, num2 + 1);
+					this.cbPrice.Location = new Point(this.btnPriceDec.Right + 1, num - 1);
+					this.btnPriceInc.Location = new Point(this.cbPrice.Right + 2, num2 + 1);
+					this.btnClear.Location = new Point(this.panelTop.Width - this.btnClear.Width - 5, 2);
+					this.btnSendOrder.Location = new Point(this.btnClear.Left - this.btnSendOrder.Width - 5, 2);
+					this.tbPin.Location = new Point(this.btnSendOrder.Left - this.tbPin.Width - 5, 3);
+					this.lbPin.Location = new Point(this.tbPin.Left - this.lbPin.Width - 5, 5);
+					this.panelStopOrder.SetBounds(2, this.btnSendOrder.Bottom + 5, base.Width - 4, this.cbStopOrderField.Bottom + this.cbStopOrderField.Top);
+					this.panelOrderBox.SetBounds(2, this.panelStopOrder.Bottom + 2, base.Width - 4, this.cbStock.Bottom + this.cbStock.Top);
+					this.panelTop.Height = this.panelOrderBox.Bottom + 10;
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ReloadData()
+		{
+			try
+			{
+				ApplicationInfo.WebAlertService.ViewStopOrderCompleted -= new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
+				ApplicationInfo.WebAlertService.ViewStopOrderCompleted += new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
+				ApplicationInfo.WebAlertService.ViewStopOrderAsync(ApplicationInfo.UserLoginID, "", 0);
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("RequestWeb", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void MyWebService_ViewStopOrderCompleted(object sender, ViewStopOrderCompletedEventArgs e)
+		{
+			try
+			{
+				ApplicationInfo.WebAlertService.ViewStopOrderCompleted -= new ViewStopOrderCompletedEventHandler(this.MyWebService_ViewStopOrderCompleted);
+				if (e.Error == null)
+				{
+					using (DataSet dataSet = new DataSet())
+					{
+						MyDataHelper.StringToDataSet(e.Result.ToString(), dataSet);
+						if (dataSet.Tables.Contains("ORDERS"))
+						{
+							this.intzaStopOrder.SortColumnName = string.Empty;
+							this.intzaStopOrder.BeginUpdate();
+							this.intzaStopOrder.Rows = dataSet.Tables["ORDERS"].Rows.Count;
+							int num = 0;
+							foreach (DataRow dr in dataSet.Tables["ORDERS"].Rows)
+							{
+								this.UpdateStopOrderToGrid(dr, num, false);
+								num++;
+							}
+							this.intzaStopOrder.Redraw();
+							if (this.intzaStopOrder.Rows > 0)
+							{
+								this.intzaStopOrder.Focus();
+								this.intzaStopOrder.SetFocusItem(0);
+							}
+						}
+						dataSet.Clear();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.intzaStopOrder.Redraw();
+				this.ShowError("ViewStopOrderCompleted", ex);
+			}
+			base.IsLoadingData = false;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void UpdateStopOrderToGrid(DataRow dr, int i, bool isRedraw)
+		{
+			try
+			{
+				long num = 0L;
+				long num2 = 0L;
+				long num3 = 0L;
+				string text = string.Empty;
+				string text2 = string.Empty;
+				string text3 = string.Empty;
+				long.TryParse(dr["ref_no"].ToString(), out num3);
+				RecordItem recordItem;
+				if (i == -1)
+				{
+					recordItem = this.intzaStopOrder.Find("ref_no", num3.ToString());
+					if (recordItem == null)
+					{
+						recordItem = this.intzaStopOrder.AddRecord(1, false);
+					}
+				}
+				else
+				{
+					recordItem = this.intzaStopOrder.Records(i);
+				}
+				recordItem.Fields("ref_no").Text = num3;
+				text = dr["ord_side"].ToString();
+				recordItem.Fields("side").Text = text;
+				StockList.StockInformation stockInformation = ApplicationInfo.StockInfo[Convert.ToInt32(dr["stock"].ToString())];
+				if (Utilities.PriceFormat(dr["ord_ttf"].ToString()) == string.Empty)
+				{
+					recordItem.Fields("stock").Text = stockInformation.Symbol;
+				}
+				else
+				{
+					recordItem.Fields("stock").Text = stockInformation.Symbol + "(" + dr["ord_ttf"].ToString() + ")";
+				}
+				long.TryParse(dr["ord_volume"].ToString(), out num);
+				recordItem.Fields("volume").Text = num;
+				long.TryParse(dr["ord_pubvol"].ToString(), out num2);
+				recordItem.Fields("pubvol").Text = num2;
+				recordItem.Fields("limit").Text = (Convert.ToBoolean(dr["limit"].ToString()) ? "Y" : "N");
+				string text4 = dr["ord_condition"].ToString();
+				if (text4 != null)
+				{
+					if (text4 == "I")
+					{
+						recordItem.Fields("price_cond").Text = "IOC";
+						goto IL_2B4;
+					}
+					if (text4 == "F")
+					{
+						recordItem.Fields("price_cond").Text = "FOK";
+						goto IL_2B4;
+					}
+				}
+				recordItem.Fields("price_cond").Text = dr["ord_condition"].ToString();
+				IL_2B4:
+				text3 = dr["status"].ToString().Trim();
+				text4 = text3;
+				if (text4 != null)
+				{
+					if (!(text4 == "PO"))
+					{
+						if (!(text4 == "O"))
+						{
+							if (!(text4 == "F"))
+							{
+								if (!(text4 == "S"))
+								{
+									if (!(text4 == "M"))
+									{
+										if (text4 == "X")
+										{
+											text2 = "Cancel";
+										}
+									}
+									else
+									{
+										text2 = "InComplete";
+									}
+								}
+								else
+								{
+									text2 = "Sent";
+								}
+							}
+							else
+							{
+								text2 = "Fail";
+							}
+						}
+						else
+						{
+							text2 = "Pending";
+						}
+					}
+					else
+					{
+						text2 = "Wait";
+					}
+				}
+				recordItem.Fields("status").Text = text2;
+				recordItem.Fields("price").Text = Utilities.PriceFormat(dr["ord_price"].ToString());
+				recordItem.Fields("sent_time").Text = Utilities.GetTime(dr["time"].ToString());
+				recordItem.Fields("matched_time").Text = Utilities.GetTime(dr["mtime"].ToString());
+				string text5 = "  ";
+				int num4 = 0;
+				int.TryParse(dr["field_type"].ToString(), out num4);
+				if (num4 == 1 || num4 == 4 || num4 == 5 || num4 == 6)
+				{
+					text5 += "Last";
+				}
+				else
+				{
+					text5 += "Unknow";
+				}
+				int num5 = 0;
+				int.TryParse(dr["operator_type"].ToString(), out num5);
+				if (num5 == 1)
+				{
+					text5 += " >= ";
+				}
+				else
+				{
+					if (num5 == 2)
+					{
+						text5 += " <= ";
+					}
+					else
+					{
+						if (num5 == 3)
+						{
+							text5 += " > ";
+						}
+						else
+						{
+							if (num5 == 4)
+							{
+								text5 += " < ";
+							}
+						}
+					}
+				}
+				if (num4 == 4 || num4 == 5 || num4 == 6)
+				{
+					if (num4 == 4)
+					{
+						text5 += "SMA ";
+					}
+					else
+					{
+						if (num4 == 5)
+						{
+							text5 += "Break High ";
+						}
+						else
+						{
+							if (num4 == 6)
+							{
+								text5 += "Break Low ";
+							}
+						}
+					}
+					text5 += Utilities.PriceFormat(dr["price"].ToString());
+					decimal num6 = 0m;
+					decimal.TryParse(dr["sma_currprice"].ToString(), out num6);
+					if (num6 > 0m)
+					{
+						text5 = text5 + " (@" + Utilities.PriceFormat(num6) + " )";
+					}
+					else
+					{
+						text5 += " (...)";
+					}
+				}
+				else
+				{
+					text5 += Utilities.PriceFormat(dr["price"].ToString());
+				}
+				recordItem.Fields("condition").Text = text5;
+				if (num4 == 1)
+				{
+					recordItem.Fields("con_price").Text = dr["price"].ToString();
+				}
+				else
+				{
+					if (num4 == 4)
+					{
+						recordItem.Fields("con_price").Text = dr["sma_currprice"].ToString();
+					}
+				}
+				if (num5 == 1)
+				{
+					recordItem.Fields("con_operator").Text = ">=";
+				}
+				else
+				{
+					if (num5 == 2)
+					{
+						recordItem.Fields("con_operator").Text = "<=";
+					}
+					else
+					{
+						if (num5 == 3)
+						{
+							recordItem.Fields("con_operator").Text = ">";
+						}
+						else
+						{
+							if (num5 == 4)
+							{
+								recordItem.Fields("con_operator").Text = "<";
+							}
+						}
+					}
+				}
+				recordItem.Fields("ttf").Text = dr["ord_ttf"].ToString().Trim();
+				recordItem.Fields("order_no").Text = ((dr["order_number"].ToString() == "0") ? "" : dr["order_number"].ToString());
+				recordItem.Fields("error").Text = dr["message"].ToString().Trim();
+				recordItem.Fields("ref_no").FontColor = Color.White;
+				if (text == "B")
+				{
+					recordItem.Fields("side").FontColor = Color.Lime;
+				}
+				else
+				{
+					if (text == "S")
+					{
+						recordItem.Fields("side").FontColor = Color.Red;
+					}
+					else
+					{
+						if (text == "C")
+						{
+							recordItem.Fields("side").FontColor = Color.Cyan;
+						}
+						else
+						{
+							if (text == "H")
+							{
+								recordItem.Fields("side").FontColor = Color.Pink;
+							}
+							else
+							{
+								recordItem.Fields("side").FontColor = Color.Yellow;
+							}
+						}
+					}
+				}
+				recordItem.Fields("stock").FontColor = Color.LightGray;
+				recordItem.Fields("volume").FontColor = Color.LightGray;
+				recordItem.Fields("price").FontColor = Color.LightGray;
+				recordItem.Fields("limit").FontColor = Color.LightGray;
+				recordItem.Fields("sent_time").FontColor = Color.LightGray;
+				recordItem.Fields("matched_time").FontColor = Color.LightGray;
+				recordItem.Fields("status").FontColor = Color.Cyan;
+				recordItem.Fields("order_no").FontColor = Color.Yellow;
+				recordItem.Fields("error").FontColor = Color.Red;
+				recordItem.Fields("condition").FontColor = Color.Yellow;
+				recordItem.Fields("price_cond").FontColor = Color.LightGray;
+				recordItem.Fields("pubvol").FontColor = Color.LightGray;
+				recordItem.Fields("ttf").FontColor = Color.LightGray;
+				if (text3 == "PO" || text3 == "O")
+				{
+					recordItem.Fields("checkbox").Text = "0";
+				}
+				else
+				{
+					recordItem.Fields("checkbox").Text = "";
+				}
+				recordItem.Changed = true;
+				if (isRedraw)
+				{
+					this.intzaStopOrder.Redraw();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.intzaStopOrder.Redraw();
+				this.ShowError("UpdateToControl", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void panelStopOrder_Paint(object sender, PaintEventArgs e)
+		{
+			try
+			{
+				e.Graphics.Clear(this.panelTop.BackColor);
+				e.Graphics.DrawRectangle(Pens.DimGray, 0, 0, this.panelStopOrder.Width - 1, this.panelStopOrder.Height - 1);
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void cbStopOrderField_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				if (this.cbStopOrderField.SelectedIndex > -1)
+				{
+					if (this.cbStopOrderField.Text.ToLower().IndexOf("sma") > 0)
+					{
+						this.lbStopPriceLable.Text = "Periods";
+						this.cbStopOrderPrice.Items.Clear();
+						this.cbStopOrderPrice.Text = string.Empty;
+						for (int i = 2; i <= 200; i++)
+						{
+							if ((i >= 2 && i <= 50) || i == 75 || i == 200)
+							{
+								this.cbStopOrderPrice.Items.Add(i.ToString());
+							}
+						}
+					}
+					else
+					{
+						if (this.cbStopOrderField.Text.ToLower().IndexOf("break") > 0)
+						{
+							this.lbStopPriceLable.Text = "Periods";
+							this.cbStopOrderPrice.Items.Clear();
+							this.cbStopOrderPrice.Text = string.Empty;
+							for (int j = 2; j <= 20; j++)
+							{
+								this.cbStopOrderPrice.Items.Add(j.ToString());
+							}
+						}
+						else
+						{
+							this.lbStopPriceLable.Text = "Price";
+							this.cbStopOrderPrice.Items.Clear();
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("cbStopOrderField_SelectedIndexChanged", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void controlOrder_Enter(object sender, EventArgs e)
+		{
+			try
+			{
+				((Control)sender).BackColor = Color.Yellow;
+				((Control)sender).ForeColor = Color.Black;
+				if (sender.GetType() == typeof(TextBox))
+				{
+					((TextBox)sender).SelectAll();
+				}
+				if (sender.Equals(this.cbPrice))
+				{
+					if (this.tbPin.Text == string.Empty && ApplicationInfo.UserPincodeLastEntry != string.Empty)
+					{
+						this.tbPin.Text = ApplicationInfo.UserPincodeLastEntry;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("controlOrder_Enter", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void controlOrder_Leave(object sender, EventArgs e)
+		{
+			try
+			{
+				if (sender.GetType() == typeof(CheckBox))
+				{
+					((Control)sender).BackColor = Color.Transparent;
+					if (this.panelOrderBox.BackColor == Color.Maroon || this.panelOrderBox.BackColor == Color.DarkGreen)
+					{
+						((Control)sender).ForeColor = Color.White;
+					}
+					else
+					{
+						((Control)sender).ForeColor = Color.Black;
+					}
+				}
+				else
+				{
+					if (sender.GetType() == typeof(ComboBox))
+					{
+						((Control)sender).BackColor = Color.FromArgb(224, 224, 224);
+						((Control)sender).ForeColor = Color.Black;
+					}
+					else
+					{
+						((Control)sender).BackColor = Color.FromArgb(224, 224, 224);
+						((Control)sender).ForeColor = Color.Black;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("controlOrder_Leave", ex);
+			}
 		}
 	}
 }

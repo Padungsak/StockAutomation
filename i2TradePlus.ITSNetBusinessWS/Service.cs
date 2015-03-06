@@ -13,7 +13,6 @@ namespace i2TradePlus.ITSNetBusinessWS
 	[GeneratedCode("System.Web.Services", "2.0.50727.5483"), DesignerCategory("code"), DebuggerStepThrough, WebServiceBinding(Name = "ServiceSoap", Namespace = "http://tempuri.org/")]
 	public class Service : SoapHttpClientProtocol
 	{
-		private SendOrPostCallback CountOrderCancelForDumpOperationCompleted;
 		private SendOrPostCallback ViewCustomerByStockForDumpOperationCompleted;
 		private SendOrPostCallback GetBrokerMarginVolumeOperationCompleted;
 		private SendOrPostCallback VerifyPincodeOperationCompleted;
@@ -38,14 +37,18 @@ namespace i2TradePlus.ITSNetBusinessWS
 		private SendOrPostCallback SaveStockAlertOperationCompleted;
 		private SendOrPostCallback SavePortAlertOperationCompleted;
 		private SendOrPostCallback SendStopOrderOperationCompleted;
+		private SendOrPostCallback SendAutoTradeOperationCompleted;
 		private SendOrPostCallback ViewStopOrderOperationCompleted;
 		private SendOrPostCallback ViewStopOrder_FirstLSOperationCompleted;
 		private SendOrPostCallback SendCancelStopOrderOperationCompleted;
 		private SendOrPostCallback StopOrderRegisterOperationCompleted;
 		private SendOrPostCallback StopOrderCheckDisclaimerOperationCompleted;
+		private SendOrPostCallback ViewAutoTradeTransOperationCompleted;
 		private SendOrPostCallback SaveUserAlertOperationCompleted;
 		private SendOrPostCallback SaveUserAlert2OperationCompleted;
 		private SendOrPostCallback GetAlertLogOperationCompleted;
+		private SendOrPostCallback GetAlertLogByGroupOperationCompleted;
+		private SendOrPostCallback VerifyAlertManagerOperationCompleted;
 		private SendOrPostCallback GetUserAlertOperationCompleted;
 		private SendOrPostCallback GetStockAlertItemsOperationCompleted;
 		private SendOrPostCallback GetPortAlertItemsOperationCompleted;
@@ -56,6 +59,7 @@ namespace i2TradePlus.ITSNetBusinessWS
 		private SendOrPostCallback GetStockSMAOperationCompleted;
 		private SendOrPostCallback SaveUserConfigOperationCompleted;
 		private SendOrPostCallback SaveUserConfigAllOperationCompleted;
+		private SendOrPostCallback GetPortEquityOperationCompleted;
 		private SendOrPostCallback SendHeartBeatOperationCompleted;
 		private SendOrPostCallback SendHeartBeat2OperationCompleted;
 		private SendOrPostCallback SaveUserEfinForwardOperationCompleted;
@@ -104,7 +108,6 @@ namespace i2TradePlus.ITSNetBusinessWS
 		private SendOrPostCallback ViewCustomerCreditOnSendBox_FreewillOperationCompleted;
 		private SendOrPostCallback ViewCustomerCreditOnSendBoxOperationCompleted;
 		private SendOrPostCallback GetSwitchAccountInfoOperationCompleted;
-		private SendOrPostCallback GetSwitchAccountInfoEserviceOperationCompleted;
 		private SendOrPostCallback ViewCustomer_MobileReportAllOperationCompleted;
 		private SendOrPostCallback ViewCustomer_OrdersConfirmsOperationCompleted;
 		private SendOrPostCallback ViewCustomer_CreditPositionOperationCompleted;
@@ -139,6 +142,7 @@ namespace i2TradePlus.ITSNetBusinessWS
 		private SendOrPostCallback SendCancelOrder_AfterCloseFwOperationCompleted;
 		private SendOrPostCallback SendCancelOrderOperationCompleted;
 		private SendOrPostCallback SendEditOrderOperationCompleted;
+		private SendOrPostCallback CountOrderCancelForDumpOperationCompleted;
 		private bool useDefaultCredentialsSetExplicitly;
         public CountOrderCancelForDumpCompletedEventHandler _CountOrderCancelForDumpCompleted;
 		public event CountOrderCancelForDumpCompletedEventHandler CountOrderCancelForDumpCompleted
@@ -490,6 +494,22 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._SendStopOrderCompleted -= value;
 			}
 		}
+
+        public SendAutoTradeCompletedEventHandler _SendAutoTradeCompleted;
+		public event SendAutoTradeCompletedEventHandler SendAutoTradeCompleted
+		{
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			add
+			{
+                this._SendAutoTradeCompleted += value;
+			}
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			remove
+			{
+                this._SendAutoTradeCompleted -= value;
+			}
+		}
+		
 		public ViewStopOrderCompletedEventHandler _ViewStopOrderCompleted;
 		public event ViewStopOrderCompletedEventHandler ViewStopOrderCompleted
 		{
@@ -560,6 +580,22 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._StopOrderCheckDisclaimerCompleted -= value;
 			}
 		}
+
+        public ViewAutoTradeTransCompletedEventHandler _ViewAutoTradeTransCompleted;
+        public event ViewAutoTradeTransCompletedEventHandler ViewAutoTradeTransCompleted
+        {
+            [MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+            add
+            {
+                this._ViewAutoTradeTransCompleted = value;
+            }
+            [MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+            remove
+            {
+                this._ViewAutoTradeTransCompleted = value;
+            }
+        }
+
 		public SaveUserAlertCompletedEventHandler _SaveUserAlertCompleted;
 		public event SaveUserAlertCompletedEventHandler SaveUserAlertCompleted
 		{
@@ -600,6 +636,36 @@ namespace i2TradePlus.ITSNetBusinessWS
 			remove
 			{
 				this._GetAlertLogCompleted -= value;
+			}
+		}
+
+        public GetAlertLogByGroupCompletedEventHandler _GetAlertLogByGroupCompleted;
+		public event GetAlertLogByGroupCompletedEventHandler GetAlertLogByGroupCompleted
+		{
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			add
+			{
+                this._GetAlertLogByGroupCompleted += value;
+			}
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			remove
+			{
+                this._GetAlertLogByGroupCompleted -= value;
+			}
+		}
+
+        public VerifyAlertManagerCompletedEventHandler _VerifyAlertManagerCompleted;
+		public event VerifyAlertManagerCompletedEventHandler VerifyAlertManagerCompleted
+		{
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			add
+			{
+                this._VerifyAlertManagerCompleted += value;
+			}
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			remove
+			{
+                this._VerifyAlertManagerCompleted -= value;
 			}
 		}
 		public GetUserAlertCompletedEventHandler _GetUserAlertCompleted;
@@ -742,6 +808,22 @@ namespace i2TradePlus.ITSNetBusinessWS
                 this._SaveUserConfigAllCompleted -= value;
 			}
 		}
+
+        public GetPortEquityCompletedEventHandler _GetPortEquityCompleted;       
+		public event GetPortEquityCompletedEventHandler GetPortEquityCompleted
+		{
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			add
+			{
+                this._GetPortEquityCompleted +=  value;
+			}
+			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
+			remove
+			{
+                this._GetPortEquityCompleted -= value;
+			}
+		}
+		
         public SendHeartBeatCompletedEventHandler _SendHeartBeatCompleted;
 		public event SendHeartBeatCompletedEventHandler SendHeartBeatCompleted
 		{
@@ -1414,20 +1496,7 @@ namespace i2TradePlus.ITSNetBusinessWS
                 this._GetSwitchAccountInfoCompleted -= value;
 			}
 		}
-		public  GetSwitchAccountInfoEserviceCompletedEventHandler _GetSwitchAccountInfoEserviceCompleted;
-		public event GetSwitchAccountInfoEserviceCompletedEventHandler GetSwitchAccountInfoEserviceCompleted
-		{
-			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
-			add
-			{
-                this._GetSwitchAccountInfoEserviceCompleted += value;
-			}
-			[MethodImpl(MethodImplOptions.Synchronized | MethodImplOptions.NoInlining)]
-			remove
-			{
-                this._GetSwitchAccountInfoEserviceCompleted -= value;
-			}
-		}
+		
 		public  ViewCustomer_MobileReportAllCompletedEventHandler _ViewCustomer_MobileReportAllCompleted;
 		public event ViewCustomer_MobileReportAllCompletedEventHandler ViewCustomer_MobileReportAllCompleted
 		{
@@ -1904,6 +1973,7 @@ namespace i2TradePlus.ITSNetBusinessWS
                 this._SendEditOrderCompleted -= value;
 			}
 		}
+
 		public new string Url
 		{
 			[MethodImpl(MethodImplOptions.NoInlining)]
@@ -1947,54 +2017,6 @@ namespace i2TradePlus.ITSNetBusinessWS
 			else
 			{
 				this.useDefaultCredentialsSetExplicitly = true;
-			}
-		}
-		[SoapDocumentMethod("http://tempuri.org/CountOrderCancelForDump", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public string CountOrderCancelForDump(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo)
-		{
-			object[] array = base.Invoke("CountOrderCancelForDump", new object[]
-			{
-				account,
-				stock,
-				trusteeId,
-				side,
-				price,
-				startOrderNo,
-				endOrderNo
-			});
-			return (string)array[0];
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void CountOrderCancelForDumpAsync(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo)
-		{
-			this.CountOrderCancelForDumpAsync(account, stock, trusteeId, side, price, startOrderNo, endOrderNo, null);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void CountOrderCancelForDumpAsync(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo, object userState)
-		{
-			if (this.CountOrderCancelForDumpOperationCompleted == null)
-			{
-				this.CountOrderCancelForDumpOperationCompleted = new SendOrPostCallback(this.OnCountOrderCancelForDumpOperationCompleted);
-			}
-			base.InvokeAsync("CountOrderCancelForDump", new object[]
-			{
-				account,
-				stock,
-				trusteeId,
-				side,
-				price,
-				startOrderNo,
-				endOrderNo
-			}, this.CountOrderCancelForDumpOperationCompleted, userState);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void OnCountOrderCancelForDumpOperationCompleted(object arg)
-		{
-			if (this._CountOrderCancelForDumpCompleted != null)
-			{
-				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
-				this._CountOrderCancelForDumpCompleted(this, new CountOrderCancelForDumpCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
 		[SoapDocumentMethod("http://tempuri.org/ViewCustomerByStockForDump", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
@@ -2999,6 +3021,42 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._SendStopOrderCompleted(this, new SendStopOrderCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
+		[SoapDocumentMethod("http://tempuri.org/SendAutoTrade", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string SendAutoTrade(string message)
+		{
+			object[] array = base.Invoke("SendAutoTrade", new object[]
+			{
+				message
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void SendAutoTradeAsync(string message)
+		{
+			this.SendAutoTradeAsync(message, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void SendAutoTradeAsync(string message, object userState)
+		{
+			if (this.SendAutoTradeOperationCompleted == null)
+			{
+				this.SendAutoTradeOperationCompleted = new SendOrPostCallback(this.OnSendAutoTradeOperationCompleted);
+			}
+			base.InvokeAsync("SendAutoTrade", new object[]
+			{
+				message
+			}, this.SendAutoTradeOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnSendAutoTradeOperationCompleted(object arg)
+		{
+			if (this._SendAutoTradeCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._SendAutoTradeCompleted(this, new SendAutoTradeCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
 		[SoapDocumentMethod("http://tempuri.org/ViewStopOrder", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public string ViewStopOrder(string userId, string account, int refNo)
@@ -3195,6 +3253,50 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._StopOrderCheckDisclaimerCompleted(this, new StopOrderCheckDisclaimerCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
+		[SoapDocumentMethod("http://tempuri.org/ViewAutoTradeTrans", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string ViewAutoTradeTrans(string userId, string viewType, string stock, string side, string status)
+		{
+			object[] array = base.Invoke("ViewAutoTradeTrans", new object[]
+			{
+				userId,
+				viewType,
+				stock,
+				side,
+				status
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void ViewAutoTradeTransAsync(string userId, string viewType, string stock, string side, string status)
+		{
+			this.ViewAutoTradeTransAsync(userId, viewType, stock, side, status, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void ViewAutoTradeTransAsync(string userId, string viewType, string stock, string side, string status, object userState)
+		{
+			if (this.ViewAutoTradeTransOperationCompleted == null)
+			{
+				this.ViewAutoTradeTransOperationCompleted = new SendOrPostCallback(this.OnViewAutoTradeTransOperationCompleted);
+			}
+			base.InvokeAsync("ViewAutoTradeTrans", new object[]
+			{
+				userId,
+				viewType,
+				stock,
+				side,
+				status
+			}, this.ViewAutoTradeTransOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnViewAutoTradeTransOperationCompleted(object arg)
+		{
+			if (this._ViewAutoTradeTransCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._ViewAutoTradeTransCompleted(this, new ViewAutoTradeTransCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
 		[SoapDocumentMethod("http://tempuri.org/SaveUserAlert", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public string SaveUserAlert(string userId, bool isRecvAdvertise, bool isMktSummary, bool isRecvPort, string device, int mode)
@@ -3319,6 +3421,80 @@ namespace i2TradePlus.ITSNetBusinessWS
 			{
 				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
 				this._GetAlertLogCompleted(this, new GetAlertLogCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
+		[SoapDocumentMethod("http://tempuri.org/GetAlertLogByGroup", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string GetAlertLogByGroup(string groupId)
+		{
+			object[] array = base.Invoke("GetAlertLogByGroup", new object[]
+			{
+				groupId
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void GetAlertLogByGroupAsync(string groupId)
+		{
+			this.GetAlertLogByGroupAsync(groupId, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void GetAlertLogByGroupAsync(string groupId, object userState)
+		{
+			if (this.GetAlertLogByGroupOperationCompleted == null)
+			{
+				this.GetAlertLogByGroupOperationCompleted = new SendOrPostCallback(this.OnGetAlertLogByGroupOperationCompleted);
+			}
+			base.InvokeAsync("GetAlertLogByGroup", new object[]
+			{
+				groupId
+			}, this.GetAlertLogByGroupOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnGetAlertLogByGroupOperationCompleted(object arg)
+		{
+			if (this._GetAlertLogByGroupCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._GetAlertLogByGroupCompleted(this, new GetAlertLogByGroupCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
+		[SoapDocumentMethod("http://tempuri.org/VerifyAlertManager", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string VerifyAlertManager(string userId, string password)
+		{
+			object[] array = base.Invoke("VerifyAlertManager", new object[]
+			{
+				userId,
+				password
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void VerifyAlertManagerAsync(string userId, string password)
+		{
+			this.VerifyAlertManagerAsync(userId, password, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void VerifyAlertManagerAsync(string userId, string password, object userState)
+		{
+			if (this.VerifyAlertManagerOperationCompleted == null)
+			{
+				this.VerifyAlertManagerOperationCompleted = new SendOrPostCallback(this.OnVerifyAlertManagerOperationCompleted);
+			}
+			base.InvokeAsync("VerifyAlertManager", new object[]
+			{
+				userId,
+				password
+			}, this.VerifyAlertManagerOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnVerifyAlertManagerOperationCompleted(object arg)
+		{
+			if (this._VerifyAlertManagerCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._VerifyAlertManagerCompleted(this, new VerifyAlertManagerCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
 		[SoapDocumentMethod("http://tempuri.org/GetUserAlert", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
@@ -3717,6 +3893,44 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._SaveUserConfigAllCompleted(this, new SaveUserConfigAllCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
+		[SoapDocumentMethod("http://tempuri.org/GetPortEquity", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string GetPortEquity(string account, string accType)
+		{
+			object[] array = base.Invoke("GetPortEquity", new object[]
+			{
+				account,
+				accType
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void GetPortEquityAsync(string account, string accType)
+		{
+			this.GetPortEquityAsync(account, accType, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void GetPortEquityAsync(string account, string accType, object userState)
+		{
+			if (this.GetPortEquityOperationCompleted == null)
+			{
+				this.GetPortEquityOperationCompleted = new SendOrPostCallback(this.OnGetPortEquityOperationCompleted);
+			}
+			base.InvokeAsync("GetPortEquity", new object[]
+			{
+				account,
+				accType
+			}, this.GetPortEquityOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnGetPortEquityOperationCompleted(object arg)
+		{
+			if (this._GetPortEquityCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._GetPortEquityCompleted(this, new GetPortEquityCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
 		[SoapDocumentMethod("http://tempuri.org/SendHeartBeat", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public bool SendHeartBeat(string userID, string session)
@@ -4038,13 +4252,14 @@ namespace i2TradePlus.ITSNetBusinessWS
 		}
 		[SoapDocumentMethod("http://tempuri.org/SendPushMessage", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public string SendPushMessage(string key, string groupId, string message)
+		public string SendPushMessage(string key, string groupId, string message, string shooter)
 		{
 			object[] array = base.Invoke("SendPushMessage", new object[]
 			{
 				key,
 				groupId,
-				message
+				message,
+				shooter
 			});
 			return (string)array[0];
 		}
@@ -5528,52 +5743,6 @@ namespace i2TradePlus.ITSNetBusinessWS
 				this._GetSwitchAccountInfoCompleted(this, new GetSwitchAccountInfoCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
-		[SoapDocumentMethod("http://tempuri.org/GetSwitchAccountInfoEservice", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public string GetSwitchAccountInfoEservice(string brokerID, string userId, string session, string accountNo, string system, string service)
-		{
-			object[] array = base.Invoke("GetSwitchAccountInfoEservice", new object[]
-			{
-				brokerID,
-				userId,
-				session,
-				accountNo,
-				system,
-				service
-			});
-			return (string)array[0];
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void GetSwitchAccountInfoEserviceAsync(string brokerID, string userId, string session, string accountNo, string system, string service)
-		{
-			this.GetSwitchAccountInfoEserviceAsync(brokerID, userId, session, accountNo, system, service, null);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void GetSwitchAccountInfoEserviceAsync(string brokerID, string userId, string session, string accountNo, string system, string service, object userState)
-		{
-			if (this.GetSwitchAccountInfoEserviceOperationCompleted == null)
-			{
-				this.GetSwitchAccountInfoEserviceOperationCompleted = new SendOrPostCallback(this.OnGetSwitchAccountInfoEserviceOperationCompleted);
-			}
-			base.InvokeAsync("GetSwitchAccountInfoEservice", new object[]
-			{
-				brokerID,
-				userId,
-				session,
-				accountNo,
-				system,
-				service
-			}, this.GetSwitchAccountInfoEserviceOperationCompleted, userState);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void OnGetSwitchAccountInfoEserviceOperationCompleted(object arg)
-		{
-			if (this._GetSwitchAccountInfoEserviceCompleted != null)
-			{
-				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
-				this._GetSwitchAccountInfoEserviceCompleted(this, new GetSwitchAccountInfoEserviceCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
-			}
-		}
 		[SoapDocumentMethod("http://tempuri.org/ViewCustomer_MobileReportAll", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public string ViewCustomer_MobileReportAll(string custAccID, string stockSymbol)
@@ -6972,6 +7141,54 @@ namespace i2TradePlus.ITSNetBusinessWS
 			{
 				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
 				this._SendEditOrderCompleted(this, new SendEditOrderCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
+			}
+		}
+		[SoapDocumentMethod("http://tempuri.org/CountOrderCancelForDump", Use = SoapBindingUse.Literal, RequestNamespace = "http://tempuri.org/", ResponseNamespace = "http://tempuri.org/", ParameterStyle = SoapParameterStyle.Wrapped)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public string CountOrderCancelForDump(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo)
+		{
+			object[] array = base.Invoke("CountOrderCancelForDump", new object[]
+			{
+				account,
+				stock,
+				trusteeId,
+				side,
+				price,
+				startOrderNo,
+				endOrderNo
+			});
+			return (string)array[0];
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void CountOrderCancelForDumpAsync(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo)
+		{
+			this.CountOrderCancelForDumpAsync(account, stock, trusteeId, side, price, startOrderNo, endOrderNo, null);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void CountOrderCancelForDumpAsync(string account, string stock, int trusteeId, string side, string price, long startOrderNo, long endOrderNo, object userState)
+		{
+			if (this.CountOrderCancelForDumpOperationCompleted == null)
+			{
+				this.CountOrderCancelForDumpOperationCompleted = new SendOrPostCallback(this.OnCountOrderCancelForDumpOperationCompleted);
+			}
+			base.InvokeAsync("CountOrderCancelForDump", new object[]
+			{
+				account,
+				stock,
+				trusteeId,
+				side,
+				price,
+				startOrderNo,
+				endOrderNo
+			}, this.CountOrderCancelForDumpOperationCompleted, userState);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void OnCountOrderCancelForDumpOperationCompleted(object arg)
+		{
+			if (this._CountOrderCancelForDumpCompleted != null)
+			{
+				InvokeCompletedEventArgs invokeCompletedEventArgs = (InvokeCompletedEventArgs)arg;
+				this._CountOrderCancelForDumpCompleted(this, new CountOrderCancelForDumpCompletedEventArgs(invokeCompletedEventArgs.Results, invokeCompletedEventArgs.Error, invokeCompletedEventArgs.Cancelled, invokeCompletedEventArgs.UserState));
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]

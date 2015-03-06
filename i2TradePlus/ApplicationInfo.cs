@@ -93,7 +93,7 @@ namespace i2TradePlus
 		public static bool IsFeedsStarted = false;
 		public static bool IsScreen125 = false;
 		public static bool IsResumeState = false;
-		public static bool SendHeartBeatMonitor = false;
+		public static int SendHeartBeatInterval = 30;
 		public static bool IsLockSendBox = false;
 		private static string currentSymbol = string.Empty;
 		private static string currStockInMktWatch = string.Empty;
@@ -560,31 +560,34 @@ namespace i2TradePlus
 					Monitor.Enter(syncRoot = ((ICollection)ApplicationInfo.AutoGetOrderNoList).SyncRoot);
 					try
 					{
+						string key = string.Empty;
 						if (actionType == 1)
 						{
 							if (ApplicationInfo.SupportFreewill)
 							{
-								ApplicationInfo.AutoGetOrderNoList.Add("R" + sOrderNo, DateTime.Now);
+								key = "R" + sOrderNo;
 							}
 							else
 							{
-								ApplicationInfo.AutoGetOrderNoList.Add(sOrderNo, DateTime.Now);
+								key = sOrderNo;
 							}
 						}
 						else
 						{
 							if (actionType == 2)
 							{
-								ApplicationInfo.AutoGetOrderNoList.Add(sOrderNo, DateTime.Now);
+								key = sOrderNo;
 							}
 							else
 							{
-								if (actionType == 3)
+								if (actionType != 3)
 								{
-									ApplicationInfo.AutoGetOrderNoList.Add("F" + sOrderNo, DateTime.Now);
+									return;
 								}
+								key = "F" + sOrderNo;
 							}
 						}
+						ApplicationInfo.AutoGetOrderNoList.Add(key, DateTime.Now);
 					}
 					finally
 					{

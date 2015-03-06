@@ -31,243 +31,6 @@ namespace i2TradePlus.Controls
 		private GroupBox groupBox3;
 		private Button btnStopOrder;
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public ucBSSetting()
-		{
-			this.InitializeComponent();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ucBSSetting_Load(object sender, EventArgs e)
-		{
-			try
-			{
-				this.chkBSAutoVolume.Checked = Settings.Default.BSBoxDefaultVolumeActive;
-				this.tbDefVolume.Text = Utilities.VolumeFormat(Settings.Default.BSBoxDefaultVolume, true);
-				this.tbNextVolume.Text = Utilities.VolumeFormat(Settings.Default.BSBoxDefaultVolumeNext, true);
-				this.chkBSDefaultLastStock.Checked = Settings.Default.BSBoxDefaultStock;
-				this.chkBSInputTTF.Checked = Settings.Default.BSBoxEntryTTF;
-				if (Settings.Default.BSBoxDefaultPrice > 0)
-				{
-					this.chkBSAutoPrice.Checked = true;
-					if (Settings.Default.BSBoxDefaultPrice == 1)
-					{
-						this.rbBSDefLastprice.Checked = true;
-					}
-					else
-					{
-						if (Settings.Default.BSBoxDefaultPrice == 2)
-						{
-							this.rbBSDefBestBid.Checked = true;
-						}
-					}
-				}
-				else
-				{
-					this.chkBSAutoPrice.Checked = false;
-				}
-				this.chkSavePincode.Checked = Settings.Default.BSBoxSavePincode;
-				if (ApplicationInfo.StopOrderSupported)
-				{
-					this.btnStopOrder.Enabled = ApplicationInfo.StopOrderAccepted;
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void Save()
-		{
-			Settings.Default.BSBoxDefaultStock = this.chkBSDefaultLastStock.Checked;
-			Settings.Default.BSBoxEntryTTF = this.chkBSInputTTF.Checked;
-			Settings.Default.BSBoxDefaultVolumeActive = this.chkBSAutoVolume.Checked;
-			long num;
-			long.TryParse(this.tbNextVolume.Text.Replace(",", ""), out num);
-			Settings.Default.BSBoxDefaultVolumeNext = num;
-			long.TryParse(this.tbDefVolume.Text.Replace(",", ""), out num);
-			Settings.Default.BSBoxDefaultVolume = num;
-			if (this.chkBSAutoPrice.Checked)
-			{
-				if (this.rbBSDefLastprice.Checked)
-				{
-					Settings.Default.BSBoxDefaultPrice = 1;
-				}
-				else
-				{
-					if (this.rbBSDefBestBid.Checked)
-					{
-						Settings.Default.BSBoxDefaultPrice = 2;
-					}
-				}
-			}
-			else
-			{
-				Settings.Default.BSBoxDefaultPrice = 0;
-			}
-			Settings.Default.BSBoxSavePincode = this.chkSavePincode.Checked;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public void ChangeLanguage(string lang)
-		{
-			try
-			{
-				if (lang == "T")
-				{
-					this.chkSavePincode.Text = "บันทึก PINCODE";
-					this.gbSavePin.Text = "คำเตือน";
-					this.lbSavePin.Text = "   \"บันทึก PINCODE\" โปรแกรมจะจดจำรหัส PINCODE ไว้จนกว่าจะถึงเวลาที่กำหนดในแต่ละรอบ " + "\r\nเมื่อมีการส่งคำสั่งซื้อ/ขาย หรือยกเลิก โปรแกรมจะเป็นผู้ป้อนค่าให้แบบอัตโนมัติ" + "\r\n   ดังนั้นท่านต้องทำความเข้าใจและยอมรับในความเสี่ยงที่จะเกิดขึ้นจากการ บันทึก PINCODE " + "\r\n และโปรแกรม i2Trade จะไม่รับผิดชอบต่อความเสียหายใดที่เกิดขึ้นทุกกรณี";
-					this.chkBSDefaultLastStock.Text = "หลังส่งคำสั่งให้คงชื่อหลักทรัพย์ไว้";
-					this.chkBSInputTTF.Text = "ใส่ค่า Trustee Id ทุกครั้ง";
-					this.chkBSAutoPrice.Text = "ใส่ราคาอัตโนมัติ";
-					this.chkBSAutoVolume.Text = "ใส่ราคาปริมาณซื้อ/ขายอัตโนมัติ";
-					this.gbBSDefaultPrice.Text = "กำหนดราคาเป็น";
-				}
-				else
-				{
-					this.chkSavePincode.Text = "Save PINCODE";
-					this.gbSavePin.Text = "Disclaimer";
-					this.lbSavePin.Text = string.Concat(new string[]
-					{
-						"   \"Save PIN\" function allows you to save your PIN for an interval. During this ",
-						"\r\ninterval, re-enter PIN is not required for any transaction performed in this",
-						"\r\ntrading program only.",
-						"\r\n   Therefore, you understand and accept the risk of using this \"Save PIN\"",
-						"\r\nfunction, i2Trade will take no responsibility on any loss or damage from any",
-						"\r\nerror occurred."
-					});
-					this.chkBSDefaultLastStock.Text = "The order shall remain subject securities.";
-					this.chkBSInputTTF.Text = "Always put value of Trustee Id.";
-					this.chkBSAutoPrice.Text = "The price automatically.";
-					this.chkBSAutoVolume.Text = "Enter the amount of automation.";
-					this.gbBSDefaultPrice.Text = "Default price.";
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void chkBSAutoPrice_CheckedChanged(object sender, EventArgs e)
-		{
-			this.gbBSDefaultPrice.Enabled = this.chkBSAutoPrice.Checked;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void chkBSAutoVolume_CheckedChanged(object sender, EventArgs e)
-		{
-			this.lbDefVolume.Enabled = this.chkBSAutoVolume.Checked;
-			this.tbDefVolume.Enabled = this.chkBSAutoVolume.Checked;
-			this.lbNextVolume.Enabled = this.chkBSAutoVolume.Checked;
-			this.tbNextVolume.Enabled = this.chkBSAutoVolume.Checked;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void tbDefVolume_TextChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				if (this.tbDefVolume.Text.Trim() != string.Empty)
-				{
-					if (FormatUtil.Isnumeric(this.tbDefVolume.Text))
-					{
-						try
-						{
-							decimal num = Convert.ToInt64(this.tbDefVolume.Text.Replace(",", ""));
-							this.tbDefVolume.Text = num.ToString("#,###");
-							this.tbDefVolume.Select(this.tbDefVolume.Text.Length, 0);
-						}
-						catch
-						{
-							this.tbDefVolume.Text = this.tbDefVolume.Text.Substring(0, this.tbDefVolume.Text.Length - 1);
-						}
-					}
-					else
-					{
-						this.tbDefVolume.Text = this.tbDefVolume.Text.Substring(0, this.tbDefVolume.Text.Length - 1);
-					}
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void tbNextVolume_TextChanged(object sender, EventArgs e)
-		{
-			try
-			{
-				if (this.tbNextVolume.Text.Trim() != string.Empty)
-				{
-					if (FormatUtil.Isnumeric(this.tbNextVolume.Text))
-					{
-						try
-						{
-							decimal num = Convert.ToInt64(this.tbNextVolume.Text.Replace(",", ""));
-							this.tbNextVolume.Text = num.ToString("#,###");
-							this.tbNextVolume.Select(this.tbNextVolume.Text.Length, 0);
-						}
-						catch
-						{
-							this.tbNextVolume.Text = this.tbNextVolume.Text.Substring(0, this.tbNextVolume.Text.Length - 1);
-						}
-					}
-					else
-					{
-						this.tbNextVolume.Text = this.tbNextVolume.Text.Substring(0, this.tbNextVolume.Text.Length - 1);
-					}
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void rdoLangThai_CheckedChanged(object sender, EventArgs e)
-		{
-			this.ChangeLanguage("T");
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void rdoLangEnglish_CheckedChanged(object sender, EventArgs e)
-		{
-			this.ChangeLanguage("E");
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnSave_Click(object sender, EventArgs e)
-		{
-			this.Save();
-			base.Close();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnClose_Click(object sender, EventArgs e)
-		{
-			base.Close();
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ucBSSetting_Shown(object sender, EventArgs e)
-		{
-			base.FormBorderStyle = FormBorderStyle.FixedDialog;
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void btnStopOrder_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				this.btnStopOrder.Enabled = false;
-				string text = ApplicationInfo.WebAlertService.StopOrderRegister(ApplicationInfo.UserLoginID, false);
-				if (text == "ok")
-				{
-					ApplicationInfo.StopOrderAccepted = false;
-                    //<PS> Enable stop order feature
-                    ApplicationInfo.StopOrderAccepted = true;
-				}
-				else
-				{
-					MessageBox.Show("UnRegister fail::\r\n" + text);
-					this.btnStopOrder.Enabled = true;
-				}
-			}
-			catch
-			{
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
 		protected override void Dispose(bool disposing)
 		{
 			if (disposing && this.components != null)
@@ -507,6 +270,245 @@ namespace i2TradePlus.Controls
 			this.groupBox3.ResumeLayout(false);
 			base.ResumeLayout(false);
 			base.PerformLayout();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public ucBSSetting()
+		{
+			this.InitializeComponent();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ucBSSetting_Load(object sender, EventArgs e)
+		{
+			try
+			{
+				this.chkBSAutoVolume.Checked = Settings.Default.BSBoxDefaultVolumeActive;
+				this.tbDefVolume.Text = Utilities.VolumeFormat(Settings.Default.BSBoxDefaultVolume, true);
+				this.tbNextVolume.Text = Utilities.VolumeFormat(Settings.Default.BSBoxDefaultVolumeNext, true);
+				this.chkBSDefaultLastStock.Checked = Settings.Default.BSBoxDefaultStock;
+				this.chkBSInputTTF.Checked = Settings.Default.BSBoxEntryTTF;
+				if (Settings.Default.BSBoxDefaultPrice > 0)
+				{
+					this.chkBSAutoPrice.Checked = true;
+					if (Settings.Default.BSBoxDefaultPrice == 1)
+					{
+						this.rbBSDefLastprice.Checked = true;
+					}
+					else
+					{
+						if (Settings.Default.BSBoxDefaultPrice == 2)
+						{
+							this.rbBSDefBestBid.Checked = true;
+						}
+					}
+				}
+				else
+				{
+					this.chkBSAutoPrice.Checked = false;
+				}
+				this.chkSavePincode.Checked = Settings.Default.BSBoxSavePincode;
+				if (ApplicationInfo.StopOrderSupported)
+				{
+					this.btnStopOrder.Enabled = ApplicationInfo.StopOrderAccepted;
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void Save()
+		{
+			Settings.Default.BSBoxDefaultStock = this.chkBSDefaultLastStock.Checked;
+			Settings.Default.BSBoxEntryTTF = this.chkBSInputTTF.Checked;
+			Settings.Default.BSBoxDefaultVolumeActive = this.chkBSAutoVolume.Checked;
+			long num;
+			long.TryParse(this.tbNextVolume.Text.Replace(",", ""), out num);
+			Settings.Default.BSBoxDefaultVolumeNext = num;
+			long.TryParse(this.tbDefVolume.Text.Replace(",", ""), out num);
+			Settings.Default.BSBoxDefaultVolume = num;
+			if (this.chkBSAutoPrice.Checked)
+			{
+				if (this.rbBSDefLastprice.Checked)
+				{
+					Settings.Default.BSBoxDefaultPrice = 1;
+				}
+				else
+				{
+					if (this.rbBSDefBestBid.Checked)
+					{
+						Settings.Default.BSBoxDefaultPrice = 2;
+					}
+				}
+			}
+			else
+			{
+				Settings.Default.BSBoxDefaultPrice = 0;
+			}
+			Settings.Default.BSBoxSavePincode = this.chkSavePincode.Checked;
+			if (!Settings.Default.BSBoxSavePincode)
+			{
+				ApplicationInfo.UserPincodeLastEntry = string.Empty;
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public void ChangeLanguage(string lang)
+		{
+			try
+			{
+				if (lang == "T")
+				{
+					this.chkSavePincode.Text = "บันทึก PINCODE";
+					this.gbSavePin.Text = "คำเตือน";
+					this.lbSavePin.Text = "   \"บันทึก PINCODE\" โปรแกรมจะจดจำรหัส PINCODE ไว้จนกว่าจะถึงเวลาที่กำหนดในแต่ละรอบ " + "\r\nเมื่อมีการส่งคำสั่งซื้อ/ขาย หรือยกเลิก โปรแกรมจะเป็นผู้ป้อนค่าให้แบบอัตโนมัติ" + "\r\n   ดังนั้นท่านต้องทำความเข้าใจและยอมรับในความเสี่ยงที่จะเกิดขึ้นจากการ บันทึก PINCODE " + "\r\n และโปรแกรม i2Trade จะไม่รับผิดชอบต่อความเสียหายใดที่เกิดขึ้นทุกกรณี";
+					this.chkBSDefaultLastStock.Text = "หลังส่งคำสั่งให้คงชื่อหลักทรัพย์ไว้";
+					this.chkBSInputTTF.Text = "ใส่ค่า Trustee Id ทุกครั้ง";
+					this.chkBSAutoPrice.Text = "ใส่ราคาอัตโนมัติ";
+					this.chkBSAutoVolume.Text = "ใส่ราคาปริมาณซื้อ/ขายอัตโนมัติ";
+					this.gbBSDefaultPrice.Text = "กำหนดราคาเป็น";
+				}
+				else
+				{
+					this.chkSavePincode.Text = "Save PINCODE";
+					this.gbSavePin.Text = "Disclaimer";
+					this.lbSavePin.Text = string.Concat(new string[]
+					{
+						"   \"Save PIN\" function allows you to save your PIN for an interval. During this ",
+						"\r\ninterval, re-enter PIN is not required for any transaction performed in this",
+						"\r\ntrading program only.",
+						"\r\n   Therefore, you understand and accept the risk of using this \"Save PIN\"",
+						"\r\nfunction, i2Trade will take no responsibility on any loss or damage from any",
+						"\r\nerror occurred."
+					});
+					this.chkBSDefaultLastStock.Text = "The order shall remain subject securities.";
+					this.chkBSInputTTF.Text = "Always put value of Trustee Id.";
+					this.chkBSAutoPrice.Text = "The price automatically.";
+					this.chkBSAutoVolume.Text = "Enter the amount of automation.";
+					this.gbBSDefaultPrice.Text = "Default price.";
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void chkBSAutoPrice_CheckedChanged(object sender, EventArgs e)
+		{
+			this.gbBSDefaultPrice.Enabled = this.chkBSAutoPrice.Checked;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void chkBSAutoVolume_CheckedChanged(object sender, EventArgs e)
+		{
+			this.lbDefVolume.Enabled = this.chkBSAutoVolume.Checked;
+			this.tbDefVolume.Enabled = this.chkBSAutoVolume.Checked;
+			this.lbNextVolume.Enabled = this.chkBSAutoVolume.Checked;
+			this.tbNextVolume.Enabled = this.chkBSAutoVolume.Checked;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void tbDefVolume_TextChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				if (this.tbDefVolume.Text.Trim() != string.Empty)
+				{
+					if (FormatUtil.Isnumeric(this.tbDefVolume.Text))
+					{
+						try
+						{
+							decimal num = Convert.ToInt64(this.tbDefVolume.Text.Replace(",", ""));
+							this.tbDefVolume.Text = num.ToString("#,###");
+							this.tbDefVolume.Select(this.tbDefVolume.Text.Length, 0);
+						}
+						catch
+						{
+							this.tbDefVolume.Text = this.tbDefVolume.Text.Substring(0, this.tbDefVolume.Text.Length - 1);
+						}
+					}
+					else
+					{
+						this.tbDefVolume.Text = this.tbDefVolume.Text.Substring(0, this.tbDefVolume.Text.Length - 1);
+					}
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void tbNextVolume_TextChanged(object sender, EventArgs e)
+		{
+			try
+			{
+				if (this.tbNextVolume.Text.Trim() != string.Empty)
+				{
+					if (FormatUtil.Isnumeric(this.tbNextVolume.Text))
+					{
+						try
+						{
+							decimal num = Convert.ToInt64(this.tbNextVolume.Text.Replace(",", ""));
+							this.tbNextVolume.Text = num.ToString("#,###");
+							this.tbNextVolume.Select(this.tbNextVolume.Text.Length, 0);
+						}
+						catch
+						{
+							this.tbNextVolume.Text = this.tbNextVolume.Text.Substring(0, this.tbNextVolume.Text.Length - 1);
+						}
+					}
+					else
+					{
+						this.tbNextVolume.Text = this.tbNextVolume.Text.Substring(0, this.tbNextVolume.Text.Length - 1);
+					}
+				}
+			}
+			catch
+			{
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void rdoLangThai_CheckedChanged(object sender, EventArgs e)
+		{
+			this.ChangeLanguage("T");
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void rdoLangEnglish_CheckedChanged(object sender, EventArgs e)
+		{
+			this.ChangeLanguage("E");
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnSave_Click(object sender, EventArgs e)
+		{
+			this.Save();
+			base.Close();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnClose_Click(object sender, EventArgs e)
+		{
+			base.Close();
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ucBSSetting_Shown(object sender, EventArgs e)
+		{
+			base.FormBorderStyle = FormBorderStyle.FixedDialog;
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void btnStopOrder_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				this.btnStopOrder.Enabled = false;
+				string text = ApplicationInfo.WebAlertService.StopOrderRegister(ApplicationInfo.UserLoginID, false);
+				if (text == "ok")
+				{
+					ApplicationInfo.StopOrderAccepted = false;
+				}
+				else
+				{
+					MessageBox.Show("UnRegister fail::\r\n" + text);
+					this.btnStopOrder.Enabled = true;
+				}
+			}
+			catch
+			{
+			}
 		}
 	}
 }

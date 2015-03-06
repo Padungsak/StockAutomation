@@ -1456,7 +1456,7 @@ namespace i2TradePlus
 			itemGrid.FieldType = ItemType.Text;
 			itemGrid.FontColor = Color.Yellow;
 			itemGrid.FontStyle = FontStyle.Regular;
-			itemGrid.Height = 1;
+			itemGrid.Height = 1f;
 			itemGrid.IsBlink = 0;
 			itemGrid.Name = "stock";
 			itemGrid.Text = "";
@@ -1464,7 +1464,7 @@ namespace i2TradePlus
 			itemGrid.Visible = true;
 			itemGrid.Width = 18;
 			itemGrid.X = 0;
-			itemGrid.Y = 0;
+			itemGrid.Y = 0f;
 			itemGrid2.AdjustFontSize = 0f;
 			itemGrid2.Alignment = StringAlignment.Near;
 			itemGrid2.BackColor = Color.Black;
@@ -1472,7 +1472,7 @@ namespace i2TradePlus
 			itemGrid2.FieldType = ItemType.Text;
 			itemGrid2.FontColor = Color.Yellow;
 			itemGrid2.FontStyle = FontStyle.Regular;
-			itemGrid2.Height = 1;
+			itemGrid2.Height = 1f;
 			itemGrid2.IsBlink = 0;
 			itemGrid2.Name = "price";
 			itemGrid2.Text = "";
@@ -1480,7 +1480,7 @@ namespace i2TradePlus
 			itemGrid2.Visible = true;
 			itemGrid2.Width = 13;
 			itemGrid2.X = 18;
-			itemGrid2.Y = 0;
+			itemGrid2.Y = 0f;
 			itemGrid3.AdjustFontSize = 0f;
 			itemGrid3.Alignment = StringAlignment.Near;
 			itemGrid3.BackColor = Color.Black;
@@ -1488,7 +1488,7 @@ namespace i2TradePlus
 			itemGrid3.FieldType = ItemType.Text;
 			itemGrid3.FontColor = Color.Yellow;
 			itemGrid3.FontStyle = FontStyle.Regular;
-			itemGrid3.Height = 1;
+			itemGrid3.Height = 1f;
 			itemGrid3.IsBlink = 0;
 			itemGrid3.Name = "chg";
 			itemGrid3.Text = "";
@@ -1496,7 +1496,7 @@ namespace i2TradePlus
 			itemGrid3.Visible = true;
 			itemGrid3.Width = 11;
 			itemGrid3.X = 31;
-			itemGrid3.Y = 0;
+			itemGrid3.Y = 0f;
 			itemGrid4.AdjustFontSize = 0f;
 			itemGrid4.Alignment = StringAlignment.Near;
 			itemGrid4.BackColor = Color.Black;
@@ -1504,7 +1504,7 @@ namespace i2TradePlus
 			itemGrid4.FieldType = ItemType.Text;
 			itemGrid4.FontColor = Color.Yellow;
 			itemGrid4.FontStyle = FontStyle.Regular;
-			itemGrid4.Height = 1;
+			itemGrid4.Height = 1f;
 			itemGrid4.IsBlink = 0;
 			itemGrid4.Name = "pchg";
 			itemGrid4.Text = "";
@@ -1512,7 +1512,7 @@ namespace i2TradePlus
 			itemGrid4.Visible = true;
 			itemGrid4.Width = 14;
 			itemGrid4.X = 42;
-			itemGrid4.Y = 0;
+			itemGrid4.Y = 0f;
 			itemGrid5.AdjustFontSize = 0f;
 			itemGrid5.Alignment = StringAlignment.Near;
 			itemGrid5.BackColor = Color.Black;
@@ -1520,7 +1520,7 @@ namespace i2TradePlus
 			itemGrid5.FieldType = ItemType.Label;
 			itemGrid5.FontColor = Color.LightGray;
 			itemGrid5.FontStyle = FontStyle.Regular;
-			itemGrid5.Height = 1;
+			itemGrid5.Height = 1f;
 			itemGrid5.IsBlink = 0;
 			itemGrid5.Name = "col3";
 			itemGrid5.Text = "High";
@@ -1528,7 +1528,7 @@ namespace i2TradePlus
 			itemGrid5.Visible = true;
 			itemGrid5.Width = 10;
 			itemGrid5.X = 56;
-			itemGrid5.Y = 0;
+			itemGrid5.Y = 0f;
 			itemGrid6.AdjustFontSize = 0f;
 			itemGrid6.Alignment = StringAlignment.Near;
 			itemGrid6.BackColor = Color.Black;
@@ -1536,7 +1536,7 @@ namespace i2TradePlus
 			itemGrid6.FieldType = ItemType.Text;
 			itemGrid6.FontColor = Color.Yellow;
 			itemGrid6.FontStyle = FontStyle.Regular;
-			itemGrid6.Height = 1;
+			itemGrid6.Height = 1f;
 			itemGrid6.IsBlink = 0;
 			itemGrid6.Name = "high";
 			itemGrid6.Text = "";
@@ -1544,7 +1544,7 @@ namespace i2TradePlus
 			itemGrid6.Visible = true;
 			itemGrid6.Width = 12;
 			itemGrid6.X = 66;
-			itemGrid6.Y = 0;
+			itemGrid6.Y = 0f;
 			itemGrid7.AdjustFontSize = 0f;
 			itemGrid7.Alignment = StringAlignment.Near;
 			itemGrid7.BackColor = Color.Black;
@@ -1552,7 +1552,7 @@ namespace i2TradePlus
 			itemGrid7.FieldType = ItemType.Label;
 			itemGrid7.FontColor = Color.LightGray;
 			itemGrid7.FontStyle = FontStyle.Regular;
-			itemGrid7.Height = 1;
+			itemGrid7.Height = 1f;
 			itemGrid7.IsBlink = 0;
 			itemGrid7.Name = "col4";
 			itemGrid7.Text = "Low";
@@ -1560,7 +1560,7 @@ namespace i2TradePlus
 			itemGrid7.Visible = true;
 			itemGrid7.Width = 10;
 			itemGrid7.X = 78;
-			itemGrid7.Y = 0;
+			itemGrid7.Y = 0f;
 			itemGrid8.AdjustFontSize = 0f;
 			itemGrid8.Alignment = StringAlignment.Near;
 			itemGrid8.BackColor = Color.Black;
@@ -1568,7 +1568,7 @@ namespace i2TradePlus
 			itemGrid8.FieldType = ItemType.Text;
 			itemGrid8.FontColor = Color.Yellow;
 			itemGrid8.FontStyle = FontStyle.Regular;
-			itemGrid8.Height = 1;
+			itemGrid8.Height = 1f;
 			itemGrid8.IsBlink = 0;
 			itemGrid8.Name = "low";
 			itemGrid8.Text = "";
@@ -1576,7 +1576,7 @@ namespace i2TradePlus
 			itemGrid8.Visible = true;
 			itemGrid8.Width = 12;
 			itemGrid8.X = 88;
-			itemGrid8.Y = 0;
+			itemGrid8.Y = 0f;
 			this.intzaHeader1.Items.Add(itemGrid);
 			this.intzaHeader1.Items.Add(itemGrid2);
 			this.intzaHeader1.Items.Add(itemGrid3);
@@ -1606,7 +1606,7 @@ namespace i2TradePlus
 			itemGrid9.FieldType = ItemType.Label2;
 			itemGrid9.FontColor = Color.LightGray;
 			itemGrid9.FontStyle = FontStyle.Regular;
-			itemGrid9.Height = 1;
+			itemGrid9.Height = 1f;
 			itemGrid9.IsBlink = 0;
 			itemGrid9.Name = "col1";
 			itemGrid9.Text = "OpenV";
@@ -1614,7 +1614,7 @@ namespace i2TradePlus
 			itemGrid9.Visible = true;
 			itemGrid9.Width = 10;
 			itemGrid9.X = 0;
-			itemGrid9.Y = 0;
+			itemGrid9.Y = 0f;
 			itemGrid10.AdjustFontSize = 0f;
 			itemGrid10.Alignment = StringAlignment.Near;
 			itemGrid10.BackColor = Color.FromArgb(10, 10, 10);
@@ -1622,7 +1622,7 @@ namespace i2TradePlus
 			itemGrid10.FieldType = ItemType.Text;
 			itemGrid10.FontColor = Color.Yellow;
 			itemGrid10.FontStyle = FontStyle.Regular;
-			itemGrid10.Height = 1;
+			itemGrid10.Height = 1f;
 			itemGrid10.IsBlink = 0;
 			itemGrid10.Name = "open_vol";
 			itemGrid10.Text = "";
@@ -1630,7 +1630,7 @@ namespace i2TradePlus
 			itemGrid10.Visible = true;
 			itemGrid10.Width = 16;
 			itemGrid10.X = 10;
-			itemGrid10.Y = 0;
+			itemGrid10.Y = 0f;
 			itemGrid11.AdjustFontSize = 0f;
 			itemGrid11.Alignment = StringAlignment.Near;
 			itemGrid11.BackColor = Color.FromArgb(10, 10, 10);
@@ -1638,7 +1638,7 @@ namespace i2TradePlus
 			itemGrid11.FieldType = ItemType.Label2;
 			itemGrid11.FontColor = Color.LightGray;
 			itemGrid11.FontStyle = FontStyle.Regular;
-			itemGrid11.Height = 1;
+			itemGrid11.Height = 1f;
 			itemGrid11.IsBlink = 0;
 			itemGrid11.Name = "col2";
 			itemGrid11.Text = "BuyV";
@@ -1646,7 +1646,7 @@ namespace i2TradePlus
 			itemGrid11.Visible = true;
 			itemGrid11.Width = 10;
 			itemGrid11.X = 26;
-			itemGrid11.Y = 0;
+			itemGrid11.Y = 0f;
 			itemGrid12.AdjustFontSize = 0f;
 			itemGrid12.Alignment = StringAlignment.Near;
 			itemGrid12.BackColor = Color.FromArgb(10, 10, 10);
@@ -1654,7 +1654,7 @@ namespace i2TradePlus
 			itemGrid12.FieldType = ItemType.Text;
 			itemGrid12.FontColor = Color.Yellow;
 			itemGrid12.FontStyle = FontStyle.Regular;
-			itemGrid12.Height = 1;
+			itemGrid12.Height = 1f;
 			itemGrid12.IsBlink = 0;
 			itemGrid12.Name = "buy_vol";
 			itemGrid12.Text = "";
@@ -1662,7 +1662,7 @@ namespace i2TradePlus
 			itemGrid12.Visible = true;
 			itemGrid12.Width = 19;
 			itemGrid12.X = 36;
-			itemGrid12.Y = 0;
+			itemGrid12.Y = 0f;
 			itemGrid13.AdjustFontSize = 0f;
 			itemGrid13.Alignment = StringAlignment.Near;
 			itemGrid13.BackColor = Color.FromArgb(10, 10, 10);
@@ -1670,7 +1670,7 @@ namespace i2TradePlus
 			itemGrid13.FieldType = ItemType.Label2;
 			itemGrid13.FontColor = Color.LightGray;
 			itemGrid13.FontStyle = FontStyle.Regular;
-			itemGrid13.Height = 1;
+			itemGrid13.Height = 1f;
 			itemGrid13.IsBlink = 0;
 			itemGrid13.Name = "col3";
 			itemGrid13.Text = "SellV";
@@ -1678,7 +1678,7 @@ namespace i2TradePlus
 			itemGrid13.Visible = true;
 			itemGrid13.Width = 9;
 			itemGrid13.X = 55;
-			itemGrid13.Y = 0;
+			itemGrid13.Y = 0f;
 			itemGrid14.AdjustFontSize = 0f;
 			itemGrid14.Alignment = StringAlignment.Near;
 			itemGrid14.BackColor = Color.FromArgb(10, 10, 10);
@@ -1686,7 +1686,7 @@ namespace i2TradePlus
 			itemGrid14.FieldType = ItemType.Text;
 			itemGrid14.FontColor = Color.Yellow;
 			itemGrid14.FontStyle = FontStyle.Regular;
-			itemGrid14.Height = 1;
+			itemGrid14.Height = 1f;
 			itemGrid14.IsBlink = 0;
 			itemGrid14.Name = "sell_vol";
 			itemGrid14.Text = "";
@@ -1694,7 +1694,7 @@ namespace i2TradePlus
 			itemGrid14.Visible = true;
 			itemGrid14.Width = 19;
 			itemGrid14.X = 64;
-			itemGrid14.Y = 0;
+			itemGrid14.Y = 0f;
 			itemGrid15.AdjustFontSize = 0f;
 			itemGrid15.Alignment = StringAlignment.Near;
 			itemGrid15.BackColor = Color.Black;
@@ -1702,7 +1702,7 @@ namespace i2TradePlus
 			itemGrid15.FieldType = ItemType.Label2;
 			itemGrid15.FontColor = Color.White;
 			itemGrid15.FontStyle = FontStyle.Regular;
-			itemGrid15.Height = 1;
+			itemGrid15.Height = 1f;
 			itemGrid15.IsBlink = 0;
 			itemGrid15.Name = "col4";
 			itemGrid15.Text = "OI";
@@ -1710,7 +1710,7 @@ namespace i2TradePlus
 			itemGrid15.Visible = true;
 			itemGrid15.Width = 7;
 			itemGrid15.X = 83;
-			itemGrid15.Y = 0;
+			itemGrid15.Y = 0f;
 			itemGrid16.AdjustFontSize = 0f;
 			itemGrid16.Alignment = StringAlignment.Near;
 			itemGrid16.BackColor = Color.Black;
@@ -1718,7 +1718,7 @@ namespace i2TradePlus
 			itemGrid16.FieldType = ItemType.Text;
 			itemGrid16.FontColor = Color.Yellow;
 			itemGrid16.FontStyle = FontStyle.Regular;
-			itemGrid16.Height = 1;
+			itemGrid16.Height = 1f;
 			itemGrid16.IsBlink = 0;
 			itemGrid16.Name = "OI_vol";
 			itemGrid16.Text = "";
@@ -1726,7 +1726,7 @@ namespace i2TradePlus
 			itemGrid16.Visible = true;
 			itemGrid16.Width = 9;
 			itemGrid16.X = 91;
-			itemGrid16.Y = 0;
+			itemGrid16.Y = 0f;
 			this.intzaVolumeByBoard1.Items.Add(itemGrid9);
 			this.intzaVolumeByBoard1.Items.Add(itemGrid10);
 			this.intzaVolumeByBoard1.Items.Add(itemGrid11);

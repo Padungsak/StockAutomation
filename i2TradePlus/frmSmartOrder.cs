@@ -3,6 +3,7 @@ using i2TradePlus.Information;
 using i2TradePlus.MyDataSet;
 using i2TradePlus.Properties;
 using ITSNet.Common.BIZ;
+using ITSNet.Common.BIZ.RealtimeMessage;
 using STIControl;
 using STIControl.SortTableGrid;
 using System;
@@ -45,11 +46,13 @@ namespace i2TradePlus
 		private SortGrid sortGrid1;
 		private ToolStripStatusLabel toolStripStatusLabel3;
 		private ToolStripStatusLabel tslbTotAmount;
-		private int lastFocus = -1;
-		private bool isEditing = false;
+		private ToolStripSeparator toolStripSeparator5;
+		private ToolStripButton tsbtnStopSending;
+		private frmOrderFormConfirm _frmConfirm = null;
+		private bool _isEditing = false;
 		private StockList.StockInformation _stockInfo = null;
 		private decimal _TotAmount = 0m;
-		private Thread thrSendOrder;
+		private DataTable _dtOrderQueue = null;
 		private string _stockSymbol = string.Empty;
 		private string _side = string.Empty;
 		private long _volume = 0L;
@@ -61,8 +64,10 @@ namespace i2TradePlus
 		private int _sendSuccessCount = 0;
 		private int _sendCount = 0;
 		private bool _isSelectAll = false;
-		private frmOrderFormConfirm _frmConfirm = null;
-		private DataTable dtOrderQueue = null;
+		private long _currOrdNoPending = 0L;
+		private int _currSeqLineNo = 0;
+		private List<int> _lstOrder = null;
+		private bool _isSending = false;
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		protected override void Dispose(bool disposing)
 		{
@@ -110,6 +115,8 @@ namespace i2TradePlus
 			this.toolStripStatusLabel3 = new ToolStripStatusLabel();
 			this.tslbTotAmount = new ToolStripStatusLabel();
 			this.sortGrid1 = new SortGrid();
+			this.tsbtnStopSending = new ToolStripButton();
+			this.toolStripSeparator5 = new ToolStripSeparator();
 			this.toolStrip1.SuspendLayout();
 			((ISupportInitialize)this.orderQueueDS1).BeginInit();
 			this.statusStrip1.SuspendLayout();
@@ -130,7 +137,9 @@ namespace i2TradePlus
 				this.toolStripSeparator3,
 				this.tsbtnSendAllOrder,
 				this.toolStripSeparator2,
-				this.tsbtnValidateOrder
+				this.tsbtnValidateOrder,
+				this.toolStripSeparator5,
+				this.tsbtnStopSending
 			});
 			this.toolStrip1.Location = new Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
@@ -140,7 +149,7 @@ namespace i2TradePlus
 			this.toolStrip1.TabIndex = 8;
 			this.tsbtnClearAll.Alignment = ToolStripItemAlignment.Right;
 			this.tsbtnClearAll.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsbtnClearAll.ForeColor = Color.Gainsboro;
+			this.tsbtnClearAll.ForeColor = Color.WhiteSmoke;
 			this.tsbtnClearAll.ImageTransparentColor = Color.Magenta;
 			this.tsbtnClearAll.Name = "tsbtnClearAll";
 			this.tsbtnClearAll.Size = new Size(55, 20);
@@ -151,14 +160,14 @@ namespace i2TradePlus
 			this.toolStripSeparator4.Size = new Size(6, 23);
 			this.tsbtnClear.Alignment = ToolStripItemAlignment.Right;
 			this.tsbtnClear.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsbtnClear.ForeColor = Color.Gainsboro;
+			this.tsbtnClear.ForeColor = Color.WhiteSmoke;
 			this.tsbtnClear.ImageTransparentColor = Color.Magenta;
 			this.tsbtnClear.Name = "tsbtnClear";
 			this.tsbtnClear.Size = new Size(38, 20);
 			this.tsbtnClear.Text = "Clear";
 			this.tsbtnClear.ToolTipText = "Clear [Ctrl+Insert]";
 			this.tsbtnClear.Click += new EventHandler(this.tsbtnRemove_Click);
-			this.tsImportCSV.ForeColor = Color.Gainsboro;
+			this.tsImportCSV.ForeColor = Color.WhiteSmoke;
 			this.tsImportCSV.Image = (Image)componentResourceManager.GetObject("tsImportCSV.Image");
 			this.tsImportCSV.ImageTransparentColor = Color.Magenta;
 			this.tsImportCSV.Margin = new Padding(5, 1, 0, 2);
@@ -168,7 +177,7 @@ namespace i2TradePlus
 			this.tsImportCSV.Click += new EventHandler(this.tsImportCSV_Click);
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
 			this.toolStripSeparator6.Size = new Size(6, 23);
-			this.tsExportCSV.ForeColor = Color.Gainsboro;
+			this.tsExportCSV.ForeColor = Color.WhiteSmoke;
 			this.tsExportCSV.Image = (Image)componentResourceManager.GetObject("tsExportCSV.Image");
 			this.tsExportCSV.ImageTransparentColor = Color.Magenta;
 			this.tsExportCSV.Margin = new Padding(2, 1, 0, 2);
@@ -178,7 +187,7 @@ namespace i2TradePlus
 			this.tsExportCSV.Click += new EventHandler(this.tsExportCSV_Click);
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new Size(6, 23);
-			this.tsSendSelected.ForeColor = Color.Gainsboro;
+			this.tsSendSelected.ForeColor = Color.WhiteSmoke;
 			this.tsSendSelected.ImageTransparentColor = Color.Magenta;
 			this.tsSendSelected.Margin = new Padding(20, 1, 0, 2);
 			this.tsSendSelected.Name = "tsSendSelected";
@@ -188,7 +197,7 @@ namespace i2TradePlus
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
 			this.toolStripSeparator3.Size = new Size(6, 23);
 			this.tsbtnSendAllOrder.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsbtnSendAllOrder.ForeColor = Color.Gainsboro;
+			this.tsbtnSendAllOrder.ForeColor = Color.WhiteSmoke;
 			this.tsbtnSendAllOrder.ImageTransparentColor = Color.Magenta;
 			this.tsbtnSendAllOrder.Margin = new Padding(2, 1, 0, 2);
 			this.tsbtnSendAllOrder.Name = "tsbtnSendAllOrder";
@@ -198,7 +207,7 @@ namespace i2TradePlus
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.toolStripSeparator2.Size = new Size(6, 23);
 			this.tsbtnValidateOrder.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsbtnValidateOrder.ForeColor = Color.Gainsboro;
+			this.tsbtnValidateOrder.ForeColor = Color.WhiteSmoke;
 			this.tsbtnValidateOrder.Image = (Image)componentResourceManager.GetObject("tsbtnValidateOrder.Image");
 			this.tsbtnValidateOrder.ImageTransparentColor = Color.Magenta;
 			this.tsbtnValidateOrder.Margin = new Padding(2, 1, 0, 2);
@@ -427,6 +436,16 @@ namespace i2TradePlus
 			this.sortGrid1.TabIndex = 17;
 			this.sortGrid1.TableMouseClick += new SortGrid.TableMouseClickEventHandler(this.sortGrid1_TableMouseClick);
 			this.sortGrid1.TableMouseDoubleClick += new SortGrid.TableMouseDoubleClickEventHandler(this.sortGrid1_TableMouseDoubleClick);
+			this.tsbtnStopSending.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			this.tsbtnStopSending.ForeColor = Color.WhiteSmoke;
+			this.tsbtnStopSending.Image = (Image)componentResourceManager.GetObject("tsbtnStopSending.Image");
+			this.tsbtnStopSending.ImageTransparentColor = Color.Magenta;
+			this.tsbtnStopSending.Name = "tsbtnStopSending";
+			this.tsbtnStopSending.Size = new Size(35, 20);
+			this.tsbtnStopSending.Text = "Stop";
+			this.tsbtnStopSending.Click += new EventHandler(this.tsbtnStopSending_Click);
+			this.toolStripSeparator5.Name = "toolStripSeparator5";
+			this.toolStripSeparator5.Size = new Size(6, 23);
 			base.AutoScaleDimensions = new SizeF(6f, 13f);
 			base.AutoScaleMode = AutoScaleMode.Font;
 			this.BackColor = Color.DimGray;
@@ -442,7 +461,6 @@ namespace i2TradePlus
 			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmSmartOrder_IDoLoadData);
 			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmSmartOrder_IDoFontChanged);
 			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmSmartOrder_IDoCustomSizeChanged);
-			base.IDoHeaderChanged += new ClientBaseForm.OnHeaderChangedEventHandler(this.frmSmartOrder_IDoHeaderChanged);
 			base.IDoMainFormKeyUp += new ClientBaseForm.OnFormKeyUpEventHandler(this.frmSmartOrder_IDoMainFormKeyUp);
 			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmSmartOrder_IDoReActivated);
 			base.Controls.SetChildIndex(this.toolStrip1, 0);
@@ -470,6 +488,41 @@ namespace i2TradePlus
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public void ReceiveMessage(IBroadcastMessage message, StockList.StockInformation realtimeStockInfo)
 		{
+			if (!base.IsLoadingData)
+			{
+				try
+				{
+					if (ApplicationInfo.SupportFreewill)
+					{
+						string messageType = message.MessageType;
+						if (messageType != null)
+						{
+							if (messageType == "0I")
+							{
+								OrderInfoClient orderInfoClient = (OrderInfoClient)message;
+								if (this._isSending && orderInfoClient.Reserve2 == "R" + this._currOrdNoPending)
+								{
+									if (this._lstOrder.Count > 0)
+									{
+										this._currSeqLineNo = this._lstOrder[0];
+										this._lstOrder.Remove(this._currSeqLineNo);
+										Thread thread = new Thread(new ThreadStart(this.SendFreewillOrder));
+										thread.Start();
+									}
+									else
+									{
+										this._isSending = false;
+									}
+								}
+							}
+						}
+					}
+				}
+				catch (Exception ex)
+				{
+					this.ShowError("ReceiveMessage", ex);
+				}
+			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public void ReceiveTfexMessage(IBroadcastMessage message, SeriesList.SeriesInformation realtimeSeriesInfo)
@@ -604,8 +657,7 @@ namespace i2TradePlus
 		{
 			try
 			{
-				this.isEditing = true;
-				this.lastFocus = rowIndex;
+				this._isEditing = true;
 				Rectangle position = this.sortGrid1.GetPosition(rowIndex, columnName);
 				this.cbText.Items.Clear();
 				this.sortGrid1.SetFocusItem(rowIndex);
@@ -627,22 +679,20 @@ namespace i2TradePlus
 									{
 										if (columnName == "deposit")
 										{
-											this.cbText.DropDownStyle = ComboBoxStyle.DropDownList;
-											this.cbText.Items.Add("");
-											if (ApplicationInfo.SuuportSBL == "Y")
+											if (ApplicationInfo.SuuportSBL == "Y" && ApplicationInfo.AccInfo.CurrentAccountType == "B")
 											{
-												if (ApplicationInfo.AccInfo.CurrentAccountType == "B")
+												this.cbText.DropDownStyle = ComboBoxStyle.DropDownList;
+												this.cbText.Items.Add("");
+												this.cbText.Items.Add("D");
+												if (ApplicationInfo.SupportCollateral == "Y")
 												{
-													this.cbText.Items.Add("D");
-													if (ApplicationInfo.SupportCollateral == "Y")
-													{
-														this.cbText.Items.Add("C");
-													}
+													this.cbText.Items.Add("C");
 												}
 											}
 											else
 											{
 												this.cbText.Enabled = false;
+												this.SetTextPosition(this.sortGrid1.FocusItemIndex, "condition");
 											}
 										}
 									}
@@ -690,25 +740,18 @@ namespace i2TradePlus
 				this.cbText.Text = this.sortGrid1.Records(rowIndex).Fields(columnName).Text.ToString();
 				this.cbText.Focus();
 				this.cbText.SelectAll();
-				this.isEditing = false;
+				this._isEditing = false;
 			}
 			catch (Exception ex)
 			{
-				this.isEditing = false;
+				this._isEditing = false;
 				this.ShowError("SetTextPosition", ex);
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void tsbtnValidateOrder_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				this.checkOrderValidate();
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("tsbtnValidateOrder_Click", ex);
-			}
+			this.checkOrderValidateAll();
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void tsbtnRemove_Click(object sender, EventArgs e)
@@ -764,7 +807,7 @@ namespace i2TradePlus
 					if (keyCode == Keys.Escape)
 					{
 						this.cbText.Hide();
-						goto IL_5B9;
+						goto IL_761;
 					}
 					switch (keyCode)
 					{
@@ -796,7 +839,7 @@ namespace i2TradePlus
 							break;
 						}
 						e.SuppressKeyPress = true;
-						goto IL_5B9;
+						goto IL_761;
 					}
 					case Keys.Up:
 						if (this.sortGrid1.FocusItemIndex - 1 > -1)
@@ -809,10 +852,11 @@ namespace i2TradePlus
 							this.SetTextPosition(this.sortGrid1.FocusItemIndex, this.cbText.Tag.ToString());
 						}
 						e.SuppressKeyPress = true;
-						goto IL_5B9;
+						goto IL_761;
 					case Keys.Right:
 						break;
 					case Keys.Down:
+						this.calAmountPerRow();
 						if (this.sortGrid1.FocusItemIndex + 1 < this.sortGrid1.Rows)
 						{
 							if (this.sortGrid1.Records(this.sortGrid1.FocusItemIndex + 1).Fields("side").Text.ToString().Trim() == string.Empty)
@@ -823,9 +867,9 @@ namespace i2TradePlus
 							this.SetTextPosition(this.sortGrid1.FocusItemIndex + 1, this.cbText.Tag.ToString());
 						}
 						e.SuppressKeyPress = true;
-						goto IL_5B9;
+						goto IL_761;
 					default:
-						goto IL_5B9;
+						goto IL_761;
 					}
 				}
 				if (this.SetText())
@@ -855,10 +899,33 @@ namespace i2TradePlus
 						this.calAmountPerRow();
 						break;
 					case "condition":
-						this.SetTextPosition(this.sortGrid1.FocusItemIndex, "deposit");
+						if (ApplicationInfo.SuuportSBL == "Y" && ApplicationInfo.AccInfo.CurrentAccountType == "B")
+						{
+							this.SetTextPosition(this.sortGrid1.FocusItemIndex, "deposit");
+						}
+						else
+						{
+							if (this.sortGrid1.FocusItemIndex + 1 < this.sortGrid1.Rows)
+							{
+								if (this.sortGrid1.Records(this.sortGrid1.FocusItemIndex + 1).Fields("side").Text.ToString().Trim() == string.Empty)
+								{
+									this.cbText.Tag = "side";
+								}
+								this.sortGrid1.SetFocusItem(this.sortGrid1.FocusItemIndex);
+								this.SetTextPosition(this.sortGrid1.FocusItemIndex + 1, this.cbText.Tag.ToString());
+							}
+						}
 						break;
 					case "deposit":
-						this.cbText.SelectAll();
+						if (this.sortGrid1.FocusItemIndex + 1 < this.sortGrid1.Rows)
+						{
+							if (this.sortGrid1.Records(this.sortGrid1.FocusItemIndex + 1).Fields("side").Text.ToString().Trim() == string.Empty)
+							{
+								this.cbText.Tag = "side";
+							}
+							this.sortGrid1.SetFocusItem(this.sortGrid1.FocusItemIndex);
+							this.SetTextPosition(this.sortGrid1.FocusItemIndex + 1, this.cbText.Tag.ToString());
+						}
 						break;
 					}
 					if (this.sortGrid1.Records(this.sortGrid1.FocusItemIndex).Fields("checkbox").Text.ToString() == "")
@@ -868,7 +935,7 @@ namespace i2TradePlus
 					}
 				}
 				e.SuppressKeyPress = true;
-				IL_5B9:;
+				IL_761:;
 			}
 			catch (Exception ex)
 			{
@@ -1015,7 +1082,7 @@ namespace i2TradePlus
 						}
 					}
 				}
-				if (!this.isEditing && this.sortGrid1.FocusItemIndex > -1 && this.cbText.Tag != null)
+				if (!this._isEditing && this.sortGrid1.FocusItemIndex > -1 && this.cbText.Tag != null)
 				{
 					this.sortGrid1.Records(this.sortGrid1.FocusItemIndex).Fields(this.cbText.Tag.ToString()).Text = this.cbText.Text;
 					if (this.cbText.Tag.ToString() == "side")
@@ -1316,13 +1383,13 @@ namespace i2TradePlus
 					recordItem.Fields("amount").Text = d2.ToString();
 					if (text == "B")
 					{
-						recordItem.Fields("side").FontColor = Color.Lime;
+						recordItem.Fields("side").FontColor = MyColor.BuyColor;
 					}
 					else
 					{
 						if (text == "S")
 						{
-							recordItem.Fields("side").FontColor = Color.Red;
+							recordItem.Fields("side").FontColor = MyColor.SellColor;
 						}
 						else
 						{
@@ -1338,7 +1405,7 @@ namespace i2TradePlus
 								}
 								else
 								{
-									recordItem.Fields("side").FontColor = Color.Yellow;
+									recordItem.Fields("side").FontColor = Color.White;
 								}
 							}
 						}
@@ -1361,19 +1428,30 @@ namespace i2TradePlus
 		{
 			try
 			{
-				this._isSelectAll = true;
-				int num = 0;
-				for (int i = 0; i < this.sortGrid1.Rows; i++)
+				if (!this._isSending)
 				{
-					RecordItem recordItem = this.sortGrid1.Records(i);
-					if (recordItem.Fields("side").Text.ToString() != string.Empty && recordItem.Fields("stock").Text.ToString() != string.Empty && recordItem.Fields("volume").Text.ToString() != string.Empty)
+					this._isSelectAll = true;
+					if (this._lstOrder == null)
 					{
-						num++;
+						this._lstOrder = new List<int>();
 					}
-				}
-				if (num > 0)
-				{
-					this.ShowMessageInFormConfirm("Confirm to send " + num + " orders?", frmOrderFormConfirm.OpenStyle.ConfirmSendNew, 0);
+					else
+					{
+						this._lstOrder.Clear();
+					}
+					for (int i = 0; i < this.sortGrid1.Rows; i++)
+					{
+						RecordItem recordItem = this.sortGrid1.Records(i);
+						if (recordItem.Fields("side").Text.ToString() != string.Empty && recordItem.Fields("stock").Text.ToString() != string.Empty && recordItem.Fields("volume").Text.ToString() != string.Empty)
+						{
+							this._lstOrder.Add(i);
+						}
+					}
+					if (this._lstOrder.Count > 0)
+					{
+						this._isSending = true;
+						this.ShowMessageInFormConfirm("Confirm to send " + this._lstOrder.Count + " orders?", frmOrderFormConfirm.OpenStyle.ConfirmSendNew, 0);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -1386,21 +1464,32 @@ namespace i2TradePlus
 		{
 			try
 			{
-				this._isSelectAll = false;
-				bool flag = false;
-				string text = string.Empty;
-				for (int i = 0; i < this.sortGrid1.Rows; i++)
+				if (!this._isSending)
 				{
-					if (this.sortGrid1.Records(i).Fields("checkbox").Text.ToString() == "1")
+					this._isSelectAll = false;
+					string text = string.Empty;
+					if (this._lstOrder == null)
 					{
-						flag = true;
-						text = text + "," + (i + 1);
+						this._lstOrder = new List<int>();
 					}
-				}
-				if (flag)
-				{
-					text = text.Substring(1);
-					this.ShowMessageInFormConfirm("Confirm to send list " + text + "?", frmOrderFormConfirm.OpenStyle.ConfirmSendNew, 0);
+					else
+					{
+						this._lstOrder.Clear();
+					}
+					for (int i = 0; i < this.sortGrid1.Rows; i++)
+					{
+						if (this.sortGrid1.Records(i).Fields("checkbox").Text.ToString() == "1")
+						{
+							text = text + "," + (i + 1);
+							this._lstOrder.Add(i);
+						}
+					}
+					if (this._lstOrder.Count > 0)
+					{
+						this._isSending = true;
+						text = text.Substring(1);
+						this.ShowMessageInFormConfirm("Confirm to send list " + text + "?", frmOrderFormConfirm.OpenStyle.ConfirmSendNew, 0);
+					}
 				}
 			}
 			catch (Exception ex)
@@ -1521,6 +1610,10 @@ namespace i2TradePlus
 									num3++;
 									this.UpdateOrderResult(text, Color.Red, i);
 								}
+								if (!this._isSending)
+								{
+									break;
+								}
 							}
 						}
 					}
@@ -1540,9 +1633,132 @@ namespace i2TradePlus
 			{
 				this.ShowError("LoopThroughGrid", ex);
 			}
+			this._isSending = false;
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void checkOrderValidate()
+		private void CheckMktFreewill()
+		{
+			try
+			{
+				bool flag = false;
+				string data = ApplicationInfo.WebOrderService.VerifyOrderMkt();
+				using (DataSet dataSet = new DataSet())
+				{
+					MyDataHelper.StringToDataSet(data, dataSet);
+					if (dataSet.Tables.Contains("Results") && dataSet.Tables["Results"].Rows.Count > 0)
+					{
+						long num = 0L;
+						string message = string.Empty;
+						long.TryParse(dataSet.Tables["Results"].Rows[0]["code"].ToString(), out num);
+						message = dataSet.Tables["Results"].Rows[0]["message"].ToString().Trim();
+						if (num > 0L)
+						{
+							flag = true;
+						}
+						else
+						{
+							this.ShowMessageInFormConfirm(message, frmOrderFormConfirm.OpenStyle.Error);
+						}
+						dataSet.Clear();
+					}
+				}
+				if (flag)
+				{
+					this._currSeqLineNo = this._lstOrder[0];
+					this._lstOrder.Remove(this._currSeqLineNo);
+					this.SendFreewillOrder();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("CheckMktFreewill", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void SendFreewillOrder()
+		{
+			try
+			{
+				int num = 1;
+				this._sendSuccessCount = 0;
+				this._sendCount = 0;
+				int currSeqLineNo = this._currSeqLineNo;
+				RecordItem recordItem = this.sortGrid1.Records(currSeqLineNo);
+				bool flag = this._isSelectAll || recordItem.Fields("checkbox").Text.ToString() == "1";
+				if (flag)
+				{
+					if (recordItem.Fields("side").Text.ToString() != string.Empty && recordItem.Fields("stock").Text.ToString() != string.Empty && recordItem.Fields("volume").Text.ToString() != string.Empty)
+					{
+						this._side = recordItem.Fields("side").Text.ToString();
+						this._stockSymbol = recordItem.Fields("stock").Text.ToString();
+						long.TryParse(recordItem.Fields("volume").Text.ToString().Replace(",", ""), out this._volume);
+						this._price = recordItem.Fields("price").Text.ToString().Replace(",", "");
+						long.TryParse(recordItem.Fields("pubvol").Text.ToString().Replace(",", ""), out this._publishVol);
+						this._condition = recordItem.Fields("condition").Text.ToString();
+						int.TryParse(recordItem.Fields("ttf").Text.ToString(), out this._ttf);
+						this._deposit = recordItem.Fields("deposit").Text.ToString();
+						StockList.StockInformation stockInformation = ApplicationInfo.StockInfo[this._stockSymbol];
+						string condition = this._condition;
+						if (condition != null)
+						{
+							if (!(condition == "IOC"))
+							{
+								if (!(condition == "FOK"))
+								{
+									if (condition == "")
+									{
+										if (ApplicationInfo.SupportFreewill)
+										{
+											if (this._volume < (long)stockInformation.BoardLot)
+											{
+												this._condition = "O";
+											}
+											else
+											{
+												this._condition = " ";
+											}
+										}
+										else
+										{
+											this._condition = " ";
+										}
+									}
+								}
+								else
+								{
+									this._condition = "F";
+								}
+							}
+							else
+							{
+								this._condition = "I";
+							}
+						}
+						this._sendCount++;
+						ApplicationInfo.SendNewOrderResult sendNewOrderResult = ApplicationInfo.SendNewOrder(this._stockSymbol, this._side, this._volume, this._price, this._publishVol, this._condition, this._ttf, this._deposit);
+						if (sendNewOrderResult.OrderNo > 0L)
+						{
+							this._currOrdNoPending = sendNewOrderResult.OrderNo;
+							ApplicationInfo.AddOrderNoToAutoRefreshList(sendNewOrderResult.OrderNo.ToString(), sendNewOrderResult.IsFwOfflineOrder ? 3 : 1);
+							this.UpdateOrderResult("Success [" + sendNewOrderResult.OrderNo + "]", Color.Lime, currSeqLineNo);
+							this._sendSuccessCount++;
+						}
+						else
+						{
+							this._currOrdNoPending = -1L;
+							this.UpdateOrderResult(sendNewOrderResult.ResultMessage, Color.Yellow, currSeqLineNo);
+						}
+						num++;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				this.ShowError("LoopThroughGrid", ex);
+			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void checkOrderValidateAll()
 		{
 			try
 			{
@@ -1939,8 +2155,19 @@ namespace i2TradePlus
 					DialogResult result = ((frmOrderFormConfirm)sender).Result;
 					if (result == DialogResult.OK)
 					{
-						this.thrSendOrder = new Thread(new ThreadStart(this.LoopThroughGrid));
-						this.thrSendOrder.Start();
+						if (ApplicationInfo.SupportFreewill)
+						{
+							if (this._lstOrder.Count > 0)
+							{
+								Thread thread = new Thread(new ThreadStart(this.CheckMktFreewill));
+								thread.Start();
+							}
+						}
+						else
+						{
+							Thread thread2 = new Thread(new ThreadStart(this.LoopThroughGrid));
+							thread2.Start();
+						}
 					}
 				}
 			}
@@ -2030,9 +2257,9 @@ namespace i2TradePlus
 			try
 			{
 				this.gridToDataSet();
-				if (this.dtOrderQueue != null && this.dtOrderQueue.Rows.Count > 0)
+				if (this._dtOrderQueue != null && this._dtOrderQueue.Rows.Count > 0)
 				{
-					CSVReadWrite.exportToCSV(this.dtOrderQueue);
+					CSVReadWrite.exportToCSV(this._dtOrderQueue);
 				}
 			}
 			catch (Exception ex)
@@ -2045,28 +2272,28 @@ namespace i2TradePlus
 		{
 			try
 			{
-				this.dtOrderQueue = this.CreateOrderTable();
-				this.dtOrderQueue.Rows.Add(new object[0]);
-				this.dtOrderQueue.Rows[0][0] = "Side";
-				this.dtOrderQueue.Rows[0][1] = "Stock Code";
-				this.dtOrderQueue.Rows[0][2] = "NVDR";
-				this.dtOrderQueue.Rows[0][3] = "Quantity ";
-				this.dtOrderQueue.Rows[0][4] = "Price";
-				this.dtOrderQueue.Rows[0][5] = "Validity";
-				this.dtOrderQueue.Rows[0][6] = "Iceberg Vol";
+				this._dtOrderQueue = this.CreateOrderTable();
+				this._dtOrderQueue.Rows.Add(new object[0]);
+				this._dtOrderQueue.Rows[0][0] = "Side";
+				this._dtOrderQueue.Rows[0][1] = "Stock Code";
+				this._dtOrderQueue.Rows[0][2] = "NVDR";
+				this._dtOrderQueue.Rows[0][3] = "Quantity ";
+				this._dtOrderQueue.Rows[0][4] = "Price";
+				this._dtOrderQueue.Rows[0][5] = "Validity";
+				this._dtOrderQueue.Rows[0][6] = "Iceberg Vol";
 				for (int i = 0; i < this.sortGrid1.Rows; i++)
 				{
 					RecordItem recordItem = this.sortGrid1.Records(i);
 					if (recordItem.Fields("side").Text.ToString() != string.Empty && recordItem.Fields("stock").Text.ToString() != string.Empty && recordItem.Fields("volume").Text.ToString() != string.Empty)
 					{
-						this.dtOrderQueue.Rows.Add(new object[0]);
-						this.dtOrderQueue.Rows[i + 1][0] = recordItem.Fields("side").Text.ToString();
-						this.dtOrderQueue.Rows[i + 1][1] = recordItem.Fields("stock").Text.ToString();
-						this.dtOrderQueue.Rows[i + 1][2] = recordItem.Fields("ttf").Text.ToString();
-						this.dtOrderQueue.Rows[i + 1][3] = recordItem.Fields("volume").Text.ToString().Replace(",", "");
-						this.dtOrderQueue.Rows[i + 1][4] = recordItem.Fields("price").Text.ToString().Replace(",", "");
-						this.dtOrderQueue.Rows[i + 1][5] = recordItem.Fields("condition").Text.ToString();
-						this.dtOrderQueue.Rows[i + 1][6] = recordItem.Fields("pubvol").Text.ToString().Replace(",", "");
+						this._dtOrderQueue.Rows.Add(new object[0]);
+						this._dtOrderQueue.Rows[i + 1][0] = recordItem.Fields("side").Text.ToString();
+						this._dtOrderQueue.Rows[i + 1][1] = recordItem.Fields("stock").Text.ToString();
+						this._dtOrderQueue.Rows[i + 1][2] = recordItem.Fields("ttf").Text.ToString();
+						this._dtOrderQueue.Rows[i + 1][3] = recordItem.Fields("volume").Text.ToString().Replace(",", "");
+						this._dtOrderQueue.Rows[i + 1][4] = recordItem.Fields("price").Text.ToString().Replace(",", "");
+						this._dtOrderQueue.Rows[i + 1][5] = recordItem.Fields("condition").Text.ToString();
+						this._dtOrderQueue.Rows[i + 1][6] = recordItem.Fields("pubvol").Text.ToString().Replace(",", "");
 					}
 				}
 			}
@@ -2141,8 +2368,9 @@ namespace i2TradePlus
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void frmSmartOrder_IDoHeaderChanged()
+		private void tsbtnStopSending_Click(object sender, EventArgs e)
 		{
+			this._isSending = false;
 		}
 	}
 }

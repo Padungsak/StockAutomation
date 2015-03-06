@@ -8,8 +8,6 @@
     <AssemblyName>i2-TradePlus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -28,21 +26,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="STIControl.i2Chart" />
     <Reference Include="System.Data" />
-    <Reference Include="System" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="ITSNet.Common.BIZ" />
-    <Reference Include="STIControl.IntzaGrid" />
+    <Reference Include="System" />
+    <Reference Include="STIControl.i2Chart" />
     <Reference Include="System.Drawing" />
+    <Reference Include="STIControl.IntzaGrid" />
+    <Reference Include="ITSNet.Common.BIZ" />
+    <Reference Include="System.Xml" />
     <Reference Include="nsoftware.IPWorksSSL.Ipports" />
     <Reference Include="ITSNet.CefBrowser" />
-    <Reference Include="ITSNet.Controls.XtWebBrowser" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
+    <Reference Include="ITSNet.Controls.XtWebBrowser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="-Module-{0CA6E940-F297-4C13-B6AE-4EB43CE0B457}.cs" />
+    <Compile Include="-Module-{B583E13B-8F53-4737-BECC-E8F275848C38}.cs" />
     <Compile Include="clsGraphPanel.cs" />
     <Compile Include="clsPermission.cs" />
     <Compile Include="clsVolumeItem.cs" />
@@ -184,6 +182,8 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\DeleteStockNicknameExtraCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\Get5BidOfferCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\Get5BidOfferCompletedEventHandler.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetAlertLogByGroupCompletedEventArgs.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetAlertLogByGroupCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetAlertLogCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetAlertLogCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetBrokerMarginVolumeCompletedEventArgs.cs" />
@@ -200,6 +200,8 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetOrderFor1ClickCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortAlertItemsCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortAlertItemsCompletedEventHandler.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortEquityCompletedEventArgs.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortEquityCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortfolioStatAllStockCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortfolioStatAllStockCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetPortfolioStatByStockCompletedEventArgs.cs" />
@@ -212,8 +214,6 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetStockSMACompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetSwitchAccountInfoCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetSwitchAccountInfoCompletedEventHandler.cs" />
-    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetSwitchAccountInfoEserviceCompletedEventArgs.cs" />
-    <Compile Include="i2TradePlus.ITSNetBusinessWS\GetSwitchAccountInfoEserviceCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetTunnelCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetTunnelCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\GetTunnelConfigCompletedEventArgs.cs" />
@@ -287,6 +287,8 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SectorStatCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SectorStatForDumpCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SectorStatForDumpCompletedEventHandler.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\SendAutoTradeCompletedEventArgs.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\SendAutoTradeCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SendBAMessageCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SendBAMessageCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\SendCancelOrderCompletedEventArgs.cs" />
@@ -352,6 +354,8 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\TopBBOCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\UserAuthenCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\UserAuthenCompletedEventHandler.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyAlertManagerCompletedEventArgs.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyAlertManagerCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyOrderCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyOrderCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyOrderFwCompletedEventArgs.cs" />
@@ -362,6 +366,8 @@
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyPincode2CompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyPincodeCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\VerifyPincodeCompletedEventHandler.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\ViewAutoTradeTransCompletedEventArgs.cs" />
+    <Compile Include="i2TradePlus.ITSNetBusinessWS\ViewAutoTradeTransCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\ViewCustomerByStockForDumpCompletedEventArgs.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\ViewCustomerByStockForDumpCompletedEventHandler.cs" />
     <Compile Include="i2TradePlus.ITSNetBusinessWS\ViewCustomerCreditOnSendBoxCompletedEventArgs.cs" />
@@ -537,6 +543,7 @@
     <Compile Include="i2TradePlus\KeepErrorMode.cs" />
     <Compile Include="i2TradePlus\MainFixedTemplate.cs" />
     <Compile Include="i2TradePlus\MessageTPmodulo.cs" />
+    <Compile Include="i2TradePlus\MyColor.cs" />
     <Compile Include="i2TradePlus\MyDataHelper.cs" />
     <Compile Include="i2TradePlus\PasswordEntryUC.cs">
       <SubType>UserControl</SubType>

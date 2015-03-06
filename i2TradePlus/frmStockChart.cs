@@ -18,14 +18,6 @@ namespace i2TradePlus
 	public class frmStockChart : ClientBaseForm, IRealtimeMessage
 	{
 		private delegate void SetNewStockInfoCallBack(string stockSymbol);
-		private BackgroundWorker bgwReloadData = null;
-		private DataSet tds = null;
-		private string selectDate = string.Empty;
-		private StockList.StockInformation _stockInfo = null;
-		private string _cfCurrentStock = string.Empty;
-		private bool _firstLoad = true;
-		private decimal _openPrice;
-		private bool _isChartFocus = false;
 		private IContainer components = null;
 		private ToolStripLabel tsStockLable;
 		private ToolStripComboBox tstbStock;
@@ -43,6 +35,236 @@ namespace i2TradePlus
 		private Panel panel1;
 		private CefWebBrowser cefWebBrowser1;
 		private Label lbError;
+		private BackgroundWorker bgwReloadData = null;
+		private DataSet tds = null;
+		private string selectDate = string.Empty;
+		private StockList.StockInformation _stockInfo = null;
+		private string _cfCurrentStock = string.Empty;
+		private bool _firstLoad = true;
+		private decimal _openPrice;
+		private bool _isChartFocus = false;
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			ExchangeIntraday exchangeIntraday = new ExchangeIntraday();
+			this.tsStockLable = new ToolStripLabel();
+			this.tstbStock = new ToolStripComboBox();
+			this.tStripMenu = new ToolStrip();
+			this.tslbName = new ToolStripLabel();
+			this.toolStripSeparator2 = new ToolStripSeparator();
+			this.toolStripLabel2 = new ToolStripLabel();
+			this.tstbAddIndicator = new ToolStripButton();
+			this.tsbtnEditIndicator = new ToolStripButton();
+			this.tsDelIndicator = new ToolStripButton();
+			this.toolStripSeparator1 = new ToolStripSeparator();
+			this.toolStripLabel1 = new ToolStripLabel();
+			this.tscbCycle = new ToolStripComboBox();
+			this.panel1 = new Panel();
+			this.chart = new ChartWinControl();
+			this.cefWebBrowser1 = new CefWebBrowser();
+			this.lbError = new Label();
+			this.tStripMenu.SuspendLayout();
+			this.panel1.SuspendLayout();
+			base.SuspendLayout();
+			this.tsStockLable.BackColor = Color.Black;
+			this.tsStockLable.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			this.tsStockLable.Font = new Font("Microsoft Sans Serif", 8.25f);
+			this.tsStockLable.ForeColor = Color.Gainsboro;
+			this.tsStockLable.ImageTransparentColor = Color.Magenta;
+			this.tsStockLable.Name = "tsStockLable";
+			this.tsStockLable.Padding = new Padding(1, 0, 2, 0);
+			this.tsStockLable.Size = new Size(38, 21);
+			this.tsStockLable.Text = "Stock";
+			this.tstbStock.BackColor = Color.FromArgb(45, 45, 45);
+			this.tstbStock.Font = new Font("Microsoft Sans Serif", 8.25f);
+			this.tstbStock.ForeColor = Color.Yellow;
+			this.tstbStock.Margin = new Padding(1, 1, 1, 2);
+			this.tstbStock.Name = "tstbStock";
+			this.tstbStock.Size = new Size(130, 21);
+			this.tstbStock.SelectedIndexChanged += new EventHandler(this.tstbStock_SelectedIndexChanged);
+			this.tstbStock.KeyUp += new KeyEventHandler(this.tstbStock_KeyUp);
+			this.tstbStock.KeyDown += new KeyEventHandler(this.tstbStock_KeyDown);
+			this.tstbStock.KeyPress += new KeyPressEventHandler(this.tstbStock_KeyPress);
+			this.tStripMenu.BackColor = Color.FromArgb(20, 20, 20);
+			this.tStripMenu.BackgroundImageLayout = ImageLayout.None;
+			this.tStripMenu.GripMargin = new Padding(0);
+			this.tStripMenu.GripStyle = ToolStripGripStyle.Hidden;
+			this.tStripMenu.Items.AddRange(new ToolStripItem[]
+			{
+				this.tsStockLable,
+				this.tstbStock,
+				this.tslbName,
+				this.toolStripSeparator2,
+				this.toolStripLabel2,
+				this.tstbAddIndicator,
+				this.tsbtnEditIndicator,
+				this.tsDelIndicator,
+				this.toolStripSeparator1,
+				this.toolStripLabel1,
+				this.tscbCycle
+			});
+			this.tStripMenu.Location = new Point(0, 0);
+			this.tStripMenu.Name = "tStripMenu";
+			this.tStripMenu.Padding = new Padding(2, 1, 1, 0);
+			this.tStripMenu.RenderMode = ToolStripRenderMode.Professional;
+			this.tStripMenu.Size = new Size(384, 25);
+			this.tStripMenu.TabIndex = 51;
+			this.tStripMenu.KeyDown += new KeyEventHandler(this.tstbStock_KeyDown);
+			this.tslbName.ForeColor = Color.Yellow;
+			this.tslbName.Margin = new Padding(5, 1, 0, 2);
+			this.tslbName.Name = "tslbName";
+			this.tslbName.Size = new Size(12, 21);
+			this.tslbName.Text = "-";
+			this.toolStripSeparator2.Margin = new Padding(5, 0, 5, 0);
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new Size(6, 27);
+			this.toolStripSeparator2.Visible = false;
+			this.toolStripLabel2.ForeColor = Color.LightGray;
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new Size(60, 24);
+			this.toolStripLabel2.Text = "Indicator :";
+			this.toolStripLabel2.Visible = false;
+			this.tstbAddIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			this.tstbAddIndicator.ForeColor = Color.Lime;
+			this.tstbAddIndicator.ImageTransparentColor = Color.Magenta;
+			this.tstbAddIndicator.Name = "tstbAddIndicator";
+			this.tstbAddIndicator.Size = new Size(33, 24);
+			this.tstbAddIndicator.Text = "Add";
+			this.tstbAddIndicator.Visible = false;
+			this.tstbAddIndicator.Click += new EventHandler(this.tstbAddIndicator_Click);
+			this.tsbtnEditIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			this.tsbtnEditIndicator.ForeColor = Color.FromArgb(128, 255, 255);
+			this.tsbtnEditIndicator.ImageTransparentColor = Color.Magenta;
+			this.tsbtnEditIndicator.Name = "tsbtnEditIndicator";
+			this.tsbtnEditIndicator.Size = new Size(58, 24);
+			this.tsbtnEditIndicator.Text = "Indicator";
+			this.tsbtnEditIndicator.Visible = false;
+			this.tsbtnEditIndicator.Click += new EventHandler(this.tsbtnEditIndicator_Click);
+			this.tsDelIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
+			this.tsDelIndicator.ForeColor = Color.FromArgb(255, 128, 128);
+			this.tsDelIndicator.ImageTransparentColor = Color.Magenta;
+			this.tsDelIndicator.Name = "tsDelIndicator";
+			this.tsDelIndicator.Size = new Size(44, 21);
+			this.tsDelIndicator.Text = "Delete";
+			this.tsDelIndicator.Visible = false;
+			this.tsDelIndicator.Click += new EventHandler(this.tsDelIndicator_Click);
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new Size(6, 24);
+			this.toolStripSeparator1.Visible = false;
+			this.toolStripLabel1.ForeColor = Color.WhiteSmoke;
+			this.toolStripLabel1.Margin = new Padding(5, 1, 5, 2);
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.toolStripLabel1.Size = new Size(41, 21);
+			this.toolStripLabel1.Text = "Period";
+			this.toolStripLabel1.Visible = false;
+			this.tscbCycle.BackColor = Color.FromArgb(45, 45, 45);
+			this.tscbCycle.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.tscbCycle.ForeColor = Color.LightGray;
+			this.tscbCycle.Items.AddRange(new object[]
+			{
+				"DAY",
+				"WEEK",
+				"MONTH"
+			});
+			this.tscbCycle.Name = "tscbCycle";
+			this.tscbCycle.Size = new Size(80, 24);
+			this.tscbCycle.Visible = false;
+			this.tscbCycle.SelectedIndexChanged += new EventHandler(this.tscbCycle_SelectedIndexChanged);
+			this.panel1.Controls.Add(this.chart);
+			this.panel1.Controls.Add(this.tStripMenu);
+			this.panel1.Location = new Point(170, 25);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new Size(384, 236);
+			this.panel1.TabIndex = 53;
+			this.chart.AreaPercent = "3;1";
+			this.chart.BackColor = Color.FromArgb(64, 64, 64);
+			this.chart.CausesValidation = false;
+			this.chart.ChartDragMode = ChartDragMode.Axis;
+			this.chart.CrossCursorMouseMode = MouseAction.MouseDown;
+			this.chart.DefaultFormulas = null;
+			this.chart.Designing = false;
+			this.chart.EndTime = new DateTime(0L);
+			this.chart.FavoriteFormulas = "";
+			exchangeIntraday.NativeCycle = true;
+			exchangeIntraday.ShowFirstXLabel = true;
+			exchangeIntraday.TimePeriods = new TimePeriod[0];
+			exchangeIntraday.TimeZone = 7.0;
+			this.chart.IntradayInfo = exchangeIntraday;
+			this.chart.LatestValueType = LatestValueType.StockOnly;
+			this.chart.Location = new Point(13, 59);
+			this.chart.MaxColumnWidth = 30.0;
+			this.chart.MaxPrice = 0.0;
+			this.chart.MinPrice = 0.0;
+			this.chart.Name = "chart";
+			this.chart.NeedDrawCursor = false;
+			this.chart.PriceLabelFormat = null;
+			this.chart.ScaleType = ScaleType.Default;
+			this.chart.SelectFormulaMouseMode = MouseAction.MouseDown;
+			this.chart.ShowCursorLabel = false;
+			this.chart.ShowHorizontalGrid = ShowLineMode.Default;
+			this.chart.ShowStatistic = false;
+			this.chart.ShowVerticalGrid = ShowLineMode.Default;
+			this.chart.Size = new Size(400, 136);
+			this.chart.Skin = "GreenRed";
+			this.chart.StartTime = new DateTime(0L);
+			this.chart.StickRenderType = StickRenderType.Default;
+			this.chart.StockRenderType = StockRenderType.Default;
+			this.chart.Symbol = "";
+			this.chart.TabIndex = 52;
+			this.chart.TabStop = false;
+			this.chart.ValueTextMode = ValueTextMode.Default;
+			this.chart.Enter += new EventHandler(this.chart_Enter);
+			this.chart.Leave += new EventHandler(this.chart_Leave);
+			this.cefWebBrowser1.Location = new Point(12, 168);
+			this.cefWebBrowser1.Name = "cefWebBrowser1";
+			this.cefWebBrowser1.Size = new Size(152, 93);
+			this.cefWebBrowser1.TabIndex = 54;
+			this.cefWebBrowser1.Text = "cefWebBrowser1";
+			this.lbError.AutoSize = true;
+			this.lbError.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 222);
+			this.lbError.ForeColor = Color.Maroon;
+			this.lbError.Location = new Point(9, 9);
+			this.lbError.Name = "lbError";
+			this.lbError.Size = new Size(146, 16);
+			this.lbError.TabIndex = 55;
+			this.lbError.Text = "eFin user is empty!!!";
+			this.lbError.Visible = false;
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			this.BackColor = SystemColors.ControlDark;
+			base.ClientSize = new Size(661, 334);
+			base.Controls.Add(this.lbError);
+			base.Controls.Add(this.cefWebBrowser1);
+			base.Controls.Add(this.panel1);
+			base.FormBorderStyle = FormBorderStyle.Sizable;
+			base.Margin = new Padding(3, 4, 3, 4);
+			base.Name = "frmStockChart";
+			this.Text = "Stock History";
+			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmStockHistory_IDoShownDelay);
+			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmStockHistory_IDoLoadData);
+			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmStockHistory_IDoFontChanged);
+			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmStockHistory_IDoCustomSizeChanged);
+			base.IDoMainFormKeyUp += new ClientBaseForm.OnFormKeyUpEventHandler(this.frmStockHistory_IDoMainFormKeyUp);
+			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmStockHistory_IDoReActivated);
+			base.Controls.SetChildIndex(this.panel1, 0);
+			base.Controls.SetChildIndex(this.cefWebBrowser1, 0);
+			base.Controls.SetChildIndex(this.lbError, 0);
+			this.tStripMenu.ResumeLayout(false);
+			this.tStripMenu.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
+			base.ResumeLayout(false);
+			base.PerformLayout();
+		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public frmStockChart()
 		{
@@ -764,228 +986,6 @@ namespace i2TradePlus
 		private void toolStripButton1_Click_1(object sender, EventArgs e)
 		{
 			this.UpdateChart_Realtime(100.0, 120.0, 110.0, 105.0, 200.0);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			ExchangeIntraday exchangeIntraday = new ExchangeIntraday();
-			this.tsStockLable = new ToolStripLabel();
-			this.tstbStock = new ToolStripComboBox();
-			this.tStripMenu = new ToolStrip();
-			this.tslbName = new ToolStripLabel();
-			this.toolStripSeparator2 = new ToolStripSeparator();
-			this.toolStripLabel2 = new ToolStripLabel();
-			this.tstbAddIndicator = new ToolStripButton();
-			this.tsbtnEditIndicator = new ToolStripButton();
-			this.tsDelIndicator = new ToolStripButton();
-			this.toolStripSeparator1 = new ToolStripSeparator();
-			this.toolStripLabel1 = new ToolStripLabel();
-			this.tscbCycle = new ToolStripComboBox();
-			this.panel1 = new Panel();
-			this.chart = new ChartWinControl();
-			this.cefWebBrowser1 = new CefWebBrowser();
-			this.lbError = new Label();
-			this.tStripMenu.SuspendLayout();
-			this.panel1.SuspendLayout();
-			base.SuspendLayout();
-			this.tsStockLable.BackColor = Color.Black;
-			this.tsStockLable.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsStockLable.Font = new Font("Microsoft Sans Serif", 8.25f);
-			this.tsStockLable.ForeColor = Color.Gainsboro;
-			this.tsStockLable.ImageTransparentColor = Color.Magenta;
-			this.tsStockLable.Name = "tsStockLable";
-			this.tsStockLable.Padding = new Padding(1, 0, 2, 0);
-			this.tsStockLable.Size = new Size(38, 21);
-			this.tsStockLable.Text = "Stock";
-			this.tstbStock.BackColor = Color.FromArgb(45, 45, 45);
-			this.tstbStock.Font = new Font("Microsoft Sans Serif", 8.25f);
-			this.tstbStock.ForeColor = Color.Yellow;
-			this.tstbStock.Margin = new Padding(1, 1, 1, 2);
-			this.tstbStock.Name = "tstbStock";
-			this.tstbStock.Size = new Size(130, 21);
-			this.tstbStock.SelectedIndexChanged += new EventHandler(this.tstbStock_SelectedIndexChanged);
-			this.tstbStock.KeyUp += new KeyEventHandler(this.tstbStock_KeyUp);
-			this.tstbStock.KeyDown += new KeyEventHandler(this.tstbStock_KeyDown);
-			this.tstbStock.KeyPress += new KeyPressEventHandler(this.tstbStock_KeyPress);
-			this.tStripMenu.BackColor = Color.FromArgb(20, 20, 20);
-			this.tStripMenu.BackgroundImageLayout = ImageLayout.None;
-			this.tStripMenu.GripMargin = new Padding(0);
-			this.tStripMenu.GripStyle = ToolStripGripStyle.Hidden;
-			this.tStripMenu.Items.AddRange(new ToolStripItem[]
-			{
-				this.tsStockLable,
-				this.tstbStock,
-				this.tslbName,
-				this.toolStripSeparator2,
-				this.toolStripLabel2,
-				this.tstbAddIndicator,
-				this.tsbtnEditIndicator,
-				this.tsDelIndicator,
-				this.toolStripSeparator1,
-				this.toolStripLabel1,
-				this.tscbCycle
-			});
-			this.tStripMenu.Location = new Point(0, 0);
-			this.tStripMenu.Name = "tStripMenu";
-			this.tStripMenu.Padding = new Padding(2, 1, 1, 0);
-			this.tStripMenu.RenderMode = ToolStripRenderMode.Professional;
-			this.tStripMenu.Size = new Size(384, 25);
-			this.tStripMenu.TabIndex = 51;
-			this.tStripMenu.KeyDown += new KeyEventHandler(this.tstbStock_KeyDown);
-			this.tslbName.ForeColor = Color.Yellow;
-			this.tslbName.Margin = new Padding(5, 1, 0, 2);
-			this.tslbName.Name = "tslbName";
-			this.tslbName.Size = new Size(12, 21);
-			this.tslbName.Text = "-";
-			this.toolStripSeparator2.Margin = new Padding(5, 0, 5, 0);
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new Size(6, 27);
-			this.toolStripSeparator2.Visible = false;
-			this.toolStripLabel2.ForeColor = Color.LightGray;
-			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new Size(60, 24);
-			this.toolStripLabel2.Text = "Indicator :";
-			this.toolStripLabel2.Visible = false;
-			this.tstbAddIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tstbAddIndicator.ForeColor = Color.Lime;
-			this.tstbAddIndicator.ImageTransparentColor = Color.Magenta;
-			this.tstbAddIndicator.Name = "tstbAddIndicator";
-			this.tstbAddIndicator.Size = new Size(33, 24);
-			this.tstbAddIndicator.Text = "Add";
-			this.tstbAddIndicator.Visible = false;
-			this.tstbAddIndicator.Click += new EventHandler(this.tstbAddIndicator_Click);
-			this.tsbtnEditIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsbtnEditIndicator.ForeColor = Color.FromArgb(128, 255, 255);
-			this.tsbtnEditIndicator.ImageTransparentColor = Color.Magenta;
-			this.tsbtnEditIndicator.Name = "tsbtnEditIndicator";
-			this.tsbtnEditIndicator.Size = new Size(58, 24);
-			this.tsbtnEditIndicator.Text = "Indicator";
-			this.tsbtnEditIndicator.Visible = false;
-			this.tsbtnEditIndicator.Click += new EventHandler(this.tsbtnEditIndicator_Click);
-			this.tsDelIndicator.DisplayStyle = ToolStripItemDisplayStyle.Text;
-			this.tsDelIndicator.ForeColor = Color.FromArgb(255, 128, 128);
-			this.tsDelIndicator.ImageTransparentColor = Color.Magenta;
-			this.tsDelIndicator.Name = "tsDelIndicator";
-			this.tsDelIndicator.Size = new Size(44, 21);
-			this.tsDelIndicator.Text = "Delete";
-			this.tsDelIndicator.Visible = false;
-			this.tsDelIndicator.Click += new EventHandler(this.tsDelIndicator_Click);
-			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new Size(6, 24);
-			this.toolStripSeparator1.Visible = false;
-			this.toolStripLabel1.ForeColor = Color.WhiteSmoke;
-			this.toolStripLabel1.Margin = new Padding(5, 1, 5, 2);
-			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new Size(41, 21);
-			this.toolStripLabel1.Text = "Period";
-			this.toolStripLabel1.Visible = false;
-			this.tscbCycle.BackColor = Color.FromArgb(45, 45, 45);
-			this.tscbCycle.DropDownStyle = ComboBoxStyle.DropDownList;
-			this.tscbCycle.ForeColor = Color.LightGray;
-			this.tscbCycle.Items.AddRange(new object[]
-			{
-				"DAY",
-				"WEEK",
-				"MONTH"
-			});
-			this.tscbCycle.Name = "tscbCycle";
-			this.tscbCycle.Size = new Size(80, 24);
-			this.tscbCycle.Visible = false;
-			this.tscbCycle.SelectedIndexChanged += new EventHandler(this.tscbCycle_SelectedIndexChanged);
-			this.panel1.Controls.Add(this.chart);
-			this.panel1.Controls.Add(this.tStripMenu);
-			this.panel1.Location = new Point(170, 25);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new Size(384, 236);
-			this.panel1.TabIndex = 53;
-			this.chart.AreaPercent = "3;1";
-			this.chart.BackColor = Color.FromArgb(64, 64, 64);
-			this.chart.CausesValidation = false;
-			this.chart.ChartDragMode = ChartDragMode.Axis;
-			this.chart.CrossCursorMouseMode = MouseAction.MouseDown;
-			this.chart.DefaultFormulas = null;
-			this.chart.Designing = false;
-			this.chart.EndTime = new DateTime(0L);
-			this.chart.FavoriteFormulas = "";
-			exchangeIntraday.NativeCycle = true;
-			exchangeIntraday.ShowFirstXLabel = true;
-			exchangeIntraday.TimePeriods = new TimePeriod[0];
-			exchangeIntraday.TimeZone = 7.0;
-			this.chart.IntradayInfo = exchangeIntraday;
-			this.chart.LatestValueType = LatestValueType.StockOnly;
-			this.chart.Location = new Point(13, 59);
-			this.chart.MaxColumnWidth = 30.0;
-			this.chart.MaxPrice = 0.0;
-			this.chart.MinPrice = 0.0;
-			this.chart.Name = "chart";
-			this.chart.NeedDrawCursor = false;
-			this.chart.PriceLabelFormat = null;
-			this.chart.ScaleType = ScaleType.Default;
-			this.chart.SelectFormulaMouseMode = MouseAction.MouseDown;
-			this.chart.ShowCursorLabel = false;
-			this.chart.ShowHorizontalGrid = ShowLineMode.Default;
-			this.chart.ShowStatistic = false;
-			this.chart.ShowVerticalGrid = ShowLineMode.Default;
-			this.chart.Size = new Size(400, 136);
-			this.chart.Skin = "GreenRed";
-			this.chart.StartTime = new DateTime(0L);
-			this.chart.StickRenderType = StickRenderType.Default;
-			this.chart.StockRenderType = StockRenderType.Default;
-			this.chart.Symbol = "";
-			this.chart.TabIndex = 52;
-			this.chart.TabStop = false;
-			this.chart.ValueTextMode = ValueTextMode.Default;
-			this.chart.Enter += new EventHandler(this.chart_Enter);
-			this.chart.Leave += new EventHandler(this.chart_Leave);
-			this.cefWebBrowser1.Location = new Point(12, 168);
-			this.cefWebBrowser1.Name = "cefWebBrowser1";
-			this.cefWebBrowser1.Size = new Size(152, 93);
-			this.cefWebBrowser1.TabIndex = 54;
-			this.cefWebBrowser1.Text = "cefWebBrowser1";
-			this.lbError.AutoSize = true;
-			this.lbError.Font = new Font("Microsoft Sans Serif", 9.75f, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 222);
-			this.lbError.ForeColor = Color.Maroon;
-			this.lbError.Location = new Point(9, 9);
-			this.lbError.Name = "lbError";
-			this.lbError.Size = new Size(146, 16);
-			this.lbError.TabIndex = 55;
-			this.lbError.Text = "eFin user is empty!!!";
-			this.lbError.Visible = false;
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			this.BackColor = SystemColors.ControlDark;
-			base.ClientSize = new Size(661, 334);
-			base.Controls.Add(this.lbError);
-			base.Controls.Add(this.cefWebBrowser1);
-			base.Controls.Add(this.panel1);
-			base.FormBorderStyle = FormBorderStyle.Sizable;
-			base.Margin = new Padding(3, 4, 3, 4);
-			base.Name = "frmStockChart";
-			this.Text = "Stock History";
-			base.IDoShownDelay += new ClientBaseForm.OnShownDelayEventHandler(this.frmStockHistory_IDoShownDelay);
-			base.IDoLoadData += new ClientBaseForm.OnIDoLoadDataEventHandler(this.frmStockHistory_IDoLoadData);
-			base.IDoFontChanged += new ClientBaseForm.OnFontChangedEventHandler(this.frmStockHistory_IDoFontChanged);
-			base.IDoCustomSizeChanged += new ClientBaseForm.CustomSizeChangedEventHandler(this.frmStockHistory_IDoCustomSizeChanged);
-			base.IDoMainFormKeyUp += new ClientBaseForm.OnFormKeyUpEventHandler(this.frmStockHistory_IDoMainFormKeyUp);
-			base.IDoReActivated += new ClientBaseForm.OnReActiveEventHandler(this.frmStockHistory_IDoReActivated);
-			base.Controls.SetChildIndex(this.panel1, 0);
-			base.Controls.SetChildIndex(this.cefWebBrowser1, 0);
-			base.Controls.SetChildIndex(this.lbError, 0);
-			this.tStripMenu.ResumeLayout(false);
-			this.tStripMenu.PerformLayout();
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			base.ResumeLayout(false);
-			base.PerformLayout();
 		}
 	}
 }

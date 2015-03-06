@@ -35,6 +35,58 @@ namespace i2TradePlus
 		private const string CM_VERIFY_ORDER = "V";
 		private const string CM_SEND_ORDER = "S";
 		private const string CM_SEND_AUTO_TRADE = "T";
+		private string _showSide = string.Empty;
+		private string _showSideTFEX = string.Empty;
+		private BackgroundWorker bgwReloadCredit = null;
+		private BackgroundWorker bgwSendOrder = null;
+		private DataSet tdsCredit = null;
+		private StockList.StockInformation _stockInfo = null;
+		private SeriesList.SeriesInformation _seriesInfoTfex = null;
+		private long _returnOrderNumberFromServer = 0L;
+		private long _returnOrderNumberFromServer_TFEX = 0L;
+		private System.Windows.Forms.Timer timerReloadCredit = null;
+		private decimal _buyCreditLimit = 0m;
+		private decimal _totalCreditLimit = 0m;
+		private System.Windows.Forms.Timer timerSwitchAccount = null;
+		private int _creditType = 0;
+		private bool _isActive = false;
+		private frmOrderFormConfirm _frmConfirm = null;
+		private frmStopDisclaimer _frmStopDisclaimer = null;
+		private object _objLastActive = null;
+		private int _OrdTimes = 0;
+		private int _currTimes = 0;
+		private string _retOrderMessage = string.Empty;
+		private string _commandType = string.Empty;
+		private string _OrdSymbol = string.Empty;
+		private string _OrdSide = string.Empty;
+		private long _OrdVolume = 0L;
+		private string _OrdPrice = string.Empty;
+		private long _OrdPubVol = 0L;
+		private string _OrdCondition = string.Empty;
+		private int _OrdTtf;
+		private string _OrdIsDeposit = string.Empty;
+		private string _OrdPriceType = string.Empty;
+		private string _OrdPosition = string.Empty;
+		private string _OrdValidityDate = string.Empty;
+		private string _OrdTfexStopPrice = string.Empty;
+		private string _OrdTfexStopSeries = string.Empty;
+		private string _OrdTfexStopCond = string.Empty;
+		private int _stopField = 0;
+		private int _stopOperator = 0;
+		private decimal _stopPrice = 0m;
+		private int _stopLimit = 0;
+		private bool _isLockPubVol = false;
+		private bool _verifyResult_Pin = false;
+		private string _verifyResultStr_Pin = string.Empty;
+		private bool _verifyResult = false;
+		private bool _verifyParam = false;
+		private DataSet _dsSendOrder = null;
+		private DataSet _dsSendOrderTfex = null;
+		private ApplicationInfo.SendNewOrderResult _newOrderResult = null;
+		private System.Windows.Forms.Timer tmCloseSplash = null;
+		private ucBSSetting frm = null;
+		private frmPcPriceAlert _pcPriceAlertForm = null;
+		private frmMobileAlert alertSettingForm = null;
 		private IContainer components = null;
 		private Label lbPrice;
 		private Label lbVolume;
@@ -120,58 +172,6 @@ namespace i2TradePlus
 		private Button btnBResize_Down;
 		private ComboBox cbStopOrderPrice;
 		private Label lbStopPriceLable;
-		private string _showSide = string.Empty;
-		private string _showSideTFEX = string.Empty;
-		private BackgroundWorker bgwReloadCredit = null;
-		private BackgroundWorker bgwSendOrder = null;
-		private DataSet tdsCredit = null;
-		private StockList.StockInformation _stockInfo = null;
-		private SeriesList.SeriesInformation _seriesInfoTfex = null;
-		private long _returnOrderNumberFromServer = 0L;
-		private long _returnOrderNumberFromServer_TFEX = 0L;
-		private System.Windows.Forms.Timer timerReloadCredit = null;
-		private decimal _buyCreditLimit = 0m;
-		private decimal _totalCreditLimit = 0m;
-		private System.Windows.Forms.Timer timerSwitchAccount = null;
-		private int _creditType = 0;
-		private bool _isActive = false;
-		private frmOrderFormConfirm _frmConfirm = null;
-		private frmStopDisclaimer _frmStopDisclaimer = null;
-		private object _objLastActive = null;
-		private int _OrdTimes = 0;
-		private int _currTimes = 0;
-		private string _retOrderMessage = string.Empty;
-		private string _commandType = string.Empty;
-		private string _OrdSymbol = string.Empty;
-		private string _OrdSide = string.Empty;
-		private long _OrdVolume = 0L;
-		private string _OrdPrice = string.Empty;
-		private long _OrdPubVol = 0L;
-		private string _OrdCondition = string.Empty;
-		private int _OrdTtf;
-		private string _OrdIsDeposit = string.Empty;
-		private string _OrdPriceType = string.Empty;
-		private string _OrdPosition = string.Empty;
-		private string _OrdValidityDate = string.Empty;
-		private string _OrdTfexStopPrice = string.Empty;
-		private string _OrdTfexStopSeries = string.Empty;
-		private string _OrdTfexStopCond = string.Empty;
-		private int _stopField = 0;
-		private int _stopOperator = 0;
-		private decimal _stopPrice = 0m;
-		private int _stopLimit = 0;
-		private bool _isLockPubVol = false;
-		private bool _verifyResult_Pin = false;
-		private string _verifyResultStr_Pin = string.Empty;
-		private bool _verifyResult = false;
-		private bool _verifyParam = false;
-		private DataSet _dsSendOrder = null;
-		private DataSet _dsSendOrderTfex = null;
-		private ApplicationInfo.SendNewOrderResult _newOrderResult = null;
-		private System.Windows.Forms.Timer tmCloseSplash = null;
-		private ucBSSetting frm = null;
-		private frmPcPriceAlert _pcPriceAlertForm = null;
-		private frmMobileAlert alertSettingForm = null;
 		public  ucSendNewOrder.OnAccountChangedHandler _OnAccountChanged;
 		public event ucSendNewOrder.OnAccountChangedHandler OnAccountChanged
 		{
@@ -281,1321 +281,6 @@ namespace i2TradePlus
 					}
 				}
 			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && this.components != null)
-			{
-				this.components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void InitializeComponent()
-		{
-			this.components = new Container();
-			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(ucSendNewOrder));
-			this.lbPrice = new Label();
-			this.lbVolume = new Label();
-			this.tbVolume = new TextBox();
-			this.lbPublic = new Label();
-			this.lbCondition = new Label();
-			this.tbPublic = new TextBox();
-			this.chbNVDR = new CheckBox();
-			this.panelTop = new Panel();
-			this.btnBResize_Up = new Button();
-			this.btnBResize_Down = new Button();
-			this.tbEquity = new Label();
-			this.lbEquity = new Label();
-			this.btnNotification = new Button();
-			this.btnShowStockAlert = new Button();
-			this.btnRisk = new Button();
-			this.btnStyle4 = new Button();
-			this.btnStyle3 = new Button();
-			this.btnCleanPort = new Button();
-			this.btnSetting = new Button();
-			this.btnStyle2 = new Button();
-			this.btnStyle1 = new Button();
-			this.tbOnHand = new Label();
-			this.lbOnHand = new Label();
-			this.lbAccount = new Label();
-			this.cbAccount = new ComboBox();
-			this.tbBuyLimit = new Label();
-			this.lbBuyLimit = new Label();
-			this.chbEqStopOrder = new CheckBox();
-			this.lbLoading = new Label();
-			this.btnSendOrder = new Button();
-			this.cbCondition = new ComboBox();
-			this.panelEquity = new Panel();
-			this.panelStopOrder = new Panel();
-			this.lbStopPriceLable = new Label();
-			this.cbStopOrderPrice = new ComboBox();
-			this.chbLimit = new CheckBox();
-			this.label2 = new Label();
-			this.cbStopOrderField = new ComboBox();
-			this.cbDepCollateral = new ComboBox();
-			this.lbDep = new Label();
-			this.cbStock = new ComboBox();
-			this.lbStock = new Label();
-			this.lbSide = new Label();
-			this.cbSide = new ComboBox();
-			this.btnPriceDec = new Button();
-			this.btnPriceInc = new Button();
-			this.btnPBDec = new Button();
-			this.btnPBInc = new Button();
-			this.btnVolDec = new Button();
-			this.btnVolInc = new Button();
-			this.btnClear = new Button();
-			this.lbPin = new Label();
-			this.tbPin = new TextBox();
-			this.rbCover = new RadioButton();
-			this.rbShort = new RadioButton();
-			this.rbSell = new RadioButton();
-			this.rbBuy = new RadioButton();
-			this.cbPrice = new ComboBox();
-			this.tbTimes = new TextBox();
-			this.lbTimes = new Label();
-			this.toolTip1 = new ToolTip(this.components);
-			this.panelDerivative = new Panel();
-			this.cbPosition = new ComboBox();
-			this.rdbTfexSell = new RadioButton();
-			this.rdbTfexBuy = new RadioButton();
-			this.tbTfexPriceCondition = new TextBox();
-			this.cbTfexConStopOrder = new ComboBox();
-			this.tbPriceT = new TextBox();
-			this.tbSeriesCondition = new TextBox();
-			this.tbSeries = new TextBox();
-			this.chbTfexStopOrder = new CheckBox();
-			this.tbPublishT = new TextBox();
-			this.lbValidity = new Label();
-			this.tbVolumeT = new TextBox();
-			this.lbType = new Label();
-			this.btnClearTextT = new Button();
-			this.lbPosition = new Label();
-			this.btnSendOrderT = new Button();
-			this.lbPublish = new Label();
-			this.cbValidity = new ComboBox();
-			this.lbPriceT = new Label();
-			this.cbType = new ComboBox();
-			this.lbVolumeT = new Label();
-			this.lbSeries = new Label();
-			this.panelTop.SuspendLayout();
-			this.panelEquity.SuspendLayout();
-			this.panelStopOrder.SuspendLayout();
-			this.panelDerivative.SuspendLayout();
-			base.SuspendLayout();
-			this.lbPrice.AutoSize = true;
-			this.lbPrice.ForeColor = Color.LightGray;
-			this.lbPrice.Location = new Point(418, 8);
-			this.lbPrice.Margin = new Padding(2, 0, 2, 0);
-			this.lbPrice.Name = "lbPrice";
-			this.lbPrice.Size = new Size(31, 13);
-			this.lbPrice.TabIndex = 13;
-			this.lbPrice.Text = "Price";
-			this.lbPrice.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbVolume.AutoSize = true;
-			this.lbVolume.ForeColor = Color.LightGray;
-			this.lbVolume.Location = new Point(253, 8);
-			this.lbVolume.Margin = new Padding(2, 0, 2, 0);
-			this.lbVolume.Name = "lbVolume";
-			this.lbVolume.Size = new Size(22, 13);
-			this.lbVolume.TabIndex = 11;
-			this.lbVolume.Text = "Vol";
-			this.lbVolume.TextAlign = ContentAlignment.MiddleLeft;
-			this.tbVolume.AllowDrop = true;
-			this.tbVolume.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbVolume.BorderStyle = BorderStyle.FixedSingle;
-			this.tbVolume.Location = new Point(276, 6);
-			this.tbVolume.Margin = new Padding(2, 3, 2, 3);
-			this.tbVolume.MaxLength = 10;
-			this.tbVolume.Name = "tbVolume";
-			this.tbVolume.Size = new Size(59, 20);
-			this.tbVolume.TabIndex = 2;
-			this.tbVolume.TextChanged += new EventHandler(this.tbVolume_TextChanged);
-			this.tbVolume.DragDrop += new DragEventHandler(this.tbVolume_DragDrop);
-			this.tbVolume.KeyDown += new KeyEventHandler(this.tbVolume_KeyDown);
-			this.tbVolume.Leave += new EventHandler(this.controlOrder_Leave);
-			this.tbVolume.Enter += new EventHandler(this.controlOrder_Enter);
-			this.tbVolume.DragEnter += new DragEventHandler(this.tbVolume_DragEnter);
-			this.lbPublic.AutoSize = true;
-			this.lbPublic.ForeColor = Color.LightGray;
-			this.lbPublic.Location = new Point(525, 7);
-			this.lbPublic.Margin = new Padding(2, 0, 2, 0);
-			this.lbPublic.Name = "lbPublic";
-			this.lbPublic.Size = new Size(44, 13);
-			this.lbPublic.TabIndex = 67;
-			this.lbPublic.Text = "P/B Vol";
-			this.lbPublic.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbCondition.AutoSize = true;
-			this.lbCondition.ForeColor = Color.LightGray;
-			this.lbCondition.Location = new Point(630, 6);
-			this.lbCondition.Margin = new Padding(2, 0, 2, 0);
-			this.lbCondition.Name = "lbCondition";
-			this.lbCondition.Size = new Size(32, 13);
-			this.lbCondition.TabIndex = 68;
-			this.lbCondition.Text = "Cond";
-			this.lbCondition.TextAlign = ContentAlignment.MiddleLeft;
-			this.tbPublic.AllowDrop = true;
-			this.tbPublic.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			this.tbPublic.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.tbPublic.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbPublic.BorderStyle = BorderStyle.FixedSingle;
-			this.tbPublic.CharacterCasing = CharacterCasing.Upper;
-			this.tbPublic.Location = new Point(567, 4);
-			this.tbPublic.Margin = new Padding(2, 3, 2, 3);
-			this.tbPublic.MaxLength = 10;
-			this.tbPublic.Name = "tbPublic";
-			this.tbPublic.Size = new Size(59, 20);
-			this.tbPublic.TabIndex = 4;
-			this.tbPublic.TextChanged += new EventHandler(this.tbPublic_TextChanged);
-			this.tbPublic.KeyDown += new KeyEventHandler(this.tbPublic_KeyDown);
-			this.tbPublic.Leave += new EventHandler(this.controlOrder_Leave);
-			this.tbPublic.Enter += new EventHandler(this.controlOrder_Enter);
-			this.chbNVDR.AutoSize = true;
-			this.chbNVDR.ForeColor = Color.LightGray;
-			this.chbNVDR.Location = new Point(201, 8);
-			this.chbNVDR.Margin = new Padding(2, 3, 0, 3);
-			this.chbNVDR.Name = "chbNVDR";
-			this.chbNVDR.Size = new Size(57, 17);
-			this.chbNVDR.TabIndex = 1;
-			this.chbNVDR.Text = "NVDR";
-			this.chbNVDR.UseVisualStyleBackColor = false;
-			this.chbNVDR.Leave += new EventHandler(this.controlOrder_Leave);
-			this.chbNVDR.Enter += new EventHandler(this.controlOrder_Enter);
-			this.chbNVDR.CheckedChanged += new EventHandler(this.cbNVDR_CheckedChanged);
-			this.chbNVDR.KeyDown += new KeyEventHandler(this.cbNDVR_KeyDown);
-			this.panelTop.BackColor = Color.FromArgb(30, 30, 30);
-			this.panelTop.Controls.Add(this.btnBResize_Up);
-			this.panelTop.Controls.Add(this.btnBResize_Down);
-			this.panelTop.Controls.Add(this.tbEquity);
-			this.panelTop.Controls.Add(this.lbEquity);
-			this.panelTop.Controls.Add(this.btnNotification);
-			this.panelTop.Controls.Add(this.btnShowStockAlert);
-			this.panelTop.Controls.Add(this.btnRisk);
-			this.panelTop.Controls.Add(this.btnStyle4);
-			this.panelTop.Controls.Add(this.btnStyle3);
-			this.panelTop.Controls.Add(this.btnCleanPort);
-			this.panelTop.Controls.Add(this.btnSetting);
-			this.panelTop.Controls.Add(this.btnStyle2);
-			this.panelTop.Controls.Add(this.btnStyle1);
-			this.panelTop.Controls.Add(this.tbOnHand);
-			this.panelTop.Controls.Add(this.lbOnHand);
-			this.panelTop.Controls.Add(this.lbAccount);
-			this.panelTop.Controls.Add(this.cbAccount);
-			this.panelTop.Controls.Add(this.tbBuyLimit);
-			this.panelTop.Controls.Add(this.lbBuyLimit);
-			this.panelTop.ForeColor = Color.Black;
-			this.panelTop.Location = new Point(1, 1);
-			this.panelTop.Margin = new Padding(0);
-			this.panelTop.Name = "panelTop";
-			this.panelTop.Size = new Size(868, 26);
-			this.panelTop.TabIndex = 72;
-			this.btnBResize_Up.FlatAppearance.BorderColor = Color.Gray;
-			this.btnBResize_Up.FlatAppearance.BorderSize = 0;
-			this.btnBResize_Up.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnBResize_Up.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnBResize_Up.FlatStyle = FlatStyle.Flat;
-			this.btnBResize_Up.ForeColor = Color.LightGray;
-			this.btnBResize_Up.Image = Resources.Up1;
-			this.btnBResize_Up.Location = new Point(830, 2);
-			this.btnBResize_Up.Name = "btnBResize_Up";
-			this.btnBResize_Up.Size = new Size(16, 20);
-			this.btnBResize_Up.TabIndex = 110;
-			this.btnBResize_Up.TabStop = false;
-			this.toolTip1.SetToolTip(this.btnBResize_Up, "Enlarge the box.");
-			this.btnBResize_Up.UseVisualStyleBackColor = true;
-			this.btnBResize_Up.Visible = false;
-			this.btnBResize_Up.Click += new EventHandler(this.btnBResize_Up_Click);
-			this.btnBResize_Down.FlatAppearance.BorderColor = Color.Gray;
-			this.btnBResize_Down.FlatAppearance.BorderSize = 0;
-			this.btnBResize_Down.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnBResize_Down.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnBResize_Down.FlatStyle = FlatStyle.Flat;
-			this.btnBResize_Down.ForeColor = Color.LightGray;
-			this.btnBResize_Down.Image = Resources.Down;
-			this.btnBResize_Down.Location = new Point(848, 2);
-			this.btnBResize_Down.Name = "btnBResize_Down";
-			this.btnBResize_Down.Size = new Size(16, 20);
-			this.btnBResize_Down.TabIndex = 109;
-			this.btnBResize_Down.TabStop = false;
-			this.toolTip1.SetToolTip(this.btnBResize_Down, "Shrink the box.");
-			this.btnBResize_Down.UseVisualStyleBackColor = true;
-			this.btnBResize_Down.Visible = false;
-			this.btnBResize_Down.Click += new EventHandler(this.btnBResize_Down_Click);
-			this.tbEquity.AutoSize = true;
-			this.tbEquity.ForeColor = Color.Yellow;
-			this.tbEquity.Location = new Point(460, 5);
-			this.tbEquity.Margin = new Padding(2, 0, 2, 0);
-			this.tbEquity.Name = "tbEquity";
-			this.tbEquity.Size = new Size(13, 13);
-			this.tbEquity.TabIndex = 108;
-			this.tbEquity.Text = "0";
-			this.tbEquity.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbEquity.AutoSize = true;
-			this.lbEquity.ForeColor = Color.LightGray;
-			this.lbEquity.Location = new Point(400, 5);
-			this.lbEquity.Margin = new Padding(2, 0, 2, 0);
-			this.lbEquity.Name = "lbEquity";
-			this.lbEquity.Size = new Size(42, 13);
-			this.lbEquity.TabIndex = 107;
-			this.lbEquity.Text = "Equity :";
-			this.lbEquity.TextAlign = ContentAlignment.MiddleLeft;
-			this.btnNotification.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			this.btnNotification.BackColor = Color.Transparent;
-			this.btnNotification.FlatAppearance.BorderColor = Color.LightGray;
-			this.btnNotification.FlatAppearance.BorderSize = 0;
-			this.btnNotification.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnNotification.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnNotification.FlatStyle = FlatStyle.Flat;
-			this.btnNotification.ForeColor = Color.LightGray;
-			this.btnNotification.Image = (Image)componentResourceManager.GetObject("btnNotification.Image");
-			this.btnNotification.Location = new Point(607, 1);
-			this.btnNotification.Name = "btnNotification";
-			this.btnNotification.Size = new Size(24, 23);
-			this.btnNotification.TabIndex = 95;
-			this.btnNotification.TabStop = false;
-			this.btnNotification.Tag = "5";
-			this.toolTip1.SetToolTip(this.btnNotification, "Mobile Notification");
-			this.btnNotification.UseVisualStyleBackColor = false;
-			this.btnNotification.Click += new EventHandler(this.btnNotification_Click);
-			this.btnShowStockAlert.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
-			this.btnShowStockAlert.BackColor = Color.Transparent;
-			this.btnShowStockAlert.FlatAppearance.BorderColor = Color.LightGray;
-			this.btnShowStockAlert.FlatAppearance.BorderSize = 0;
-			this.btnShowStockAlert.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnShowStockAlert.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnShowStockAlert.FlatStyle = FlatStyle.Flat;
-			this.btnShowStockAlert.ForeColor = Color.LightGray;
-			this.btnShowStockAlert.Image = (Image)componentResourceManager.GetObject("btnShowStockAlert.Image");
-			this.btnShowStockAlert.Location = new Point(633, 1);
-			this.btnShowStockAlert.Name = "btnShowStockAlert";
-			this.btnShowStockAlert.Size = new Size(24, 23);
-			this.btnShowStockAlert.TabIndex = 94;
-			this.btnShowStockAlert.TabStop = false;
-			this.btnShowStockAlert.Tag = "5";
-			this.toolTip1.SetToolTip(this.btnShowStockAlert, "Price Alert on PC");
-			this.btnShowStockAlert.UseVisualStyleBackColor = false;
-			this.btnShowStockAlert.Click += new EventHandler(this.btnShowStockAlert_Click);
-			this.btnRisk.FlatAppearance.BorderColor = Color.LightGray;
-			this.btnRisk.FlatAppearance.BorderSize = 0;
-			this.btnRisk.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnRisk.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnRisk.FlatStyle = FlatStyle.Flat;
-			this.btnRisk.ForeColor = Color.LightGray;
-			this.btnRisk.Image = (Image)componentResourceManager.GetObject("btnRisk.Image");
-			this.btnRisk.Location = new Point(562, 2);
-			this.btnRisk.Name = "btnRisk";
-			this.btnRisk.Size = new Size(37, 20);
-			this.btnRisk.TabIndex = 93;
-			this.btnRisk.TabStop = false;
-			this.toolTip1.SetToolTip(this.btnRisk, "Risk Control / เครื่องมือควบคุมความเสี่ยง");
-			this.btnRisk.UseVisualStyleBackColor = true;
-			this.btnRisk.Visible = false;
-			this.btnRisk.Click += new EventHandler(this.btnPolicy_Click);
-			this.btnStyle4.FlatAppearance.BorderColor = Color.Gray;
-			this.btnStyle4.FlatAppearance.BorderSize = 0;
-			this.btnStyle4.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnStyle4.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnStyle4.FlatStyle = FlatStyle.Flat;
-			this.btnStyle4.ForeColor = Color.LightGray;
-			this.btnStyle4.Location = new Point(761, 2);
-			this.btnStyle4.Name = "btnStyle4";
-			this.btnStyle4.Size = new Size(18, 20);
-			this.btnStyle4.TabIndex = 92;
-			this.btnStyle4.TabStop = false;
-			this.btnStyle4.Text = "4";
-			this.toolTip1.SetToolTip(this.btnStyle4, "Trade Style 4");
-			this.btnStyle4.UseVisualStyleBackColor = true;
-			this.btnStyle4.Click += new EventHandler(this.btnStyle_Click);
-			this.btnStyle3.FlatAppearance.BorderColor = Color.Gray;
-			this.btnStyle3.FlatAppearance.BorderSize = 0;
-			this.btnStyle3.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnStyle3.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnStyle3.FlatStyle = FlatStyle.Flat;
-			this.btnStyle3.ForeColor = Color.LightGray;
-			this.btnStyle3.Location = new Point(742, 2);
-			this.btnStyle3.Name = "btnStyle3";
-			this.btnStyle3.Size = new Size(18, 20);
-			this.btnStyle3.TabIndex = 90;
-			this.btnStyle3.TabStop = false;
-			this.btnStyle3.Text = "3";
-			this.toolTip1.SetToolTip(this.btnStyle3, "Trade Style 3");
-			this.btnStyle3.UseVisualStyleBackColor = true;
-			this.btnStyle3.Click += new EventHandler(this.btnStyle_Click);
-			this.btnCleanPort.FlatAppearance.BorderColor = Color.Gray;
-			this.btnCleanPort.FlatAppearance.BorderSize = 0;
-			this.btnCleanPort.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnCleanPort.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnCleanPort.FlatStyle = FlatStyle.Flat;
-			this.btnCleanPort.ForeColor = Color.LightGray;
-			this.btnCleanPort.Image = (Image)componentResourceManager.GetObject("btnCleanPort.Image");
-			this.btnCleanPort.Location = new Point(663, 2);
-			this.btnCleanPort.Name = "btnCleanPort";
-			this.btnCleanPort.Size = new Size(20, 20);
-			this.btnCleanPort.TabIndex = 89;
-			this.btnCleanPort.TabStop = false;
-			this.toolTip1.SetToolTip(this.btnCleanPort, "Portfolio clearing tool");
-			this.btnCleanPort.UseVisualStyleBackColor = true;
-			this.btnCleanPort.Click += new EventHandler(this.btnCleanPort_Click);
-			this.btnSetting.FlatAppearance.BorderColor = Color.Gray;
-			this.btnSetting.FlatAppearance.BorderSize = 0;
-			this.btnSetting.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnSetting.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnSetting.FlatStyle = FlatStyle.Flat;
-			this.btnSetting.ForeColor = Color.LightGray;
-			this.btnSetting.Image = (Image)componentResourceManager.GetObject("btnSetting.Image");
-			this.btnSetting.Location = new Point(787, 2);
-			this.btnSetting.Name = "btnSetting";
-			this.btnSetting.Size = new Size(20, 20);
-			this.btnSetting.TabIndex = 88;
-			this.btnSetting.TabStop = false;
-			this.toolTip1.SetToolTip(this.btnSetting, "Buy/Sell Options");
-			this.btnSetting.UseVisualStyleBackColor = true;
-			this.btnSetting.Click += new EventHandler(this.btnSetting_Click);
-			this.btnStyle2.FlatAppearance.BorderColor = Color.Gray;
-			this.btnStyle2.FlatAppearance.BorderSize = 0;
-			this.btnStyle2.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnStyle2.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnStyle2.FlatStyle = FlatStyle.Flat;
-			this.btnStyle2.ForeColor = Color.LightGray;
-			this.btnStyle2.Location = new Point(718, 2);
-			this.btnStyle2.Name = "btnStyle2";
-			this.btnStyle2.Size = new Size(18, 20);
-			this.btnStyle2.TabIndex = 87;
-			this.btnStyle2.TabStop = false;
-			this.btnStyle2.Text = "2";
-			this.toolTip1.SetToolTip(this.btnStyle2, "Quick Trade Style");
-			this.btnStyle2.UseVisualStyleBackColor = true;
-			this.btnStyle2.Click += new EventHandler(this.btnStyle_Click);
-			this.btnStyle1.FlatAppearance.BorderColor = Color.Gray;
-			this.btnStyle1.FlatAppearance.BorderSize = 0;
-			this.btnStyle1.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnStyle1.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
-			this.btnStyle1.FlatStyle = FlatStyle.Flat;
-			this.btnStyle1.ForeColor = Color.LightGray;
-			this.btnStyle1.Location = new Point(692, 2);
-			this.btnStyle1.Name = "btnStyle1";
-			this.btnStyle1.Size = new Size(18, 20);
-			this.btnStyle1.TabIndex = 86;
-			this.btnStyle1.TabStop = false;
-			this.btnStyle1.Text = "1";
-			this.toolTip1.SetToolTip(this.btnStyle1, "i2 Trade Style");
-			this.btnStyle1.UseVisualStyleBackColor = true;
-			this.btnStyle1.Click += new EventHandler(this.btnStyle_Click);
-			this.tbOnHand.AutoSize = true;
-			this.tbOnHand.BackColor = Color.Transparent;
-			this.tbOnHand.ForeColor = Color.Yellow;
-			this.tbOnHand.Location = new Point(345, 5);
-			this.tbOnHand.Margin = new Padding(2, 0, 2, 0);
-			this.tbOnHand.MinimumSize = new Size(60, 0);
-			this.tbOnHand.Name = "tbOnHand";
-			this.tbOnHand.Size = new Size(60, 13);
-			this.tbOnHand.TabIndex = 81;
-			this.tbOnHand.Text = "0";
-			this.tbOnHand.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbOnHand.AutoSize = true;
-			this.lbOnHand.BackColor = Color.Transparent;
-			this.lbOnHand.ForeColor = Color.LightGray;
-			this.lbOnHand.Location = new Point(285, 6);
-			this.lbOnHand.Margin = new Padding(2, 0, 2, 0);
-			this.lbOnHand.Name = "lbOnHand";
-			this.lbOnHand.Size = new Size(56, 13);
-			this.lbOnHand.TabIndex = 80;
-			this.lbOnHand.Text = "OnHand : ";
-			this.lbOnHand.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbAccount.AutoSize = true;
-			this.lbAccount.BackColor = Color.Transparent;
-			this.lbAccount.ForeColor = Color.LightGray;
-			this.lbAccount.Location = new Point(3, 5);
-			this.lbAccount.Margin = new Padding(2, 0, 1, 0);
-			this.lbAccount.Name = "lbAccount";
-			this.lbAccount.Size = new Size(53, 13);
-			this.lbAccount.TabIndex = 79;
-			this.lbAccount.Text = "Account :";
-			this.lbAccount.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbAccount.BackColor = Color.FromArgb(30, 30, 30);
-			this.cbAccount.DropDownStyle = ComboBoxStyle.DropDownList;
-			this.cbAccount.FlatStyle = FlatStyle.Popup;
-			this.cbAccount.ForeColor = Color.Yellow;
-			this.cbAccount.FormattingEnabled = true;
-			this.cbAccount.Location = new Point(59, 2);
-			this.cbAccount.Margin = new Padding(0, 3, 0, 3);
-			this.cbAccount.Name = "cbAccount";
-			this.cbAccount.Size = new Size(130, 21);
-			this.cbAccount.TabIndex = 78;
-			this.cbAccount.TabStop = false;
-			this.cbAccount.SelectedIndexChanged += new EventHandler(this.cbAccount_SelectedIndexChanged);
-			this.tbBuyLimit.AutoSize = true;
-			this.tbBuyLimit.BackColor = Color.Transparent;
-			this.tbBuyLimit.ForeColor = Color.Yellow;
-			this.tbBuyLimit.Location = new Point(254, 5);
-			this.tbBuyLimit.Margin = new Padding(2, 0, 2, 0);
-			this.tbBuyLimit.MinimumSize = new Size(60, 0);
-			this.tbBuyLimit.Name = "tbBuyLimit";
-			this.tbBuyLimit.Size = new Size(60, 13);
-			this.tbBuyLimit.TabIndex = 76;
-			this.tbBuyLimit.Text = "0";
-			this.tbBuyLimit.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbBuyLimit.AutoSize = true;
-			this.lbBuyLimit.BackColor = Color.Transparent;
-			this.lbBuyLimit.ForeColor = Color.LightGray;
-			this.lbBuyLimit.Location = new Point(195, 5);
-			this.lbBuyLimit.Margin = new Padding(2, 0, 2, 0);
-			this.lbBuyLimit.Name = "lbBuyLimit";
-			this.lbBuyLimit.Size = new Size(55, 13);
-			this.lbBuyLimit.TabIndex = 72;
-			this.lbBuyLimit.Text = "Buy Limit :";
-			this.lbBuyLimit.TextAlign = ContentAlignment.MiddleLeft;
-			this.chbEqStopOrder.AutoSize = true;
-			this.chbEqStopOrder.ForeColor = Color.FromArgb(255, 192, 128);
-			this.chbEqStopOrder.Location = new Point(528, 61);
-			this.chbEqStopOrder.Margin = new Padding(2, 3, 0, 3);
-			this.chbEqStopOrder.Name = "chbEqStopOrder";
-			this.chbEqStopOrder.Size = new Size(79, 17);
-			this.chbEqStopOrder.TabIndex = 106;
-			this.chbEqStopOrder.Text = "Auto Trade";
-			this.chbEqStopOrder.UseVisualStyleBackColor = false;
-			this.chbEqStopOrder.CheckedChanged += new EventHandler(this.chbStopOrder_CheckedChanged);
-			this.lbLoading.AutoSize = true;
-			this.lbLoading.BackColor = Color.FromArgb(64, 64, 64);
-			this.lbLoading.BorderStyle = BorderStyle.FixedSingle;
-			this.lbLoading.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
-			this.lbLoading.ForeColor = Color.Yellow;
-			this.lbLoading.Location = new Point(362, 95);
-			this.lbLoading.Name = "lbLoading";
-			this.lbLoading.Padding = new Padding(4, 3, 4, 3);
-			this.lbLoading.Size = new Size(137, 23);
-			this.lbLoading.TabIndex = 73;
-			this.lbLoading.Text = "Sending New Order ...";
-			this.lbLoading.TextAlign = ContentAlignment.MiddleCenter;
-			this.lbLoading.Visible = false;
-			this.btnSendOrder.AutoEllipsis = true;
-			this.btnSendOrder.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			this.btnSendOrder.BackColor = Color.Transparent;
-			this.btnSendOrder.Cursor = Cursors.Hand;
-			this.btnSendOrder.FlatAppearance.BorderColor = Color.LightGray;
-			this.btnSendOrder.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnSendOrder.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 192, 192);
-			this.btnSendOrder.FlatStyle = FlatStyle.Flat;
-			this.btnSendOrder.ForeColor = Color.WhiteSmoke;
-			this.btnSendOrder.Location = new Point(803, 2);
-			this.btnSendOrder.MaximumSize = new Size(58, 23);
-			this.btnSendOrder.Name = "btnSendOrder";
-			this.btnSendOrder.Size = new Size(54, 22);
-			this.btnSendOrder.TabIndex = 8;
-			this.btnSendOrder.TabStop = false;
-			this.btnSendOrder.Text = "Send";
-			this.btnSendOrder.UseVisualStyleBackColor = false;
-			this.btnSendOrder.Click += new EventHandler(this.btnSendOrder_Click);
-			this.cbCondition.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"",
-				"IOC",
-				"FOK"
-			});
-			this.cbCondition.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbCondition.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbCondition.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbCondition.FlatStyle = FlatStyle.Popup;
-			this.cbCondition.ForeColor = Color.Black;
-			this.cbCondition.FormattingEnabled = true;
-			this.cbCondition.Items.AddRange(new object[]
-			{
-				"",
-				"IOC",
-				"FOK"
-			});
-			this.cbCondition.Location = new Point(663, 3);
-			this.cbCondition.Name = "cbCondition";
-			this.cbCondition.Size = new Size(40, 21);
-			this.cbCondition.TabIndex = 5;
-			this.cbCondition.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbCondition.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbCondition.KeyPress += new KeyPressEventHandler(this.cbCondition_KeyPress);
-			this.cbCondition.KeyDown += new KeyEventHandler(this.cbCondition_KeyDown);
-			this.panelEquity.BackColor = Color.FromArgb(45, 45, 45);
-			this.panelEquity.Controls.Add(this.panelStopOrder);
-			this.panelEquity.Controls.Add(this.cbDepCollateral);
-			this.panelEquity.Controls.Add(this.chbEqStopOrder);
-			this.panelEquity.Controls.Add(this.lbDep);
-			this.panelEquity.Controls.Add(this.cbStock);
-			this.panelEquity.Controls.Add(this.lbStock);
-			this.panelEquity.Controls.Add(this.lbSide);
-			this.panelEquity.Controls.Add(this.cbSide);
-			this.panelEquity.Controls.Add(this.btnPriceDec);
-			this.panelEquity.Controls.Add(this.btnPriceInc);
-			this.panelEquity.Controls.Add(this.btnPBDec);
-			this.panelEquity.Controls.Add(this.btnPBInc);
-			this.panelEquity.Controls.Add(this.btnVolDec);
-			this.panelEquity.Controls.Add(this.btnVolInc);
-			this.panelEquity.Controls.Add(this.btnClear);
-			this.panelEquity.Controls.Add(this.lbPin);
-			this.panelEquity.Controls.Add(this.tbPin);
-			this.panelEquity.Controls.Add(this.rbCover);
-			this.panelEquity.Controls.Add(this.rbShort);
-			this.panelEquity.Controls.Add(this.rbSell);
-			this.panelEquity.Controls.Add(this.rbBuy);
-			this.panelEquity.Controls.Add(this.cbPrice);
-			this.panelEquity.Controls.Add(this.tbTimes);
-			this.panelEquity.Controls.Add(this.lbTimes);
-			this.panelEquity.Controls.Add(this.cbCondition);
-			this.panelEquity.Controls.Add(this.lbPrice);
-			this.panelEquity.Controls.Add(this.lbVolume);
-			this.panelEquity.Controls.Add(this.btnSendOrder);
-			this.panelEquity.Controls.Add(this.tbPublic);
-			this.panelEquity.Controls.Add(this.chbNVDR);
-			this.panelEquity.Controls.Add(this.lbCondition);
-			this.panelEquity.Controls.Add(this.tbVolume);
-			this.panelEquity.Controls.Add(this.lbPublic);
-			this.panelEquity.Location = new Point(3, 30);
-			this.panelEquity.Name = "panelEquity";
-			this.panelEquity.Size = new Size(866, 88);
-			this.panelEquity.TabIndex = 79;
-			this.panelStopOrder.BackColor = Color.FromArgb(60, 60, 60);
-			this.panelStopOrder.Controls.Add(this.lbStopPriceLable);
-			this.panelStopOrder.Controls.Add(this.cbStopOrderPrice);
-			this.panelStopOrder.Controls.Add(this.chbLimit);
-			this.panelStopOrder.Controls.Add(this.label2);
-			this.panelStopOrder.Controls.Add(this.cbStopOrderField);
-			this.panelStopOrder.Location = new Point(8, 55);
-			this.panelStopOrder.Name = "panelStopOrder";
-			this.panelStopOrder.Size = new Size(469, 27);
-			this.panelStopOrder.TabIndex = 110;
-			this.lbStopPriceLable.AutoSize = true;
-			this.lbStopPriceLable.ForeColor = Color.WhiteSmoke;
-			this.lbStopPriceLable.Location = new Point(247, 7);
-			this.lbStopPriceLable.Margin = new Padding(2, 0, 2, 0);
-			this.lbStopPriceLable.Name = "lbStopPriceLable";
-			this.lbStopPriceLable.Size = new Size(31, 13);
-			this.lbStopPriceLable.TabIndex = 115;
-			this.lbStopPriceLable.Text = "Price";
-			this.lbStopPriceLable.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbStopOrderPrice.AllowDrop = true;
-			this.cbStopOrderPrice.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbStopOrderPrice.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbStopOrderPrice.FlatStyle = FlatStyle.Popup;
-			this.cbStopOrderPrice.ForeColor = Color.Black;
-			this.cbStopOrderPrice.FormattingEnabled = true;
-			this.cbStopOrderPrice.Location = new Point(289, 3);
-			this.cbStopOrderPrice.Name = "cbStopOrderPrice";
-			this.cbStopOrderPrice.Size = new Size(64, 21);
-			this.cbStopOrderPrice.TabIndex = 114;
-			this.chbLimit.AutoSize = true;
-			this.chbLimit.ForeColor = Color.WhiteSmoke;
-			this.chbLimit.Location = new Point(361, 7);
-			this.chbLimit.Margin = new Padding(2, 3, 0, 3);
-			this.chbLimit.Name = "chbLimit";
-			this.chbLimit.Size = new Size(103, 17);
-			this.chbLimit.TabIndex = 111;
-			this.chbLimit.Text = "Cancel End Day";
-			this.chbLimit.UseVisualStyleBackColor = false;
-			this.label2.AutoSize = true;
-			this.label2.ForeColor = Color.WhiteSmoke;
-			this.label2.Location = new Point(4, 7);
-			this.label2.Margin = new Padding(2, 0, 2, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new Size(85, 13);
-			this.label2.TabIndex = 109;
-			this.label2.Text = "Order Conditions";
-			this.label2.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbStopOrderField.AllowDrop = true;
-			this.cbStopOrderField.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbStopOrderField.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbStopOrderField.DropDownStyle = ComboBoxStyle.DropDownList;
-			this.cbStopOrderField.FlatStyle = FlatStyle.Popup;
-			this.cbStopOrderField.ForeColor = Color.Black;
-			this.cbStopOrderField.FormattingEnabled = true;
-			this.cbStopOrderField.Items.AddRange(new object[]
-			{
-				"Last >=",
-				"Last <=",
-				"Last >= SMA(Day)",
-				"Last <= SMA(Day)",
-				"Last > Break High (Day)",
-				"Last < Break High (Day)",
-				"Last > Break Low (Day)",
-				"Last < Break Low (Day)"
-			});
-			this.cbStopOrderField.Location = new Point(96, 3);
-			this.cbStopOrderField.Name = "cbStopOrderField";
-			this.cbStopOrderField.Size = new Size(143, 21);
-			this.cbStopOrderField.TabIndex = 106;
-			this.cbStopOrderField.SelectedIndexChanged += new EventHandler(this.cbStopOrderField_SelectedIndexChanged);
-			this.cbStopOrderField.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbStopOrderField.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbDepCollateral.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"",
-				"IOC",
-				"FOK"
-			});
-			this.cbDepCollateral.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbDepCollateral.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbDepCollateral.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbDepCollateral.FlatStyle = FlatStyle.Popup;
-			this.cbDepCollateral.ForeColor = Color.Black;
-			this.cbDepCollateral.FormattingEnabled = true;
-			this.cbDepCollateral.Location = new Point(740, 3);
-			this.cbDepCollateral.Name = "cbDepCollateral";
-			this.cbDepCollateral.Size = new Size(57, 21);
-			this.cbDepCollateral.TabIndex = 102;
-			this.cbDepCollateral.SelectedIndexChanged += new EventHandler(this.cbDepCollateral_SelectedIndexChanged);
-			this.cbDepCollateral.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbDepCollateral.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbDepCollateral.KeyPress += new KeyPressEventHandler(this.cbCondition_KeyPress);
-			this.cbDepCollateral.KeyDown += new KeyEventHandler(this.cbDepCollateral_KeyDown);
-			this.lbDep.AutoSize = true;
-			this.lbDep.ForeColor = Color.LightGray;
-			this.lbDep.Location = new Point(707, 6);
-			this.lbDep.Margin = new Padding(2, 0, 2, 0);
-			this.lbDep.Name = "lbDep";
-			this.lbDep.Size = new Size(27, 13);
-			this.lbDep.TabIndex = 101;
-			this.lbDep.Text = "Dep";
-			this.lbDep.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbStock.AllowDrop = true;
-			this.cbStock.AutoCompleteMode = AutoCompleteMode.Suggest;
-			this.cbStock.AutoCompleteSource = AutoCompleteSource.ListItems;
-			this.cbStock.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbStock.FlatStyle = FlatStyle.Popup;
-			this.cbStock.ForeColor = Color.Black;
-			this.cbStock.FormattingEnabled = true;
-			this.cbStock.Location = new Point(128, 4);
-			this.cbStock.MaxLength = 20;
-			this.cbStock.Name = "cbStock";
-			this.cbStock.Size = new Size(77, 21);
-			this.cbStock.TabIndex = 0;
-			this.cbStock.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbStock.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbStock.DragDrop += new DragEventHandler(this.cbStock_DragDrop);
-			this.cbStock.DragEnter += new DragEventHandler(this.cbStock_DragEnter);
-			this.cbStock.KeyPress += new KeyPressEventHandler(this.cbStock_KeyPress);
-			this.cbStock.KeyDown += new KeyEventHandler(this.cbStock_KeyDown);
-			this.lbStock.AutoSize = true;
-			this.lbStock.ForeColor = Color.LightGray;
-			this.lbStock.Location = new Point(94, 9);
-			this.lbStock.Margin = new Padding(2, 0, 2, 0);
-			this.lbStock.Name = "lbStock";
-			this.lbStock.Size = new Size(35, 13);
-			this.lbStock.TabIndex = 100;
-			this.lbStock.Text = "Stock";
-			this.lbStock.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbStock.Visible = false;
-			this.lbSide.AutoSize = true;
-			this.lbSide.ForeColor = Color.LightGray;
-			this.lbSide.Location = new Point(133, 37);
-			this.lbSide.Margin = new Padding(2, 0, 2, 0);
-			this.lbSide.Name = "lbSide";
-			this.lbSide.Size = new Size(28, 13);
-			this.lbSide.TabIndex = 99;
-			this.lbSide.Text = "Side";
-			this.lbSide.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbSide.Visible = false;
-			this.cbSide.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"Buy",
-				"Sell",
-				"Cover",
-				"Short"
-			});
-			this.cbSide.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbSide.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbSide.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbSide.FlatStyle = FlatStyle.Popup;
-			this.cbSide.ForeColor = Color.Black;
-			this.cbSide.FormattingEnabled = true;
-			this.cbSide.Items.AddRange(new object[]
-			{
-				"Buy",
-				"Sell",
-				"Cover",
-				"Short"
-			});
-			this.cbSide.Location = new Point(164, 33);
-			this.cbSide.Name = "cbSide";
-			this.cbSide.Size = new Size(51, 21);
-			this.cbSide.TabIndex = 98;
-			this.cbSide.SelectedIndexChanged += new EventHandler(this.cbSide_SelectedIndexChanged);
-			this.cbSide.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbSide.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbSide.KeyPress += new KeyPressEventHandler(this.cbSide_KeyPress);
-			this.cbSide.KeyDown += new KeyEventHandler(this.cbSide_KeyDown);
-			this.btnPriceDec.FlatAppearance.BorderSize = 0;
-			this.btnPriceDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnPriceDec.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnPriceDec.FlatStyle = FlatStyle.Flat;
-			this.btnPriceDec.Image = (Image)componentResourceManager.GetObject("btnPriceDec.Image");
-			this.btnPriceDec.Location = new Point(510, 34);
-			this.btnPriceDec.Name = "btnPriceDec";
-			this.btnPriceDec.Size = new Size(15, 15);
-			this.btnPriceDec.TabIndex = 97;
-			this.btnPriceDec.UseVisualStyleBackColor = true;
-			this.btnPriceDec.Click += new EventHandler(this.btnPriceDec_Click);
-			this.btnPriceInc.FlatAppearance.BorderSize = 0;
-			this.btnPriceInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnPriceInc.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnPriceInc.FlatStyle = FlatStyle.Flat;
-			this.btnPriceInc.Image = (Image)componentResourceManager.GetObject("btnPriceInc.Image");
-			this.btnPriceInc.Location = new Point(537, 33);
-			this.btnPriceInc.Name = "btnPriceInc";
-			this.btnPriceInc.Size = new Size(15, 15);
-			this.btnPriceInc.TabIndex = 96;
-			this.btnPriceInc.UseVisualStyleBackColor = true;
-			this.btnPriceInc.Click += new EventHandler(this.btnPriceInc_Click);
-			this.btnPBDec.FlatAppearance.BorderSize = 0;
-			this.btnPBDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnPBDec.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnPBDec.FlatStyle = FlatStyle.Flat;
-			this.btnPBDec.Image = (Image)componentResourceManager.GetObject("btnPBDec.Image");
-			this.btnPBDec.Location = new Point(443, 33);
-			this.btnPBDec.Name = "btnPBDec";
-			this.btnPBDec.Size = new Size(15, 15);
-			this.btnPBDec.TabIndex = 95;
-			this.btnPBDec.UseVisualStyleBackColor = true;
-			this.btnPBDec.Click += new EventHandler(this.btnPBDec_Click);
-			this.btnPBInc.FlatAppearance.BorderSize = 0;
-			this.btnPBInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnPBInc.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnPBInc.FlatStyle = FlatStyle.Flat;
-			this.btnPBInc.Image = (Image)componentResourceManager.GetObject("btnPBInc.Image");
-			this.btnPBInc.Location = new Point(470, 32);
-			this.btnPBInc.Name = "btnPBInc";
-			this.btnPBInc.Size = new Size(15, 15);
-			this.btnPBInc.TabIndex = 94;
-			this.btnPBInc.UseVisualStyleBackColor = true;
-			this.btnPBInc.Click += new EventHandler(this.btnPBInc_Click);
-			this.btnVolDec.FlatAppearance.BorderSize = 0;
-			this.btnVolDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnVolDec.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnVolDec.FlatStyle = FlatStyle.Flat;
-			this.btnVolDec.Image = (Image)componentResourceManager.GetObject("btnVolDec.Image");
-			this.btnVolDec.Location = new Point(394, 28);
-			this.btnVolDec.Name = "btnVolDec";
-			this.btnVolDec.Size = new Size(15, 15);
-			this.btnVolDec.TabIndex = 93;
-			this.btnVolDec.UseVisualStyleBackColor = true;
-			this.btnVolDec.Click += new EventHandler(this.btnVolDec_Click);
-			this.btnVolInc.FlatAppearance.BorderSize = 0;
-			this.btnVolInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnVolInc.FlatAppearance.MouseOverBackColor = Color.Teal;
-			this.btnVolInc.FlatStyle = FlatStyle.Flat;
-			this.btnVolInc.Image = (Image)componentResourceManager.GetObject("btnVolInc.Image");
-			this.btnVolInc.Location = new Point(421, 27);
-			this.btnVolInc.Name = "btnVolInc";
-			this.btnVolInc.Size = new Size(15, 15);
-			this.btnVolInc.TabIndex = 92;
-			this.btnVolInc.UseVisualStyleBackColor = true;
-			this.btnVolInc.Click += new EventHandler(this.btnVolInc_Click);
-			this.btnClear.AutoEllipsis = true;
-			this.btnClear.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			this.btnClear.BackColor = Color.Transparent;
-			this.btnClear.Cursor = Cursors.Hand;
-			this.btnClear.FlatAppearance.BorderColor = Color.LightGray;
-			this.btnClear.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
-			this.btnClear.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 192, 192);
-			this.btnClear.FlatStyle = FlatStyle.Flat;
-			this.btnClear.ForeColor = Color.WhiteSmoke;
-			this.btnClear.Location = new Point(802, 28);
-			this.btnClear.MaximumSize = new Size(58, 23);
-			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new Size(54, 22);
-			this.btnClear.TabIndex = 9;
-			this.btnClear.TabStop = false;
-			this.btnClear.Text = "Clear";
-			this.btnClear.UseVisualStyleBackColor = false;
-			this.btnClear.Visible = false;
-			this.btnClear.Click += new EventHandler(this.btnClear_Click);
-			this.lbPin.AutoSize = true;
-			this.lbPin.ForeColor = Color.LightGray;
-			this.lbPin.Location = new Point(635, 37);
-			this.lbPin.Margin = new Padding(2, 0, 2, 0);
-			this.lbPin.Name = "lbPin";
-			this.lbPin.Size = new Size(25, 13);
-			this.lbPin.TabIndex = 90;
-			this.lbPin.Text = "PIN";
-			this.lbPin.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbPin.Visible = false;
-			this.tbPin.AllowDrop = true;
-			this.tbPin.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			this.tbPin.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.tbPin.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbPin.BorderStyle = BorderStyle.FixedSingle;
-			this.tbPin.CharacterCasing = CharacterCasing.Upper;
-			this.tbPin.Location = new Point(671, 30);
-			this.tbPin.Margin = new Padding(2, 3, 2, 3);
-			this.tbPin.MaxLength = 10;
-			this.tbPin.Name = "tbPin";
-			this.tbPin.PasswordChar = '*';
-			this.tbPin.Size = new Size(40, 20);
-			this.tbPin.TabIndex = 7;
-			this.tbPin.Visible = false;
-			this.tbPin.KeyDown += new KeyEventHandler(this.tbPin_KeyDown);
-			this.tbPin.Leave += new EventHandler(this.controlOrder_Leave);
-			this.tbPin.Enter += new EventHandler(this.controlOrder_Enter);
-			this.rbCover.AutoSize = true;
-			this.rbCover.ForeColor = Color.LightGray;
-			this.rbCover.Location = new Point(57, 29);
-			this.rbCover.Name = "rbCover";
-			this.rbCover.Size = new Size(53, 17);
-			this.rbCover.TabIndex = 88;
-			this.rbCover.TabStop = true;
-			this.rbCover.Text = "Cover";
-			this.rbCover.UseVisualStyleBackColor = true;
-			this.rbCover.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
-			this.rbShort.AutoSize = true;
-			this.rbShort.ForeColor = Color.LightGray;
-			this.rbShort.Location = new Point(3, 30);
-			this.rbShort.Name = "rbShort";
-			this.rbShort.Size = new Size(50, 17);
-			this.rbShort.TabIndex = 87;
-			this.rbShort.TabStop = true;
-			this.rbShort.Text = "Short";
-			this.rbShort.UseVisualStyleBackColor = true;
-			this.rbShort.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
-			this.rbSell.AutoSize = true;
-			this.rbSell.ForeColor = Color.LightGray;
-			this.rbSell.Location = new Point(47, 7);
-			this.rbSell.Name = "rbSell";
-			this.rbSell.Size = new Size(42, 17);
-			this.rbSell.TabIndex = 86;
-			this.rbSell.TabStop = true;
-			this.rbSell.Text = "Sell";
-			this.rbSell.UseVisualStyleBackColor = true;
-			this.rbSell.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
-			this.rbBuy.AutoSize = true;
-			this.rbBuy.ForeColor = Color.LightGray;
-			this.rbBuy.Location = new Point(4, 6);
-			this.rbBuy.Name = "rbBuy";
-			this.rbBuy.Size = new Size(43, 17);
-			this.rbBuy.TabIndex = 85;
-			this.rbBuy.TabStop = true;
-			this.rbBuy.Text = "Buy";
-			this.rbBuy.UseVisualStyleBackColor = true;
-			this.rbBuy.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
-			this.cbPrice.AllowDrop = true;
-			this.cbPrice.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"",
-				"ATO",
-				"ATC",
-				"MP",
-				"MO",
-				"ML"
-			});
-			this.cbPrice.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbPrice.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbPrice.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbPrice.FlatStyle = FlatStyle.Popup;
-			this.cbPrice.ForeColor = Color.Black;
-			this.cbPrice.FormattingEnabled = true;
-			this.cbPrice.Items.AddRange(new object[]
-			{
-				"",
-				"ATO",
-				"ATC",
-				"MP",
-				"MO",
-				"ML"
-			});
-			this.cbPrice.Location = new Point(454, 5);
-			this.cbPrice.Name = "cbPrice";
-			this.cbPrice.Size = new Size(57, 21);
-			this.cbPrice.TabIndex = 3;
-			this.cbPrice.Leave += new EventHandler(this.controlOrder_Leave);
-			this.cbPrice.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbPrice.DragDrop += new DragEventHandler(this.cbPrice_DragDrop);
-			this.cbPrice.DragEnter += new DragEventHandler(this.cbPrice_DragEnter);
-			this.cbPrice.KeyPress += new KeyPressEventHandler(this.cbPrice_KeyPress);
-			this.cbPrice.KeyDown += new KeyEventHandler(this.cbPrice_KeyDown);
-			this.tbTimes.AllowDrop = true;
-			this.tbTimes.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbTimes.BorderStyle = BorderStyle.FixedSingle;
-			this.tbTimes.CharacterCasing = CharacterCasing.Upper;
-			this.tbTimes.Location = new Point(376, 7);
-			this.tbTimes.Margin = new Padding(2, 3, 2, 3);
-			this.tbTimes.MaxLength = 2;
-			this.tbTimes.Name = "tbTimes";
-			this.tbTimes.Size = new Size(40, 20);
-			this.tbTimes.TabIndex = 80;
-			this.tbTimes.TextAlign = HorizontalAlignment.Center;
-			this.tbTimes.Visible = false;
-			this.tbTimes.KeyDown += new KeyEventHandler(this.tbTimes_KeyDown);
-			this.tbTimes.Leave += new EventHandler(this.controlOrder_Leave);
-			this.tbTimes.Enter += new EventHandler(this.controlOrder_Enter);
-			this.lbTimes.AutoSize = true;
-			this.lbTimes.ForeColor = Color.LightGray;
-			this.lbTimes.Location = new Point(337, 8);
-			this.lbTimes.Margin = new Padding(2, 0, 2, 0);
-			this.lbTimes.Name = "lbTimes";
-			this.lbTimes.Size = new Size(35, 13);
-			this.lbTimes.TabIndex = 79;
-			this.lbTimes.Text = "Times";
-			this.lbTimes.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbTimes.Visible = false;
-			this.toolTip1.IsBalloon = true;
-			this.toolTip1.ToolTipIcon = ToolTipIcon.Info;
-			this.toolTip1.ToolTipTitle = "Info guide";
-			this.panelDerivative.BackColor = Color.FromArgb(45, 45, 45);
-			this.panelDerivative.Controls.Add(this.cbPosition);
-			this.panelDerivative.Controls.Add(this.rdbTfexSell);
-			this.panelDerivative.Controls.Add(this.rdbTfexBuy);
-			this.panelDerivative.Controls.Add(this.tbTfexPriceCondition);
-			this.panelDerivative.Controls.Add(this.cbTfexConStopOrder);
-			this.panelDerivative.Controls.Add(this.tbPriceT);
-			this.panelDerivative.Controls.Add(this.tbSeriesCondition);
-			this.panelDerivative.Controls.Add(this.tbSeries);
-			this.panelDerivative.Controls.Add(this.chbTfexStopOrder);
-			this.panelDerivative.Controls.Add(this.tbPublishT);
-			this.panelDerivative.Controls.Add(this.lbValidity);
-			this.panelDerivative.Controls.Add(this.tbVolumeT);
-			this.panelDerivative.Controls.Add(this.lbType);
-			this.panelDerivative.Controls.Add(this.btnClearTextT);
-			this.panelDerivative.Controls.Add(this.lbPosition);
-			this.panelDerivative.Controls.Add(this.btnSendOrderT);
-			this.panelDerivative.Controls.Add(this.lbPublish);
-			this.panelDerivative.Controls.Add(this.cbValidity);
-			this.panelDerivative.Controls.Add(this.lbPriceT);
-			this.panelDerivative.Controls.Add(this.cbType);
-			this.panelDerivative.Controls.Add(this.lbVolumeT);
-			this.panelDerivative.Controls.Add(this.lbSeries);
-			this.panelDerivative.Location = new Point(7, 124);
-			this.panelDerivative.Name = "panelDerivative";
-			this.panelDerivative.Size = new Size(827, 58);
-			this.panelDerivative.TabIndex = 83;
-			this.cbPosition.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"OPEN",
-				"CLOSE"
-			});
-			this.cbPosition.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbPosition.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbPosition.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbPosition.FlatStyle = FlatStyle.Popup;
-			this.cbPosition.FormattingEnabled = true;
-			this.cbPosition.Items.AddRange(new object[]
-			{
-				"OPEN",
-				"CLOSE"
-			});
-			this.cbPosition.Location = new Point(160, 28);
-			this.cbPosition.Name = "cbPosition";
-			this.cbPosition.Size = new Size(90, 21);
-			this.cbPosition.TabIndex = 117;
-			this.cbPosition.Text = "OPEN";
-			this.cbPosition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.cbPosition.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbPosition.KeyDown += new KeyEventHandler(this.cbPosition_KeyDown);
-			this.rdbTfexSell.AutoSize = true;
-			this.rdbTfexSell.ForeColor = Color.LightGray;
-			this.rdbTfexSell.Location = new Point(59, 4);
-			this.rdbTfexSell.Name = "rdbTfexSell";
-			this.rdbTfexSell.Size = new Size(42, 17);
-			this.rdbTfexSell.TabIndex = 116;
-			this.rdbTfexSell.TabStop = true;
-			this.rdbTfexSell.Text = "Sell";
-			this.rdbTfexSell.UseVisualStyleBackColor = true;
-			this.rdbTfexSell.CheckedChanged += new EventHandler(this.rdbTfexSell_CheckedChanged);
-			this.rdbTfexBuy.AutoSize = true;
-			this.rdbTfexBuy.ForeColor = Color.LightGray;
-			this.rdbTfexBuy.Location = new Point(13, 4);
-			this.rdbTfexBuy.Name = "rdbTfexBuy";
-			this.rdbTfexBuy.Size = new Size(43, 17);
-			this.rdbTfexBuy.TabIndex = 115;
-			this.rdbTfexBuy.TabStop = true;
-			this.rdbTfexBuy.Text = "Buy";
-			this.rdbTfexBuy.UseVisualStyleBackColor = true;
-			this.rdbTfexBuy.CheckedChanged += new EventHandler(this.rdbTfexBuy_CheckedChanged);
-			this.tbTfexPriceCondition.AllowDrop = true;
-			this.tbTfexPriceCondition.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"ATO",
-				"ATC",
-				"MP"
-			});
-			this.tbTfexPriceCondition.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			this.tbTfexPriceCondition.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.tbTfexPriceCondition.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbTfexPriceCondition.BorderStyle = BorderStyle.FixedSingle;
-			this.tbTfexPriceCondition.CharacterCasing = CharacterCasing.Upper;
-			this.tbTfexPriceCondition.Location = new Point(761, 29);
-			this.tbTfexPriceCondition.Margin = new Padding(2, 3, 2, 3);
-			this.tbTfexPriceCondition.MaxLength = 10;
-			this.tbTfexPriceCondition.Name = "tbTfexPriceCondition";
-			this.tbTfexPriceCondition.Size = new Size(61, 20);
-			this.tbTfexPriceCondition.TabIndex = 114;
-			this.tbTfexPriceCondition.Visible = false;
-			this.tbTfexPriceCondition.KeyDown += new KeyEventHandler(this.tbTfexPriceCondition_KeyDown);
-			this.tbTfexPriceCondition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbTfexPriceCondition.KeyPress += new KeyPressEventHandler(this.tbTfexPriceCondition_KeyPress);
-			this.tbTfexPriceCondition.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbTfexConStopOrder.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbTfexConStopOrder.FlatStyle = FlatStyle.Popup;
-			this.cbTfexConStopOrder.FormattingEnabled = true;
-			this.cbTfexConStopOrder.Items.AddRange(new object[]
-			{
-				"Bid >=",
-				"Bid <=",
-				"Ask >=",
-				"Ask <=",
-				"Last >=",
-				"Last <="
-			});
-			this.cbTfexConStopOrder.Location = new Point(688, 28);
-			this.cbTfexConStopOrder.Name = "cbTfexConStopOrder";
-			this.cbTfexConStopOrder.Size = new Size(68, 21);
-			this.cbTfexConStopOrder.TabIndex = 113;
-			this.cbTfexConStopOrder.TabStop = false;
-			this.cbTfexConStopOrder.Visible = false;
-			this.cbTfexConStopOrder.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.cbTfexConStopOrder.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbTfexConStopOrder.KeyDown += new KeyEventHandler(this.cbTfexConStopOrder_KeyDown);
-			this.tbPriceT.AllowDrop = true;
-			this.tbPriceT.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbPriceT.BorderStyle = BorderStyle.FixedSingle;
-			this.tbPriceT.CharacterCasing = CharacterCasing.Upper;
-			this.tbPriceT.Location = new Point(444, 4);
-			this.tbPriceT.Margin = new Padding(2, 3, 2, 3);
-			this.tbPriceT.MaxLength = 10;
-			this.tbPriceT.Name = "tbPriceT";
-			this.tbPriceT.Size = new Size(70, 20);
-			this.tbPriceT.TabIndex = 96;
-			this.tbPriceT.KeyDown += new KeyEventHandler(this.tbPriceT_KeyDown);
-			this.tbPriceT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbPriceT.KeyPress += new KeyPressEventHandler(this.tbTfexPriceCondition_KeyPress);
-			this.tbPriceT.Enter += new EventHandler(this.controlOrder_Enter);
-			this.tbSeriesCondition.AllowDrop = true;
-			this.tbSeriesCondition.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbSeriesCondition.BorderStyle = BorderStyle.FixedSingle;
-			this.tbSeriesCondition.CharacterCasing = CharacterCasing.Upper;
-			this.tbSeriesCondition.ForeColor = Color.Silver;
-			this.tbSeriesCondition.Location = new Point(606, 29);
-			this.tbSeriesCondition.Margin = new Padding(2, 3, 2, 3);
-			this.tbSeriesCondition.MaxLength = 10;
-			this.tbSeriesCondition.Name = "tbSeriesCondition";
-			this.tbSeriesCondition.Size = new Size(77, 20);
-			this.tbSeriesCondition.TabIndex = 112;
-			this.tbSeriesCondition.Visible = false;
-			this.tbSeriesCondition.KeyDown += new KeyEventHandler(this.tbSeriesCondition_KeyDown);
-			this.tbSeriesCondition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbSeriesCondition.Enter += new EventHandler(this.controlOrder_Enter);
-			this.tbSeries.AllowDrop = true;
-			this.tbSeries.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbSeries.BorderStyle = BorderStyle.FixedSingle;
-			this.tbSeries.CharacterCasing = CharacterCasing.Upper;
-			this.tbSeries.Location = new Point(160, 4);
-			this.tbSeries.Margin = new Padding(2, 3, 2, 3);
-			this.tbSeries.MaxLength = 32;
-			this.tbSeries.Name = "tbSeries";
-			this.tbSeries.Size = new Size(90, 20);
-			this.tbSeries.TabIndex = 94;
-			this.tbSeries.KeyDown += new KeyEventHandler(this.tbSeries_KeyDown);
-			this.tbSeries.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbSeries.Enter += new EventHandler(this.controlOrder_Enter);
-			this.chbTfexStopOrder.AutoSize = true;
-			this.chbTfexStopOrder.ForeColor = Color.LightGray;
-			this.chbTfexStopOrder.Location = new Point(528, 30);
-			this.chbTfexStopOrder.Name = "chbTfexStopOrder";
-			this.chbTfexStopOrder.Size = new Size(77, 17);
-			this.chbTfexStopOrder.TabIndex = 100;
-			this.chbTfexStopOrder.Text = "Stop Order";
-			this.chbTfexStopOrder.UseVisualStyleBackColor = true;
-			this.chbTfexStopOrder.CheckedChanged += new EventHandler(this.chbTfexStopOrder_CheckedChanged);
-			this.tbPublishT.AllowDrop = true;
-			this.tbPublishT.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-			this.tbPublishT.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.tbPublishT.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbPublishT.BorderStyle = BorderStyle.FixedSingle;
-			this.tbPublishT.CharacterCasing = CharacterCasing.Upper;
-			this.tbPublishT.Location = new Point(580, 4);
-			this.tbPublishT.Margin = new Padding(2, 3, 2, 3);
-			this.tbPublishT.MaxLength = 12;
-			this.tbPublishT.Name = "tbPublishT";
-			this.tbPublishT.Size = new Size(70, 20);
-			this.tbPublishT.TabIndex = 97;
-			this.tbPublishT.KeyDown += new KeyEventHandler(this.tbPublishT_KeyDown);
-			this.tbPublishT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbPublishT.Enter += new EventHandler(this.controlOrder_Enter);
-			this.lbValidity.AutoSize = true;
-			this.lbValidity.ForeColor = Color.LightGray;
-			this.lbValidity.Location = new Point(395, 32);
-			this.lbValidity.Margin = new Padding(2, 0, 2, 0);
-			this.lbValidity.Name = "lbValidity";
-			this.lbValidity.Size = new Size(40, 13);
-			this.lbValidity.TabIndex = 106;
-			this.lbValidity.Text = "Validity";
-			this.lbValidity.TextAlign = ContentAlignment.MiddleLeft;
-			this.tbVolumeT.AllowDrop = true;
-			this.tbVolumeT.BackColor = Color.FromArgb(224, 224, 224);
-			this.tbVolumeT.BorderStyle = BorderStyle.FixedSingle;
-			this.tbVolumeT.Location = new Point(309, 4);
-			this.tbVolumeT.Margin = new Padding(2, 3, 2, 3);
-			this.tbVolumeT.MaxLength = 10;
-			this.tbVolumeT.Name = "tbVolumeT";
-			this.tbVolumeT.Size = new Size(70, 20);
-			this.tbVolumeT.TabIndex = 95;
-			this.tbVolumeT.TextChanged += new EventHandler(this.tbVolumeT_TextChanged);
-			this.tbVolumeT.KeyDown += new KeyEventHandler(this.tbVolumeT_KeyDown);
-			this.tbVolumeT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.tbVolumeT.Enter += new EventHandler(this.controlOrder_Enter);
-			this.lbType.AutoSize = true;
-			this.lbType.ForeColor = Color.LightGray;
-			this.lbType.Location = new Point(261, 32);
-			this.lbType.Margin = new Padding(2, 0, 2, 0);
-			this.lbType.Name = "lbType";
-			this.lbType.Size = new Size(31, 13);
-			this.lbType.TabIndex = 110;
-			this.lbType.Text = "Type";
-			this.lbType.TextAlign = ContentAlignment.MiddleLeft;
-			this.btnClearTextT.AutoSize = true;
-			this.btnClearTextT.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			this.btnClearTextT.BackColor = Color.WhiteSmoke;
-			this.btnClearTextT.FlatStyle = FlatStyle.Popup;
-			this.btnClearTextT.ForeColor = Color.Black;
-			this.btnClearTextT.Location = new Point(715, 3);
-			this.btnClearTextT.Margin = new Padding(2);
-			this.btnClearTextT.MaximumSize = new Size(68, 27);
-			this.btnClearTextT.Name = "btnClearTextT";
-			this.btnClearTextT.Size = new Size(41, 23);
-			this.btnClearTextT.TabIndex = 108;
-			this.btnClearTextT.TabStop = false;
-			this.btnClearTextT.Text = "Clear";
-			this.btnClearTextT.UseVisualStyleBackColor = false;
-			this.btnClearTextT.Click += new EventHandler(this.btnClearTextT_Click);
-			this.lbPosition.AutoSize = true;
-			this.lbPosition.ForeColor = Color.LightGray;
-			this.lbPosition.Location = new Point(102, 32);
-			this.lbPosition.Margin = new Padding(2, 0, 2, 0);
-			this.lbPosition.Name = "lbPosition";
-			this.lbPosition.Size = new Size(44, 13);
-			this.lbPosition.TabIndex = 109;
-			this.lbPosition.Text = "Position";
-			this.lbPosition.TextAlign = ContentAlignment.MiddleLeft;
-			this.btnSendOrderT.AutoSize = true;
-			this.btnSendOrderT.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-			this.btnSendOrderT.BackColor = Color.WhiteSmoke;
-			this.btnSendOrderT.FlatStyle = FlatStyle.Popup;
-			this.btnSendOrderT.ForeColor = Color.Black;
-			this.btnSendOrderT.Location = new Point(661, 3);
-			this.btnSendOrderT.Margin = new Padding(2);
-			this.btnSendOrderT.MaximumSize = new Size(68, 27);
-			this.btnSendOrderT.Name = "btnSendOrderT";
-			this.btnSendOrderT.Size = new Size(42, 23);
-			this.btnSendOrderT.TabIndex = 107;
-			this.btnSendOrderT.TabStop = false;
-			this.btnSendOrderT.Text = "Send";
-			this.btnSendOrderT.UseVisualStyleBackColor = false;
-			this.btnSendOrderT.Click += new EventHandler(this.btnSendOrderT_Click);
-			this.lbPublish.AutoSize = true;
-			this.lbPublish.ForeColor = Color.LightGray;
-			this.lbPublish.Location = new Point(528, 7);
-			this.lbPublish.Margin = new Padding(2, 0, 2, 0);
-			this.lbPublish.Name = "lbPublish";
-			this.lbPublish.Size = new Size(44, 13);
-			this.lbPublish.TabIndex = 105;
-			this.lbPublish.Text = "P/B Vol";
-			this.lbPublish.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbValidity.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"",
-				"IOC",
-				"FOK"
-			});
-			this.cbValidity.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbValidity.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbValidity.FlatStyle = FlatStyle.Popup;
-			this.cbValidity.FormattingEnabled = true;
-			this.cbValidity.Items.AddRange(new object[]
-			{
-				"DAY",
-				"FAK",
-				"FOK"
-			});
-			this.cbValidity.Location = new Point(444, 28);
-			this.cbValidity.Name = "cbValidity";
-			this.cbValidity.Size = new Size(70, 21);
-			this.cbValidity.TabIndex = 99;
-			this.cbValidity.Leave += new EventHandler(this.controlOrderTFEX_Leave);
-			this.cbValidity.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbValidity.KeyDown += new KeyEventHandler(this.cbValidity_KeyDown);
-			this.lbPriceT.AutoSize = true;
-			this.lbPriceT.ForeColor = Color.LightGray;
-			this.lbPriceT.Location = new Point(395, 7);
-			this.lbPriceT.Margin = new Padding(2, 0, 2, 0);
-			this.lbPriceT.Name = "lbPriceT";
-			this.lbPriceT.Size = new Size(31, 13);
-			this.lbPriceT.TabIndex = 101;
-			this.lbPriceT.Text = "Price";
-			this.lbPriceT.TextAlign = ContentAlignment.MiddleLeft;
-			this.cbType.AutoCompleteCustomSource.AddRange(new string[]
-			{
-				"",
-				"IOC",
-				"FOK"
-			});
-			this.cbType.AutoCompleteMode = AutoCompleteMode.Append;
-			this.cbType.AutoCompleteSource = AutoCompleteSource.CustomSource;
-			this.cbType.BackColor = Color.FromArgb(224, 224, 224);
-			this.cbType.FlatStyle = FlatStyle.Popup;
-			this.cbType.FormattingEnabled = true;
-			this.cbType.Items.AddRange(new object[]
-			{
-				"Limit",
-				"MP",
-				"MO",
-				"ML"
-			});
-			this.cbType.Location = new Point(309, 28);
-			this.cbType.Name = "cbType";
-			this.cbType.Size = new Size(70, 21);
-			this.cbType.TabIndex = 98;
-			this.cbType.Text = "Limit";
-			this.cbType.SelectedIndexChanged += new EventHandler(this.cbType_SelectedIndexChanged);
-			this.cbType.Leave += new EventHandler(this.controlOrder_Enter);
-			this.cbType.Enter += new EventHandler(this.controlOrder_Enter);
-			this.cbType.KeyDown += new KeyEventHandler(this.cbType_KeyDown);
-			this.lbVolumeT.AutoSize = true;
-			this.lbVolumeT.ForeColor = Color.LightGray;
-			this.lbVolumeT.Location = new Point(261, 7);
-			this.lbVolumeT.Margin = new Padding(2, 0, 2, 0);
-			this.lbVolumeT.Name = "lbVolumeT";
-			this.lbVolumeT.Size = new Size(42, 13);
-			this.lbVolumeT.TabIndex = 103;
-			this.lbVolumeT.Text = "Volume";
-			this.lbVolumeT.TextAlign = ContentAlignment.MiddleLeft;
-			this.lbSeries.AutoSize = true;
-			this.lbSeries.ForeColor = Color.LightGray;
-			this.lbSeries.Location = new Point(110, 7);
-			this.lbSeries.Margin = new Padding(2, 0, 2, 0);
-			this.lbSeries.Name = "lbSeries";
-			this.lbSeries.Size = new Size(36, 13);
-			this.lbSeries.TabIndex = 102;
-			this.lbSeries.Text = "Series";
-			this.lbSeries.TextAlign = ContentAlignment.MiddleLeft;
-			this.AllowDrop = true;
-			base.AutoScaleDimensions = new SizeF(6f, 13f);
-			base.AutoScaleMode = AutoScaleMode.Font;
-			this.BackColor = Color.DimGray;
-			base.Controls.Add(this.panelDerivative);
-			base.Controls.Add(this.panelEquity);
-			base.Controls.Add(this.panelTop);
-			base.Controls.Add(this.lbLoading);
-			this.ForeColor = Color.Black;
-			base.Margin = new Padding(0);
-			base.Name = "ucSendNewOrder";
-			base.Size = new Size(870, 217);
-			base.Leave += new EventHandler(this.ucSendNewOrder_Leave);
-			base.Enter += new EventHandler(this.ucSendNewOrder_Enter);
-			this.panelTop.ResumeLayout(false);
-			this.panelTop.PerformLayout();
-			this.panelEquity.ResumeLayout(false);
-			this.panelEquity.PerformLayout();
-			this.panelStopOrder.ResumeLayout(false);
-			this.panelStopOrder.PerformLayout();
-			this.panelDerivative.ResumeLayout(false);
-			this.panelDerivative.PerformLayout();
-			base.ResumeLayout(false);
-			base.PerformLayout();
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public ucSendNewOrder()
@@ -2001,7 +686,16 @@ namespace i2TradePlus
 					else
 					{
 						this.tbTimes.Enabled = true;
-						this.cbDepCollateral.Enabled = true;
+						if (this._showSide == "S")
+						{
+							if (ApplicationInfo.SuuportSBL == "Y")
+							{
+								if (ApplicationInfo.AccInfo.CurrentAccountType == "B")
+								{
+									this.cbDepCollateral.Enabled = true;
+								}
+							}
+						}
 					}
 					this.panelStopOrder.Location = new Point(5, this.chbEqStopOrder.Bottom + 7);
 					if (!this.panelEquity.Visible)
@@ -2198,116 +892,144 @@ namespace i2TradePlus
 						if (this.chbEqStopOrder.Checked)
 						{
 							this._commandType = "T";
-							StockList.StockInformation stockInformation = ApplicationInfo.StockInfo[this._OrdSymbol];
-							if (stockInformation.Number > 0)
+							bool flag = true;
+							string message = string.Empty;
+							if (Settings.Default.MainBottomStyle == 1)
 							{
-								string text = string.Empty;
-								if (this._stopField == 1 || this._stopField == 4 || this._stopField == 5 || this._stopField == 6)
+								flag = true;
+							}
+							else
+							{
+								if (this.tbPin.Text.Trim() == string.Empty)
 								{
-									text = "Last";
+									flag = false;
+									message = "Pincode is empty!!!";
 								}
-								else
+								if (ApplicationInfo.UserPincodeWrongCount < ApplicationInfo.UserMaxRetryPincode)
 								{
-									text = "Unknow";
+									this.ShowSplash(true, "Check Pincode.", false);
+									flag = ApplicationInfo.VerifyPincode(this.tbPin.Text.Trim(), ref message);
+									this.ShowSplash(false, "", false);
 								}
-								if (this._stopOperator == 1)
+							}
+							if (flag)
+							{
+								StockList.StockInformation stockInformation = ApplicationInfo.StockInfo[this._OrdSymbol];
+								if (stockInformation.Number > 0)
 								{
-									text += " >= ";
-								}
-								else
-								{
-									if (this._stopOperator == 2)
+									string text = string.Empty;
+									if (this._stopField == 1 || this._stopField == 4 || this._stopField == 5 || this._stopField == 6)
 									{
-										text += " <= ";
+										text = "Last";
 									}
 									else
 									{
-										if (this._stopOperator == 3)
+										text = "Unknow";
+									}
+									if (this._stopOperator == 1)
+									{
+										text += " >= ";
+									}
+									else
+									{
+										if (this._stopOperator == 2)
 										{
-											text += " > ";
+											text += " <= ";
 										}
 										else
 										{
-											if (this._stopOperator == 4)
+											if (this._stopOperator == 3)
 											{
-												text += " < ";
+												text += " > ";
+											}
+											else
+											{
+												if (this._stopOperator == 4)
+												{
+													text += " < ";
+												}
 											}
 										}
 									}
-								}
-								if (this._stopField == 4)
-								{
-									object obj = text;
-									text = string.Concat(new object[]
-									{
-										obj,
-										"SMA (",
-										this._stopPrice,
-										")"
-									});
-								}
-								else
-								{
-									if (this._stopField == 5)
+									if (this._stopField == 4)
 									{
 										object obj = text;
 										text = string.Concat(new object[]
 										{
 											obj,
-											"Break High (",
+											"SMA (",
 											this._stopPrice,
 											")"
 										});
 									}
 									else
 									{
-										if (this._stopField == 6)
+										if (this._stopField == 5)
 										{
 											object obj = text;
 											text = string.Concat(new object[]
 											{
 												obj,
-												"Break Low (",
+												"Break High (",
 												this._stopPrice,
 												")"
 											});
 										}
 										else
 										{
-											text += this._stopPrice;
+											if (this._stopField == 6)
+											{
+												object obj = text;
+												text = string.Concat(new object[]
+												{
+													obj,
+													"Break Low (",
+													this._stopPrice,
+													")"
+												});
+											}
+											else
+											{
+												text += this._stopPrice;
+											}
 										}
 									}
+									this._retOrderMessage = string.Concat(new string[]
+									{
+										"Auto Trade :",
+										" Account : ",
+										ApplicationInfo.AccInfo.CurrentAccount,
+										"\n",
+										Utilities.GetOrderSideName(this._OrdSide),
+										" : ‘",
+										this._OrdSymbol,
+										"’",
+										"\nVolume : ",
+										FormatUtil.VolumeFormat(this._OrdVolume, true),
+										"\nPrice : ",
+										this._OrdPrice,
+										(this._OrdTtf != 0) ? (" ,Trustee Id " + this._OrdTtf) : "",
+										"\nCondition : ",
+										text
+									});
+									ApplicationInfo.UserPincodeLastEntry = this.tbPin.Text.Trim();
+									this.ShowOrderFormConfirm("Confirm to send?" + ((this._currTimes + 1 <= this._OrdTimes) ? string.Concat(new object[]
+									{
+										" *** Times : ",
+										this._currTimes,
+										"/",
+										this._OrdTimes
+									}) : ""), this._retOrderMessage, "", "");
 								}
-								this._retOrderMessage = string.Concat(new string[]
+								else
 								{
-									"Auto Trade :",
-									" Account : ",
-									ApplicationInfo.AccInfo.CurrentAccount,
-									"\n",
-									Utilities.GetOrderSideName(this._OrdSide),
-									" : ‘",
-									this._OrdSymbol,
-									"’",
-									"\nVolume : ",
-									FormatUtil.VolumeFormat(this._OrdVolume, true),
-									"\nPrice : ",
-									this._OrdPrice,
-									(this._OrdTtf != 0) ? (" ,Trustee Id " + this._OrdTtf) : "",
-									"\nCondition : ",
-									text
-								});
-								ApplicationInfo.UserPincodeLastEntry = this.tbPin.Text.Trim();
-								this.ShowOrderFormConfirm("Confirm to send?" + ((this._currTimes + 1 <= this._OrdTimes) ? string.Concat(new object[]
-								{
-									" *** Times : ",
-									this._currTimes,
-									"/",
-									this._OrdTimes
-								}) : ""), this._retOrderMessage, "", "");
+									this.ShowMessageInFormConfirm("Invalid Stock symbol '" + this._OrdSymbol + "'", frmOrderFormConfirm.OpenStyle.Error);
+								}
 							}
 							else
 							{
-								this.ShowMessageInFormConfirm("Invalid Stock symbol '" + this._OrdSymbol + "'", frmOrderFormConfirm.OpenStyle.Error);
+								this.ShowMessageInFormConfirm(message, frmOrderFormConfirm.OpenStyle.ShowBox, this.tbPin);
+								this.tbPin.Focus();
 							}
 						}
 						else
@@ -2487,7 +1209,20 @@ namespace i2TradePlus
 					}
 					else
 					{
-						this.ReceiveDGWReplyMessage(message);
+						DGWOrderReplyMessage dGWOrderReplyMessage = (DGWOrderReplyMessage)message;
+						if (dGWOrderReplyMessage.OrderNumber == this._returnOrderNumberFromServer)
+						{
+							this._returnOrderNumberFromServer = -1L;
+							this.ShowMessageInFormConfirm(string.Concat(new object[]
+							{
+								"Reject Order Number ",
+								dGWOrderReplyMessage.OrderNumber,
+								"\nReject Code : ",
+								dGWOrderReplyMessage.ReplyCode,
+								"\nReject Description : ",
+								dGWOrderReplyMessage.ReplyMessage
+							}), frmOrderFormConfirm.OpenStyle.ShowBox);
+						}
 					}
 				}
 			}
@@ -2663,30 +1398,6 @@ namespace i2TradePlus
 			catch (Exception ex)
 			{
 				this.ShowError("bgwReloadData_RunWorkerCompleted", ex);
-			}
-		}
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void ReceiveDGWReplyMessage(IBroadcastMessage message)
-		{
-			try
-			{
-				DGWOrderReplyMessage dGWOrderReplyMessage = (DGWOrderReplyMessage)message;
-				if (dGWOrderReplyMessage.OrderNumber == this._returnOrderNumberFromServer)
-				{
-					this.ShowMessageInFormConfirm(string.Concat(new object[]
-					{
-						"Reject Order Number ",
-						dGWOrderReplyMessage.OrderNumber,
-						"\nReject Code : ",
-						dGWOrderReplyMessage.ReplyCode,
-						"\nReject Description : ",
-						dGWOrderReplyMessage.ReplyMessage
-					}), frmOrderFormConfirm.OpenStyle.ShowBox);
-				}
-			}
-			catch (Exception ex)
-			{
-				this.ShowError("ReceiveDGWReplyMessage", ex);
 			}
 		}
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -3102,7 +1813,7 @@ namespace i2TradePlus
 				this.cbStopOrderPrice.Text = string.Empty;
 				this.chbLimit.Checked = false;
 				this.chbEqStopOrder.Checked = false;
-				if (Settings.Default.MainBottomStyle == 3 || Settings.Default.MainBottomStyle == 2)
+				if (Settings.Default.MainBottomStyle == 3 || Settings.Default.MainBottomStyle == 4 || Settings.Default.MainBottomStyle == 2)
 				{
 					if (Settings.Default.BSBoxSavePincode)
 					{
@@ -5486,43 +4197,33 @@ namespace i2TradePlus
 						{
 							if (itemInfo.AccountType == string.Empty)
 							{
-								string text = string.Empty;
-								if (ApplicationInfo.IsSupportEservice)
-								{
-									text = ApplicationInfo.WebOrderService.GetSwitchAccountInfoEservice("042", ApplicationInfo.UserLoginID, ApplicationInfo.GetSession(), ApplicationInfo.AccInfo.CurrentAccount, "M", "I2Trade");
-								}
-								else
-								{
-									text = ApplicationInfo.WebOrderService.GetSwitchAccountInfo(ApplicationInfo.AccInfo.CurrentAccount);
-								}
-								if (!string.IsNullOrEmpty(text))
+								string switchAccountInfo = ApplicationInfo.WebOrderService.GetSwitchAccountInfo(ApplicationInfo.AccInfo.CurrentAccount);
+								if (!string.IsNullOrEmpty(switchAccountInfo))
 								{
 									using (DataSet dataSet = new DataSet())
 									{
-										MyDataHelper.StringToDataSet(text, dataSet);
+										MyDataHelper.StringToDataSet(switchAccountInfo, dataSet);
 										if (dataSet != null && dataSet.Tables.Contains("INFO") && dataSet.Tables["INFO"].Rows.Count > 0)
 										{
-											DataRow dataRow = dataSet.Tables["INFO"].Rows[0];
-											itemInfo.AccountType = dataRow["sAccType"].ToString().Trim();
-											itemInfo.PcFlag = dataRow["sPC"].ToString();
+											itemInfo.AccountType = dataSet.Tables["INFO"].Rows[0]["sAccType"].ToString().Trim();
+											itemInfo.PcFlag = dataSet.Tables["INFO"].Rows[0]["sPC"].ToString();
 											if (ApplicationInfo.SupportFreewill)
 											{
-												itemInfo.TraderId = dataRow["traderid"].ToString();
+												itemInfo.TraderId = dataSet.Tables["INFO"].Rows[0]["traderid"].ToString();
 											}
-											ApplicationInfo.AccInfo.CurrentCommRate = 0m;
-											if (dataSet.Tables.Contains("COMM_RATE") && dataSet.Tables["COMM_RATE"].Rows.Count > 0)
-											{
-												decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["commrate"].ToString(), out ApplicationInfo.AccInfo.CurrentCommRate);
-												decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["trading_fee"].ToString(), out ApplicationInfo.AccInfo.CurrentTradingFee);
-												decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["clearing_fee"].ToString(), out ApplicationInfo.AccInfo.CurrentClearingFee);
-											}
-											dataSet.Clear();
+										}
+										ApplicationInfo.AccInfo.CurrentCommRate = 0m;
+										if (dataSet.Tables.Contains("COMM_RATE") && dataSet.Tables["COMM_RATE"].Rows.Count > 0)
+										{
+											decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["commrate"].ToString(), out ApplicationInfo.AccInfo.CurrentCommRate);
+											decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["trading_fee"].ToString(), out ApplicationInfo.AccInfo.CurrentTradingFee);
+											decimal.TryParse(dataSet.Tables["COMM_RATE"].Rows[0]["clearing_fee"].ToString(), out ApplicationInfo.AccInfo.CurrentClearingFee);
 										}
 										if (dataSet != null && dataSet.Tables.Contains("eservice") && dataSet.Tables["eservice"].Rows.Count > 0)
 										{
-											DataRow dataRow = dataSet.Tables["eservice"].Rows[0];
-											ApplicationInfo.EserviceServer = ApplicationInfo.EserviceServer + "?txtParam=" + dataRow["control_value"].ToString().Trim();
+											ApplicationInfo.EserviceServer = ApplicationInfo.EserviceServer + "?txtParam=" + dataSet.Tables["eservice"].Rows[0]["control_value"].ToString().Trim();
 										}
+										dataSet.Clear();
 									}
 								}
 							}
@@ -7033,6 +5734,1321 @@ namespace i2TradePlus
 					}
 				}
 			}
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && this.components != null)
+			{
+				this.components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void InitializeComponent()
+		{
+			this.components = new Container();
+			ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(ucSendNewOrder));
+			this.lbPrice = new Label();
+			this.lbVolume = new Label();
+			this.tbVolume = new TextBox();
+			this.lbPublic = new Label();
+			this.lbCondition = new Label();
+			this.tbPublic = new TextBox();
+			this.chbNVDR = new CheckBox();
+			this.panelTop = new Panel();
+			this.btnBResize_Up = new Button();
+			this.btnBResize_Down = new Button();
+			this.tbEquity = new Label();
+			this.lbEquity = new Label();
+			this.btnNotification = new Button();
+			this.btnShowStockAlert = new Button();
+			this.btnRisk = new Button();
+			this.btnStyle4 = new Button();
+			this.btnStyle3 = new Button();
+			this.btnCleanPort = new Button();
+			this.btnSetting = new Button();
+			this.btnStyle2 = new Button();
+			this.btnStyle1 = new Button();
+			this.tbOnHand = new Label();
+			this.lbOnHand = new Label();
+			this.lbAccount = new Label();
+			this.cbAccount = new ComboBox();
+			this.tbBuyLimit = new Label();
+			this.lbBuyLimit = new Label();
+			this.chbEqStopOrder = new CheckBox();
+			this.lbLoading = new Label();
+			this.btnSendOrder = new Button();
+			this.cbCondition = new ComboBox();
+			this.panelEquity = new Panel();
+			this.panelStopOrder = new Panel();
+			this.lbStopPriceLable = new Label();
+			this.cbStopOrderPrice = new ComboBox();
+			this.chbLimit = new CheckBox();
+			this.label2 = new Label();
+			this.cbStopOrderField = new ComboBox();
+			this.cbDepCollateral = new ComboBox();
+			this.lbDep = new Label();
+			this.cbStock = new ComboBox();
+			this.lbStock = new Label();
+			this.lbSide = new Label();
+			this.cbSide = new ComboBox();
+			this.btnPriceDec = new Button();
+			this.btnPriceInc = new Button();
+			this.btnPBDec = new Button();
+			this.btnPBInc = new Button();
+			this.btnVolDec = new Button();
+			this.btnVolInc = new Button();
+			this.btnClear = new Button();
+			this.lbPin = new Label();
+			this.tbPin = new TextBox();
+			this.rbCover = new RadioButton();
+			this.rbShort = new RadioButton();
+			this.rbSell = new RadioButton();
+			this.rbBuy = new RadioButton();
+			this.cbPrice = new ComboBox();
+			this.tbTimes = new TextBox();
+			this.lbTimes = new Label();
+			this.toolTip1 = new ToolTip(this.components);
+			this.panelDerivative = new Panel();
+			this.cbPosition = new ComboBox();
+			this.rdbTfexSell = new RadioButton();
+			this.rdbTfexBuy = new RadioButton();
+			this.tbTfexPriceCondition = new TextBox();
+			this.cbTfexConStopOrder = new ComboBox();
+			this.tbPriceT = new TextBox();
+			this.tbSeriesCondition = new TextBox();
+			this.tbSeries = new TextBox();
+			this.chbTfexStopOrder = new CheckBox();
+			this.tbPublishT = new TextBox();
+			this.lbValidity = new Label();
+			this.tbVolumeT = new TextBox();
+			this.lbType = new Label();
+			this.btnClearTextT = new Button();
+			this.lbPosition = new Label();
+			this.btnSendOrderT = new Button();
+			this.lbPublish = new Label();
+			this.cbValidity = new ComboBox();
+			this.lbPriceT = new Label();
+			this.cbType = new ComboBox();
+			this.lbVolumeT = new Label();
+			this.lbSeries = new Label();
+			this.panelTop.SuspendLayout();
+			this.panelEquity.SuspendLayout();
+			this.panelStopOrder.SuspendLayout();
+			this.panelDerivative.SuspendLayout();
+			base.SuspendLayout();
+			this.lbPrice.AutoSize = true;
+			this.lbPrice.ForeColor = Color.LightGray;
+			this.lbPrice.Location = new Point(418, 8);
+			this.lbPrice.Margin = new Padding(2, 0, 2, 0);
+			this.lbPrice.Name = "lbPrice";
+			this.lbPrice.Size = new Size(31, 13);
+			this.lbPrice.TabIndex = 13;
+			this.lbPrice.Text = "Price";
+			this.lbPrice.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbVolume.AutoSize = true;
+			this.lbVolume.ForeColor = Color.LightGray;
+			this.lbVolume.Location = new Point(253, 8);
+			this.lbVolume.Margin = new Padding(2, 0, 2, 0);
+			this.lbVolume.Name = "lbVolume";
+			this.lbVolume.Size = new Size(22, 13);
+			this.lbVolume.TabIndex = 11;
+			this.lbVolume.Text = "Vol";
+			this.lbVolume.TextAlign = ContentAlignment.MiddleLeft;
+			this.tbVolume.AllowDrop = true;
+			this.tbVolume.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbVolume.BorderStyle = BorderStyle.FixedSingle;
+			this.tbVolume.Location = new Point(276, 6);
+			this.tbVolume.Margin = new Padding(2, 3, 2, 3);
+			this.tbVolume.MaxLength = 10;
+			this.tbVolume.Name = "tbVolume";
+			this.tbVolume.Size = new Size(59, 20);
+			this.tbVolume.TabIndex = 2;
+			this.tbVolume.TextChanged += new EventHandler(this.tbVolume_TextChanged);
+			this.tbVolume.DragDrop += new DragEventHandler(this.tbVolume_DragDrop);
+			this.tbVolume.KeyDown += new KeyEventHandler(this.tbVolume_KeyDown);
+			this.tbVolume.Leave += new EventHandler(this.controlOrder_Leave);
+			this.tbVolume.Enter += new EventHandler(this.controlOrder_Enter);
+			this.tbVolume.DragEnter += new DragEventHandler(this.tbVolume_DragEnter);
+			this.lbPublic.AutoSize = true;
+			this.lbPublic.ForeColor = Color.LightGray;
+			this.lbPublic.Location = new Point(525, 7);
+			this.lbPublic.Margin = new Padding(2, 0, 2, 0);
+			this.lbPublic.Name = "lbPublic";
+			this.lbPublic.Size = new Size(44, 13);
+			this.lbPublic.TabIndex = 67;
+			this.lbPublic.Text = "P/B Vol";
+			this.lbPublic.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbCondition.AutoSize = true;
+			this.lbCondition.ForeColor = Color.LightGray;
+			this.lbCondition.Location = new Point(630, 6);
+			this.lbCondition.Margin = new Padding(2, 0, 2, 0);
+			this.lbCondition.Name = "lbCondition";
+			this.lbCondition.Size = new Size(32, 13);
+			this.lbCondition.TabIndex = 68;
+			this.lbCondition.Text = "Cond";
+			this.lbCondition.TextAlign = ContentAlignment.MiddleLeft;
+			this.tbPublic.AllowDrop = true;
+			this.tbPublic.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			this.tbPublic.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.tbPublic.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbPublic.BorderStyle = BorderStyle.FixedSingle;
+			this.tbPublic.CharacterCasing = CharacterCasing.Upper;
+			this.tbPublic.Location = new Point(567, 4);
+			this.tbPublic.Margin = new Padding(2, 3, 2, 3);
+			this.tbPublic.MaxLength = 10;
+			this.tbPublic.Name = "tbPublic";
+			this.tbPublic.Size = new Size(59, 20);
+			this.tbPublic.TabIndex = 4;
+			this.tbPublic.TextChanged += new EventHandler(this.tbPublic_TextChanged);
+			this.tbPublic.KeyDown += new KeyEventHandler(this.tbPublic_KeyDown);
+			this.tbPublic.Leave += new EventHandler(this.controlOrder_Leave);
+			this.tbPublic.Enter += new EventHandler(this.controlOrder_Enter);
+			this.chbNVDR.AutoSize = true;
+			this.chbNVDR.ForeColor = Color.LightGray;
+			this.chbNVDR.Location = new Point(201, 8);
+			this.chbNVDR.Margin = new Padding(2, 3, 0, 3);
+			this.chbNVDR.Name = "chbNVDR";
+			this.chbNVDR.Size = new Size(57, 17);
+			this.chbNVDR.TabIndex = 1;
+			this.chbNVDR.Text = "NVDR";
+			this.chbNVDR.UseVisualStyleBackColor = false;
+			this.chbNVDR.Leave += new EventHandler(this.controlOrder_Leave);
+			this.chbNVDR.Enter += new EventHandler(this.controlOrder_Enter);
+			this.chbNVDR.CheckedChanged += new EventHandler(this.cbNVDR_CheckedChanged);
+			this.chbNVDR.KeyDown += new KeyEventHandler(this.cbNDVR_KeyDown);
+			this.panelTop.BackColor = Color.FromArgb(30, 30, 30);
+			this.panelTop.Controls.Add(this.btnBResize_Up);
+			this.panelTop.Controls.Add(this.btnBResize_Down);
+			this.panelTop.Controls.Add(this.tbEquity);
+			this.panelTop.Controls.Add(this.lbEquity);
+			this.panelTop.Controls.Add(this.btnNotification);
+			this.panelTop.Controls.Add(this.btnShowStockAlert);
+			this.panelTop.Controls.Add(this.btnRisk);
+			this.panelTop.Controls.Add(this.btnStyle4);
+			this.panelTop.Controls.Add(this.btnStyle3);
+			this.panelTop.Controls.Add(this.btnCleanPort);
+			this.panelTop.Controls.Add(this.btnSetting);
+			this.panelTop.Controls.Add(this.btnStyle2);
+			this.panelTop.Controls.Add(this.btnStyle1);
+			this.panelTop.Controls.Add(this.tbOnHand);
+			this.panelTop.Controls.Add(this.lbOnHand);
+			this.panelTop.Controls.Add(this.lbAccount);
+			this.panelTop.Controls.Add(this.cbAccount);
+			this.panelTop.Controls.Add(this.tbBuyLimit);
+			this.panelTop.Controls.Add(this.lbBuyLimit);
+			this.panelTop.ForeColor = Color.Black;
+			this.panelTop.Location = new Point(1, 1);
+			this.panelTop.Margin = new Padding(0);
+			this.panelTop.Name = "panelTop";
+			this.panelTop.Size = new Size(868, 26);
+			this.panelTop.TabIndex = 72;
+			this.btnBResize_Up.FlatAppearance.BorderColor = Color.Gray;
+			this.btnBResize_Up.FlatAppearance.BorderSize = 0;
+			this.btnBResize_Up.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnBResize_Up.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnBResize_Up.FlatStyle = FlatStyle.Flat;
+			this.btnBResize_Up.ForeColor = Color.LightGray;
+			this.btnBResize_Up.Image = Resources.Up1;
+			this.btnBResize_Up.Location = new Point(830, 2);
+			this.btnBResize_Up.Name = "btnBResize_Up";
+			this.btnBResize_Up.Size = new Size(16, 20);
+			this.btnBResize_Up.TabIndex = 110;
+			this.btnBResize_Up.TabStop = false;
+			this.toolTip1.SetToolTip(this.btnBResize_Up, "Enlarge the box.");
+			this.btnBResize_Up.UseVisualStyleBackColor = true;
+			this.btnBResize_Up.Visible = false;
+			this.btnBResize_Up.Click += new EventHandler(this.btnBResize_Up_Click);
+			this.btnBResize_Down.FlatAppearance.BorderColor = Color.Gray;
+			this.btnBResize_Down.FlatAppearance.BorderSize = 0;
+			this.btnBResize_Down.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnBResize_Down.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnBResize_Down.FlatStyle = FlatStyle.Flat;
+			this.btnBResize_Down.ForeColor = Color.LightGray;
+			this.btnBResize_Down.Image = Resources.Down;
+			this.btnBResize_Down.Location = new Point(848, 2);
+			this.btnBResize_Down.Name = "btnBResize_Down";
+			this.btnBResize_Down.Size = new Size(16, 20);
+			this.btnBResize_Down.TabIndex = 109;
+			this.btnBResize_Down.TabStop = false;
+			this.toolTip1.SetToolTip(this.btnBResize_Down, "Shrink the box.");
+			this.btnBResize_Down.UseVisualStyleBackColor = true;
+			this.btnBResize_Down.Visible = false;
+			this.btnBResize_Down.Click += new EventHandler(this.btnBResize_Down_Click);
+			this.tbEquity.AutoSize = true;
+			this.tbEquity.ForeColor = Color.Yellow;
+			this.tbEquity.Location = new Point(460, 5);
+			this.tbEquity.Margin = new Padding(2, 0, 2, 0);
+			this.tbEquity.Name = "tbEquity";
+			this.tbEquity.Size = new Size(13, 13);
+			this.tbEquity.TabIndex = 108;
+			this.tbEquity.Text = "0";
+			this.tbEquity.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbEquity.AutoSize = true;
+			this.lbEquity.ForeColor = Color.LightGray;
+			this.lbEquity.Location = new Point(400, 5);
+			this.lbEquity.Margin = new Padding(2, 0, 2, 0);
+			this.lbEquity.Name = "lbEquity";
+			this.lbEquity.Size = new Size(42, 13);
+			this.lbEquity.TabIndex = 107;
+			this.lbEquity.Text = "Equity :";
+			this.lbEquity.TextAlign = ContentAlignment.MiddleLeft;
+			this.btnNotification.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.btnNotification.BackColor = Color.Transparent;
+			this.btnNotification.FlatAppearance.BorderColor = Color.LightGray;
+			this.btnNotification.FlatAppearance.BorderSize = 0;
+			this.btnNotification.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnNotification.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnNotification.FlatStyle = FlatStyle.Flat;
+			this.btnNotification.ForeColor = Color.LightGray;
+			this.btnNotification.Image = (Image)componentResourceManager.GetObject("btnNotification.Image");
+			this.btnNotification.Location = new Point(607, 1);
+			this.btnNotification.Name = "btnNotification";
+			this.btnNotification.Size = new Size(24, 23);
+			this.btnNotification.TabIndex = 95;
+			this.btnNotification.TabStop = false;
+			this.btnNotification.Tag = "5";
+			this.toolTip1.SetToolTip(this.btnNotification, "Mobile Notification");
+			this.btnNotification.UseVisualStyleBackColor = false;
+			this.btnNotification.Click += new EventHandler(this.btnNotification_Click);
+			this.btnShowStockAlert.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+			this.btnShowStockAlert.BackColor = Color.Transparent;
+			this.btnShowStockAlert.FlatAppearance.BorderColor = Color.LightGray;
+			this.btnShowStockAlert.FlatAppearance.BorderSize = 0;
+			this.btnShowStockAlert.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnShowStockAlert.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnShowStockAlert.FlatStyle = FlatStyle.Flat;
+			this.btnShowStockAlert.ForeColor = Color.LightGray;
+			this.btnShowStockAlert.Image = (Image)componentResourceManager.GetObject("btnShowStockAlert.Image");
+			this.btnShowStockAlert.Location = new Point(633, 1);
+			this.btnShowStockAlert.Name = "btnShowStockAlert";
+			this.btnShowStockAlert.Size = new Size(24, 23);
+			this.btnShowStockAlert.TabIndex = 94;
+			this.btnShowStockAlert.TabStop = false;
+			this.btnShowStockAlert.Tag = "5";
+			this.toolTip1.SetToolTip(this.btnShowStockAlert, "Price Alert on PC");
+			this.btnShowStockAlert.UseVisualStyleBackColor = false;
+			this.btnShowStockAlert.Click += new EventHandler(this.btnShowStockAlert_Click);
+			this.btnRisk.FlatAppearance.BorderColor = Color.LightGray;
+			this.btnRisk.FlatAppearance.BorderSize = 0;
+			this.btnRisk.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnRisk.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnRisk.FlatStyle = FlatStyle.Flat;
+			this.btnRisk.ForeColor = Color.LightGray;
+			this.btnRisk.Image = (Image)componentResourceManager.GetObject("btnRisk.Image");
+			this.btnRisk.Location = new Point(562, 2);
+			this.btnRisk.Name = "btnRisk";
+			this.btnRisk.Size = new Size(37, 20);
+			this.btnRisk.TabIndex = 93;
+			this.btnRisk.TabStop = false;
+			this.toolTip1.SetToolTip(this.btnRisk, "Risk Control / เครื่องมือควบคุมความเสี่ยง");
+			this.btnRisk.UseVisualStyleBackColor = true;
+			this.btnRisk.Visible = false;
+			this.btnRisk.Click += new EventHandler(this.btnPolicy_Click);
+			this.btnStyle4.FlatAppearance.BorderColor = Color.Gray;
+			this.btnStyle4.FlatAppearance.BorderSize = 0;
+			this.btnStyle4.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnStyle4.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnStyle4.FlatStyle = FlatStyle.Flat;
+			this.btnStyle4.ForeColor = Color.LightGray;
+			this.btnStyle4.Location = new Point(761, 2);
+			this.btnStyle4.Name = "btnStyle4";
+			this.btnStyle4.Size = new Size(18, 20);
+			this.btnStyle4.TabIndex = 92;
+			this.btnStyle4.TabStop = false;
+			this.btnStyle4.Text = "4";
+			this.toolTip1.SetToolTip(this.btnStyle4, "Trade Style 4");
+			this.btnStyle4.UseVisualStyleBackColor = true;
+			this.btnStyle4.Click += new EventHandler(this.btnStyle_Click);
+			this.btnStyle3.FlatAppearance.BorderColor = Color.Gray;
+			this.btnStyle3.FlatAppearance.BorderSize = 0;
+			this.btnStyle3.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnStyle3.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnStyle3.FlatStyle = FlatStyle.Flat;
+			this.btnStyle3.ForeColor = Color.LightGray;
+			this.btnStyle3.Location = new Point(742, 2);
+			this.btnStyle3.Name = "btnStyle3";
+			this.btnStyle3.Size = new Size(18, 20);
+			this.btnStyle3.TabIndex = 90;
+			this.btnStyle3.TabStop = false;
+			this.btnStyle3.Text = "3";
+			this.toolTip1.SetToolTip(this.btnStyle3, "Trade Style 3");
+			this.btnStyle3.UseVisualStyleBackColor = true;
+			this.btnStyle3.Click += new EventHandler(this.btnStyle_Click);
+			this.btnCleanPort.FlatAppearance.BorderColor = Color.Gray;
+			this.btnCleanPort.FlatAppearance.BorderSize = 0;
+			this.btnCleanPort.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnCleanPort.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnCleanPort.FlatStyle = FlatStyle.Flat;
+			this.btnCleanPort.ForeColor = Color.LightGray;
+			this.btnCleanPort.Image = (Image)componentResourceManager.GetObject("btnCleanPort.Image");
+			this.btnCleanPort.Location = new Point(663, 2);
+			this.btnCleanPort.Name = "btnCleanPort";
+			this.btnCleanPort.Size = new Size(20, 20);
+			this.btnCleanPort.TabIndex = 89;
+			this.btnCleanPort.TabStop = false;
+			this.toolTip1.SetToolTip(this.btnCleanPort, "Portfolio clearing tool");
+			this.btnCleanPort.UseVisualStyleBackColor = true;
+			this.btnCleanPort.Click += new EventHandler(this.btnCleanPort_Click);
+			this.btnSetting.FlatAppearance.BorderColor = Color.Gray;
+			this.btnSetting.FlatAppearance.BorderSize = 0;
+			this.btnSetting.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnSetting.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnSetting.FlatStyle = FlatStyle.Flat;
+			this.btnSetting.ForeColor = Color.LightGray;
+			this.btnSetting.Image = (Image)componentResourceManager.GetObject("btnSetting.Image");
+			this.btnSetting.Location = new Point(787, 2);
+			this.btnSetting.Name = "btnSetting";
+			this.btnSetting.Size = new Size(20, 20);
+			this.btnSetting.TabIndex = 88;
+			this.btnSetting.TabStop = false;
+			this.toolTip1.SetToolTip(this.btnSetting, "Buy/Sell Options");
+			this.btnSetting.UseVisualStyleBackColor = true;
+			this.btnSetting.Click += new EventHandler(this.btnSetting_Click);
+			this.btnStyle2.FlatAppearance.BorderColor = Color.Gray;
+			this.btnStyle2.FlatAppearance.BorderSize = 0;
+			this.btnStyle2.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnStyle2.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnStyle2.FlatStyle = FlatStyle.Flat;
+			this.btnStyle2.ForeColor = Color.LightGray;
+			this.btnStyle2.Location = new Point(718, 2);
+			this.btnStyle2.Name = "btnStyle2";
+			this.btnStyle2.Size = new Size(18, 20);
+			this.btnStyle2.TabIndex = 87;
+			this.btnStyle2.TabStop = false;
+			this.btnStyle2.Text = "2";
+			this.toolTip1.SetToolTip(this.btnStyle2, "Quick Trade Style");
+			this.btnStyle2.UseVisualStyleBackColor = true;
+			this.btnStyle2.Click += new EventHandler(this.btnStyle_Click);
+			this.btnStyle1.FlatAppearance.BorderColor = Color.Gray;
+			this.btnStyle1.FlatAppearance.BorderSize = 0;
+			this.btnStyle1.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnStyle1.FlatAppearance.MouseOverBackColor = Color.RoyalBlue;
+			this.btnStyle1.FlatStyle = FlatStyle.Flat;
+			this.btnStyle1.ForeColor = Color.LightGray;
+			this.btnStyle1.Location = new Point(692, 2);
+			this.btnStyle1.Name = "btnStyle1";
+			this.btnStyle1.Size = new Size(18, 20);
+			this.btnStyle1.TabIndex = 86;
+			this.btnStyle1.TabStop = false;
+			this.btnStyle1.Text = "1";
+			this.toolTip1.SetToolTip(this.btnStyle1, "i2 Trade Style");
+			this.btnStyle1.UseVisualStyleBackColor = true;
+			this.btnStyle1.Click += new EventHandler(this.btnStyle_Click);
+			this.tbOnHand.AutoSize = true;
+			this.tbOnHand.BackColor = Color.Transparent;
+			this.tbOnHand.ForeColor = Color.Yellow;
+			this.tbOnHand.Location = new Point(345, 5);
+			this.tbOnHand.Margin = new Padding(2, 0, 2, 0);
+			this.tbOnHand.MinimumSize = new Size(60, 0);
+			this.tbOnHand.Name = "tbOnHand";
+			this.tbOnHand.Size = new Size(60, 13);
+			this.tbOnHand.TabIndex = 81;
+			this.tbOnHand.Text = "0";
+			this.tbOnHand.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbOnHand.AutoSize = true;
+			this.lbOnHand.BackColor = Color.Transparent;
+			this.lbOnHand.ForeColor = Color.LightGray;
+			this.lbOnHand.Location = new Point(285, 6);
+			this.lbOnHand.Margin = new Padding(2, 0, 2, 0);
+			this.lbOnHand.Name = "lbOnHand";
+			this.lbOnHand.Size = new Size(56, 13);
+			this.lbOnHand.TabIndex = 80;
+			this.lbOnHand.Text = "OnHand : ";
+			this.lbOnHand.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbAccount.AutoSize = true;
+			this.lbAccount.BackColor = Color.Transparent;
+			this.lbAccount.ForeColor = Color.LightGray;
+			this.lbAccount.Location = new Point(3, 5);
+			this.lbAccount.Margin = new Padding(2, 0, 1, 0);
+			this.lbAccount.Name = "lbAccount";
+			this.lbAccount.Size = new Size(53, 13);
+			this.lbAccount.TabIndex = 79;
+			this.lbAccount.Text = "Account :";
+			this.lbAccount.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbAccount.BackColor = Color.FromArgb(30, 30, 30);
+			this.cbAccount.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.cbAccount.FlatStyle = FlatStyle.Popup;
+			this.cbAccount.ForeColor = Color.Yellow;
+			this.cbAccount.FormattingEnabled = true;
+			this.cbAccount.Location = new Point(59, 2);
+			this.cbAccount.Margin = new Padding(0, 3, 0, 3);
+			this.cbAccount.Name = "cbAccount";
+			this.cbAccount.Size = new Size(130, 21);
+			this.cbAccount.TabIndex = 78;
+			this.cbAccount.TabStop = false;
+			this.cbAccount.SelectedIndexChanged += new EventHandler(this.cbAccount_SelectedIndexChanged);
+			this.tbBuyLimit.AutoSize = true;
+			this.tbBuyLimit.BackColor = Color.Transparent;
+			this.tbBuyLimit.ForeColor = Color.Yellow;
+			this.tbBuyLimit.Location = new Point(254, 5);
+			this.tbBuyLimit.Margin = new Padding(2, 0, 2, 0);
+			this.tbBuyLimit.MinimumSize = new Size(60, 0);
+			this.tbBuyLimit.Name = "tbBuyLimit";
+			this.tbBuyLimit.Size = new Size(60, 13);
+			this.tbBuyLimit.TabIndex = 76;
+			this.tbBuyLimit.Text = "0";
+			this.tbBuyLimit.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbBuyLimit.AutoSize = true;
+			this.lbBuyLimit.BackColor = Color.Transparent;
+			this.lbBuyLimit.ForeColor = Color.LightGray;
+			this.lbBuyLimit.Location = new Point(195, 5);
+			this.lbBuyLimit.Margin = new Padding(2, 0, 2, 0);
+			this.lbBuyLimit.Name = "lbBuyLimit";
+			this.lbBuyLimit.Size = new Size(55, 13);
+			this.lbBuyLimit.TabIndex = 72;
+			this.lbBuyLimit.Text = "Buy Limit :";
+			this.lbBuyLimit.TextAlign = ContentAlignment.MiddleLeft;
+			this.chbEqStopOrder.AutoSize = true;
+			this.chbEqStopOrder.ForeColor = Color.FromArgb(255, 192, 128);
+			this.chbEqStopOrder.Location = new Point(528, 61);
+			this.chbEqStopOrder.Margin = new Padding(2, 3, 0, 3);
+			this.chbEqStopOrder.Name = "chbEqStopOrder";
+			this.chbEqStopOrder.Size = new Size(79, 17);
+			this.chbEqStopOrder.TabIndex = 106;
+			this.chbEqStopOrder.Text = "Auto Trade";
+			this.chbEqStopOrder.UseVisualStyleBackColor = false;
+			this.chbEqStopOrder.CheckedChanged += new EventHandler(this.chbStopOrder_CheckedChanged);
+			this.lbLoading.AutoSize = true;
+			this.lbLoading.BackColor = Color.FromArgb(64, 64, 64);
+			this.lbLoading.BorderStyle = BorderStyle.FixedSingle;
+			this.lbLoading.Font = new Font("Microsoft Sans Serif", 9f, FontStyle.Regular, GraphicsUnit.Point, 222);
+			this.lbLoading.ForeColor = Color.Yellow;
+			this.lbLoading.Location = new Point(362, 95);
+			this.lbLoading.Name = "lbLoading";
+			this.lbLoading.Padding = new Padding(4, 3, 4, 3);
+			this.lbLoading.Size = new Size(137, 23);
+			this.lbLoading.TabIndex = 73;
+			this.lbLoading.Text = "Sending New Order ...";
+			this.lbLoading.TextAlign = ContentAlignment.MiddleCenter;
+			this.lbLoading.Visible = false;
+			this.btnSendOrder.AutoEllipsis = true;
+			this.btnSendOrder.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			this.btnSendOrder.BackColor = Color.Transparent;
+			this.btnSendOrder.Cursor = Cursors.Hand;
+			this.btnSendOrder.FlatAppearance.BorderColor = Color.LightGray;
+			this.btnSendOrder.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnSendOrder.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 192, 192);
+			this.btnSendOrder.FlatStyle = FlatStyle.Flat;
+			this.btnSendOrder.ForeColor = Color.WhiteSmoke;
+			this.btnSendOrder.Location = new Point(803, 2);
+			this.btnSendOrder.MaximumSize = new Size(58, 23);
+			this.btnSendOrder.Name = "btnSendOrder";
+			this.btnSendOrder.Size = new Size(54, 22);
+			this.btnSendOrder.TabIndex = 8;
+			this.btnSendOrder.TabStop = false;
+			this.btnSendOrder.Text = "Send";
+			this.btnSendOrder.UseVisualStyleBackColor = false;
+			this.btnSendOrder.Click += new EventHandler(this.btnSendOrder_Click);
+			this.cbCondition.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"",
+				"IOC",
+				"FOK"
+			});
+			this.cbCondition.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbCondition.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbCondition.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbCondition.FlatStyle = FlatStyle.Popup;
+			this.cbCondition.ForeColor = Color.Black;
+			this.cbCondition.FormattingEnabled = true;
+			this.cbCondition.Items.AddRange(new object[]
+			{
+				"",
+				"IOC",
+				"FOK"
+			});
+			this.cbCondition.Location = new Point(663, 3);
+			this.cbCondition.Name = "cbCondition";
+			this.cbCondition.Size = new Size(40, 21);
+			this.cbCondition.TabIndex = 5;
+			this.cbCondition.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbCondition.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbCondition.KeyPress += new KeyPressEventHandler(this.cbCondition_KeyPress);
+			this.cbCondition.KeyDown += new KeyEventHandler(this.cbCondition_KeyDown);
+			this.panelEquity.BackColor = Color.FromArgb(45, 45, 45);
+			this.panelEquity.Controls.Add(this.panelStopOrder);
+			this.panelEquity.Controls.Add(this.cbDepCollateral);
+			this.panelEquity.Controls.Add(this.chbEqStopOrder);
+			this.panelEquity.Controls.Add(this.lbDep);
+			this.panelEquity.Controls.Add(this.cbStock);
+			this.panelEquity.Controls.Add(this.lbStock);
+			this.panelEquity.Controls.Add(this.lbSide);
+			this.panelEquity.Controls.Add(this.cbSide);
+			this.panelEquity.Controls.Add(this.btnPriceDec);
+			this.panelEquity.Controls.Add(this.btnPriceInc);
+			this.panelEquity.Controls.Add(this.btnPBDec);
+			this.panelEquity.Controls.Add(this.btnPBInc);
+			this.panelEquity.Controls.Add(this.btnVolDec);
+			this.panelEquity.Controls.Add(this.btnVolInc);
+			this.panelEquity.Controls.Add(this.btnClear);
+			this.panelEquity.Controls.Add(this.lbPin);
+			this.panelEquity.Controls.Add(this.tbPin);
+			this.panelEquity.Controls.Add(this.rbCover);
+			this.panelEquity.Controls.Add(this.rbShort);
+			this.panelEquity.Controls.Add(this.rbSell);
+			this.panelEquity.Controls.Add(this.rbBuy);
+			this.panelEquity.Controls.Add(this.cbPrice);
+			this.panelEquity.Controls.Add(this.tbTimes);
+			this.panelEquity.Controls.Add(this.lbTimes);
+			this.panelEquity.Controls.Add(this.cbCondition);
+			this.panelEquity.Controls.Add(this.lbPrice);
+			this.panelEquity.Controls.Add(this.lbVolume);
+			this.panelEquity.Controls.Add(this.btnSendOrder);
+			this.panelEquity.Controls.Add(this.tbPublic);
+			this.panelEquity.Controls.Add(this.chbNVDR);
+			this.panelEquity.Controls.Add(this.lbCondition);
+			this.panelEquity.Controls.Add(this.tbVolume);
+			this.panelEquity.Controls.Add(this.lbPublic);
+			this.panelEquity.Location = new Point(3, 30);
+			this.panelEquity.Name = "panelEquity";
+			this.panelEquity.Size = new Size(866, 88);
+			this.panelEquity.TabIndex = 79;
+			this.panelStopOrder.BackColor = Color.FromArgb(60, 60, 60);
+			this.panelStopOrder.Controls.Add(this.lbStopPriceLable);
+			this.panelStopOrder.Controls.Add(this.cbStopOrderPrice);
+			this.panelStopOrder.Controls.Add(this.chbLimit);
+			this.panelStopOrder.Controls.Add(this.label2);
+			this.panelStopOrder.Controls.Add(this.cbStopOrderField);
+			this.panelStopOrder.Location = new Point(8, 55);
+			this.panelStopOrder.Name = "panelStopOrder";
+			this.panelStopOrder.Size = new Size(469, 27);
+			this.panelStopOrder.TabIndex = 110;
+			this.lbStopPriceLable.AutoSize = true;
+			this.lbStopPriceLable.ForeColor = Color.WhiteSmoke;
+			this.lbStopPriceLable.Location = new Point(247, 7);
+			this.lbStopPriceLable.Margin = new Padding(2, 0, 2, 0);
+			this.lbStopPriceLable.Name = "lbStopPriceLable";
+			this.lbStopPriceLable.Size = new Size(31, 13);
+			this.lbStopPriceLable.TabIndex = 115;
+			this.lbStopPriceLable.Text = "Price";
+			this.lbStopPriceLable.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbStopOrderPrice.AllowDrop = true;
+			this.cbStopOrderPrice.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbStopOrderPrice.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbStopOrderPrice.FlatStyle = FlatStyle.Popup;
+			this.cbStopOrderPrice.ForeColor = Color.Black;
+			this.cbStopOrderPrice.FormattingEnabled = true;
+			this.cbStopOrderPrice.Location = new Point(289, 3);
+			this.cbStopOrderPrice.Name = "cbStopOrderPrice";
+			this.cbStopOrderPrice.Size = new Size(64, 21);
+			this.cbStopOrderPrice.TabIndex = 114;
+			this.chbLimit.AutoSize = true;
+			this.chbLimit.ForeColor = Color.WhiteSmoke;
+			this.chbLimit.Location = new Point(361, 7);
+			this.chbLimit.Margin = new Padding(2, 3, 0, 3);
+			this.chbLimit.Name = "chbLimit";
+			this.chbLimit.Size = new Size(103, 17);
+			this.chbLimit.TabIndex = 111;
+			this.chbLimit.Text = "Cancel End Day";
+			this.chbLimit.UseVisualStyleBackColor = false;
+			this.label2.AutoSize = true;
+			this.label2.ForeColor = Color.WhiteSmoke;
+			this.label2.Location = new Point(4, 7);
+			this.label2.Margin = new Padding(2, 0, 2, 0);
+			this.label2.Name = "label2";
+			this.label2.Size = new Size(85, 13);
+			this.label2.TabIndex = 109;
+			this.label2.Text = "Order Conditions";
+			this.label2.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbStopOrderField.AllowDrop = true;
+			this.cbStopOrderField.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbStopOrderField.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbStopOrderField.DropDownStyle = ComboBoxStyle.DropDownList;
+			this.cbStopOrderField.FlatStyle = FlatStyle.Popup;
+			this.cbStopOrderField.ForeColor = Color.Black;
+			this.cbStopOrderField.FormattingEnabled = true;
+			this.cbStopOrderField.Items.AddRange(new object[]
+			{
+				"Last >=",
+				"Last <=",
+				"Last >= SMA(Day)",
+				"Last <= SMA(Day)",
+				"Last > Break High (Day)",
+				"Last < Break High (Day)",
+				"Last > Break Low (Day)",
+				"Last < Break Low (Day)"
+			});
+			this.cbStopOrderField.Location = new Point(96, 3);
+			this.cbStopOrderField.Name = "cbStopOrderField";
+			this.cbStopOrderField.Size = new Size(143, 21);
+			this.cbStopOrderField.TabIndex = 106;
+			this.cbStopOrderField.SelectedIndexChanged += new EventHandler(this.cbStopOrderField_SelectedIndexChanged);
+			this.cbStopOrderField.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbStopOrderField.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbDepCollateral.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"",
+				"IOC",
+				"FOK"
+			});
+			this.cbDepCollateral.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbDepCollateral.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbDepCollateral.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbDepCollateral.FlatStyle = FlatStyle.Popup;
+			this.cbDepCollateral.ForeColor = Color.Black;
+			this.cbDepCollateral.FormattingEnabled = true;
+			this.cbDepCollateral.Location = new Point(740, 3);
+			this.cbDepCollateral.Name = "cbDepCollateral";
+			this.cbDepCollateral.Size = new Size(57, 21);
+			this.cbDepCollateral.TabIndex = 102;
+			this.cbDepCollateral.SelectedIndexChanged += new EventHandler(this.cbDepCollateral_SelectedIndexChanged);
+			this.cbDepCollateral.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbDepCollateral.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbDepCollateral.KeyPress += new KeyPressEventHandler(this.cbCondition_KeyPress);
+			this.cbDepCollateral.KeyDown += new KeyEventHandler(this.cbDepCollateral_KeyDown);
+			this.lbDep.AutoSize = true;
+			this.lbDep.ForeColor = Color.LightGray;
+			this.lbDep.Location = new Point(707, 6);
+			this.lbDep.Margin = new Padding(2, 0, 2, 0);
+			this.lbDep.Name = "lbDep";
+			this.lbDep.Size = new Size(27, 13);
+			this.lbDep.TabIndex = 101;
+			this.lbDep.Text = "Dep";
+			this.lbDep.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbStock.AllowDrop = true;
+			this.cbStock.AutoCompleteMode = AutoCompleteMode.Suggest;
+			this.cbStock.AutoCompleteSource = AutoCompleteSource.ListItems;
+			this.cbStock.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbStock.FlatStyle = FlatStyle.Popup;
+			this.cbStock.ForeColor = Color.Black;
+			this.cbStock.FormattingEnabled = true;
+			this.cbStock.Location = new Point(128, 4);
+			this.cbStock.MaxLength = 20;
+			this.cbStock.Name = "cbStock";
+			this.cbStock.Size = new Size(77, 21);
+			this.cbStock.TabIndex = 0;
+			this.cbStock.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbStock.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbStock.DragDrop += new DragEventHandler(this.cbStock_DragDrop);
+			this.cbStock.DragEnter += new DragEventHandler(this.cbStock_DragEnter);
+			this.cbStock.KeyPress += new KeyPressEventHandler(this.cbStock_KeyPress);
+			this.cbStock.KeyDown += new KeyEventHandler(this.cbStock_KeyDown);
+			this.lbStock.AutoSize = true;
+			this.lbStock.ForeColor = Color.LightGray;
+			this.lbStock.Location = new Point(94, 9);
+			this.lbStock.Margin = new Padding(2, 0, 2, 0);
+			this.lbStock.Name = "lbStock";
+			this.lbStock.Size = new Size(35, 13);
+			this.lbStock.TabIndex = 100;
+			this.lbStock.Text = "Stock";
+			this.lbStock.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbStock.Visible = false;
+			this.lbSide.AutoSize = true;
+			this.lbSide.ForeColor = Color.LightGray;
+			this.lbSide.Location = new Point(133, 37);
+			this.lbSide.Margin = new Padding(2, 0, 2, 0);
+			this.lbSide.Name = "lbSide";
+			this.lbSide.Size = new Size(28, 13);
+			this.lbSide.TabIndex = 99;
+			this.lbSide.Text = "Side";
+			this.lbSide.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbSide.Visible = false;
+			this.cbSide.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"Buy",
+				"Sell",
+				"Cover",
+				"Short"
+			});
+			this.cbSide.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbSide.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbSide.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbSide.FlatStyle = FlatStyle.Popup;
+			this.cbSide.ForeColor = Color.Black;
+			this.cbSide.FormattingEnabled = true;
+			this.cbSide.Items.AddRange(new object[]
+			{
+				"Buy",
+				"Sell",
+				"Cover",
+				"Short"
+			});
+			this.cbSide.Location = new Point(164, 33);
+			this.cbSide.Name = "cbSide";
+			this.cbSide.Size = new Size(51, 21);
+			this.cbSide.TabIndex = 98;
+			this.cbSide.SelectedIndexChanged += new EventHandler(this.cbSide_SelectedIndexChanged);
+			this.cbSide.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbSide.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbSide.KeyPress += new KeyPressEventHandler(this.cbSide_KeyPress);
+			this.cbSide.KeyDown += new KeyEventHandler(this.cbSide_KeyDown);
+			this.btnPriceDec.FlatAppearance.BorderSize = 0;
+			this.btnPriceDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnPriceDec.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnPriceDec.FlatStyle = FlatStyle.Flat;
+			this.btnPriceDec.Image = (Image)componentResourceManager.GetObject("btnPriceDec.Image");
+			this.btnPriceDec.Location = new Point(510, 34);
+			this.btnPriceDec.Name = "btnPriceDec";
+			this.btnPriceDec.Size = new Size(15, 15);
+			this.btnPriceDec.TabIndex = 97;
+			this.btnPriceDec.UseVisualStyleBackColor = true;
+			this.btnPriceDec.Click += new EventHandler(this.btnPriceDec_Click);
+			this.btnPriceInc.FlatAppearance.BorderSize = 0;
+			this.btnPriceInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnPriceInc.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnPriceInc.FlatStyle = FlatStyle.Flat;
+			this.btnPriceInc.Image = (Image)componentResourceManager.GetObject("btnPriceInc.Image");
+			this.btnPriceInc.Location = new Point(537, 33);
+			this.btnPriceInc.Name = "btnPriceInc";
+			this.btnPriceInc.Size = new Size(15, 15);
+			this.btnPriceInc.TabIndex = 96;
+			this.btnPriceInc.UseVisualStyleBackColor = true;
+			this.btnPriceInc.Click += new EventHandler(this.btnPriceInc_Click);
+			this.btnPBDec.FlatAppearance.BorderSize = 0;
+			this.btnPBDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnPBDec.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnPBDec.FlatStyle = FlatStyle.Flat;
+			this.btnPBDec.Image = (Image)componentResourceManager.GetObject("btnPBDec.Image");
+			this.btnPBDec.Location = new Point(443, 33);
+			this.btnPBDec.Name = "btnPBDec";
+			this.btnPBDec.Size = new Size(15, 15);
+			this.btnPBDec.TabIndex = 95;
+			this.btnPBDec.UseVisualStyleBackColor = true;
+			this.btnPBDec.Click += new EventHandler(this.btnPBDec_Click);
+			this.btnPBInc.FlatAppearance.BorderSize = 0;
+			this.btnPBInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnPBInc.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnPBInc.FlatStyle = FlatStyle.Flat;
+			this.btnPBInc.Image = (Image)componentResourceManager.GetObject("btnPBInc.Image");
+			this.btnPBInc.Location = new Point(470, 32);
+			this.btnPBInc.Name = "btnPBInc";
+			this.btnPBInc.Size = new Size(15, 15);
+			this.btnPBInc.TabIndex = 94;
+			this.btnPBInc.UseVisualStyleBackColor = true;
+			this.btnPBInc.Click += new EventHandler(this.btnPBInc_Click);
+			this.btnVolDec.FlatAppearance.BorderSize = 0;
+			this.btnVolDec.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnVolDec.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnVolDec.FlatStyle = FlatStyle.Flat;
+			this.btnVolDec.Image = (Image)componentResourceManager.GetObject("btnVolDec.Image");
+			this.btnVolDec.Location = new Point(394, 28);
+			this.btnVolDec.Name = "btnVolDec";
+			this.btnVolDec.Size = new Size(15, 15);
+			this.btnVolDec.TabIndex = 93;
+			this.btnVolDec.UseVisualStyleBackColor = true;
+			this.btnVolDec.Click += new EventHandler(this.btnVolDec_Click);
+			this.btnVolInc.FlatAppearance.BorderSize = 0;
+			this.btnVolInc.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnVolInc.FlatAppearance.MouseOverBackColor = Color.Teal;
+			this.btnVolInc.FlatStyle = FlatStyle.Flat;
+			this.btnVolInc.Image = (Image)componentResourceManager.GetObject("btnVolInc.Image");
+			this.btnVolInc.Location = new Point(421, 27);
+			this.btnVolInc.Name = "btnVolInc";
+			this.btnVolInc.Size = new Size(15, 15);
+			this.btnVolInc.TabIndex = 92;
+			this.btnVolInc.UseVisualStyleBackColor = true;
+			this.btnVolInc.Click += new EventHandler(this.btnVolInc_Click);
+			this.btnClear.AutoEllipsis = true;
+			this.btnClear.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			this.btnClear.BackColor = Color.Transparent;
+			this.btnClear.Cursor = Cursors.Hand;
+			this.btnClear.FlatAppearance.BorderColor = Color.LightGray;
+			this.btnClear.FlatAppearance.MouseDownBackColor = Color.FromArgb(255, 128, 0);
+			this.btnClear.FlatAppearance.MouseOverBackColor = Color.FromArgb(0, 192, 192);
+			this.btnClear.FlatStyle = FlatStyle.Flat;
+			this.btnClear.ForeColor = Color.WhiteSmoke;
+			this.btnClear.Location = new Point(802, 28);
+			this.btnClear.MaximumSize = new Size(58, 23);
+			this.btnClear.Name = "btnClear";
+			this.btnClear.Size = new Size(54, 22);
+			this.btnClear.TabIndex = 9;
+			this.btnClear.TabStop = false;
+			this.btnClear.Text = "Clear";
+			this.btnClear.UseVisualStyleBackColor = false;
+			this.btnClear.Visible = false;
+			this.btnClear.Click += new EventHandler(this.btnClear_Click);
+			this.lbPin.AutoSize = true;
+			this.lbPin.ForeColor = Color.LightGray;
+			this.lbPin.Location = new Point(635, 37);
+			this.lbPin.Margin = new Padding(2, 0, 2, 0);
+			this.lbPin.Name = "lbPin";
+			this.lbPin.Size = new Size(25, 13);
+			this.lbPin.TabIndex = 90;
+			this.lbPin.Text = "PIN";
+			this.lbPin.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbPin.Visible = false;
+			this.tbPin.AllowDrop = true;
+			this.tbPin.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			this.tbPin.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.tbPin.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbPin.BorderStyle = BorderStyle.FixedSingle;
+			this.tbPin.CharacterCasing = CharacterCasing.Upper;
+			this.tbPin.Location = new Point(671, 30);
+			this.tbPin.Margin = new Padding(2, 3, 2, 3);
+			this.tbPin.MaxLength = 10;
+			this.tbPin.Name = "tbPin";
+			this.tbPin.PasswordChar = '*';
+			this.tbPin.Size = new Size(40, 20);
+			this.tbPin.TabIndex = 7;
+			this.tbPin.Visible = false;
+			this.tbPin.KeyDown += new KeyEventHandler(this.tbPin_KeyDown);
+			this.tbPin.Leave += new EventHandler(this.controlOrder_Leave);
+			this.tbPin.Enter += new EventHandler(this.controlOrder_Enter);
+			this.rbCover.AutoSize = true;
+			this.rbCover.ForeColor = Color.LightGray;
+			this.rbCover.Location = new Point(57, 29);
+			this.rbCover.Name = "rbCover";
+			this.rbCover.Size = new Size(53, 17);
+			this.rbCover.TabIndex = 88;
+			this.rbCover.TabStop = true;
+			this.rbCover.Text = "Cover";
+			this.rbCover.UseVisualStyleBackColor = true;
+			this.rbCover.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
+			this.rbShort.AutoSize = true;
+			this.rbShort.ForeColor = Color.LightGray;
+			this.rbShort.Location = new Point(3, 30);
+			this.rbShort.Name = "rbShort";
+			this.rbShort.Size = new Size(50, 17);
+			this.rbShort.TabIndex = 87;
+			this.rbShort.TabStop = true;
+			this.rbShort.Text = "Short";
+			this.rbShort.UseVisualStyleBackColor = true;
+			this.rbShort.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
+			this.rbSell.AutoSize = true;
+			this.rbSell.ForeColor = Color.LightGray;
+			this.rbSell.Location = new Point(47, 7);
+			this.rbSell.Name = "rbSell";
+			this.rbSell.Size = new Size(42, 17);
+			this.rbSell.TabIndex = 86;
+			this.rbSell.TabStop = true;
+			this.rbSell.Text = "Sell";
+			this.rbSell.UseVisualStyleBackColor = true;
+			this.rbSell.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
+			this.rbBuy.AutoSize = true;
+			this.rbBuy.ForeColor = Color.LightGray;
+			this.rbBuy.Location = new Point(4, 6);
+			this.rbBuy.Name = "rbBuy";
+			this.rbBuy.Size = new Size(43, 17);
+			this.rbBuy.TabIndex = 85;
+			this.rbBuy.TabStop = true;
+			this.rbBuy.Text = "Buy";
+			this.rbBuy.UseVisualStyleBackColor = true;
+			this.rbBuy.CheckedChanged += new EventHandler(this.rbBuy_CheckedChanged);
+			this.cbPrice.AllowDrop = true;
+			this.cbPrice.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"",
+				"ATO",
+				"ATC",
+				"MP",
+				"MO",
+				"ML"
+			});
+			this.cbPrice.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbPrice.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbPrice.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbPrice.FlatStyle = FlatStyle.Popup;
+			this.cbPrice.ForeColor = Color.Black;
+			this.cbPrice.FormattingEnabled = true;
+			this.cbPrice.Items.AddRange(new object[]
+			{
+				"",
+				"ATO",
+				"ATC",
+				"MP",
+				"MO",
+				"ML"
+			});
+			this.cbPrice.Location = new Point(454, 5);
+			this.cbPrice.Name = "cbPrice";
+			this.cbPrice.Size = new Size(57, 21);
+			this.cbPrice.TabIndex = 3;
+			this.cbPrice.Leave += new EventHandler(this.controlOrder_Leave);
+			this.cbPrice.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbPrice.DragDrop += new DragEventHandler(this.cbPrice_DragDrop);
+			this.cbPrice.DragEnter += new DragEventHandler(this.cbPrice_DragEnter);
+			this.cbPrice.KeyPress += new KeyPressEventHandler(this.cbPrice_KeyPress);
+			this.cbPrice.KeyDown += new KeyEventHandler(this.cbPrice_KeyDown);
+			this.tbTimes.AllowDrop = true;
+			this.tbTimes.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbTimes.BorderStyle = BorderStyle.FixedSingle;
+			this.tbTimes.CharacterCasing = CharacterCasing.Upper;
+			this.tbTimes.Location = new Point(376, 7);
+			this.tbTimes.Margin = new Padding(2, 3, 2, 3);
+			this.tbTimes.MaxLength = 2;
+			this.tbTimes.Name = "tbTimes";
+			this.tbTimes.Size = new Size(40, 20);
+			this.tbTimes.TabIndex = 80;
+			this.tbTimes.TextAlign = HorizontalAlignment.Center;
+			this.tbTimes.Visible = false;
+			this.tbTimes.KeyDown += new KeyEventHandler(this.tbTimes_KeyDown);
+			this.tbTimes.Leave += new EventHandler(this.controlOrder_Leave);
+			this.tbTimes.Enter += new EventHandler(this.controlOrder_Enter);
+			this.lbTimes.AutoSize = true;
+			this.lbTimes.ForeColor = Color.LightGray;
+			this.lbTimes.Location = new Point(337, 8);
+			this.lbTimes.Margin = new Padding(2, 0, 2, 0);
+			this.lbTimes.Name = "lbTimes";
+			this.lbTimes.Size = new Size(35, 13);
+			this.lbTimes.TabIndex = 79;
+			this.lbTimes.Text = "Times";
+			this.lbTimes.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbTimes.Visible = false;
+			this.toolTip1.IsBalloon = true;
+			this.toolTip1.ToolTipIcon = ToolTipIcon.Info;
+			this.toolTip1.ToolTipTitle = "Info guide";
+			this.panelDerivative.BackColor = Color.FromArgb(45, 45, 45);
+			this.panelDerivative.Controls.Add(this.cbPosition);
+			this.panelDerivative.Controls.Add(this.rdbTfexSell);
+			this.panelDerivative.Controls.Add(this.rdbTfexBuy);
+			this.panelDerivative.Controls.Add(this.tbTfexPriceCondition);
+			this.panelDerivative.Controls.Add(this.cbTfexConStopOrder);
+			this.panelDerivative.Controls.Add(this.tbPriceT);
+			this.panelDerivative.Controls.Add(this.tbSeriesCondition);
+			this.panelDerivative.Controls.Add(this.tbSeries);
+			this.panelDerivative.Controls.Add(this.chbTfexStopOrder);
+			this.panelDerivative.Controls.Add(this.tbPublishT);
+			this.panelDerivative.Controls.Add(this.lbValidity);
+			this.panelDerivative.Controls.Add(this.tbVolumeT);
+			this.panelDerivative.Controls.Add(this.lbType);
+			this.panelDerivative.Controls.Add(this.btnClearTextT);
+			this.panelDerivative.Controls.Add(this.lbPosition);
+			this.panelDerivative.Controls.Add(this.btnSendOrderT);
+			this.panelDerivative.Controls.Add(this.lbPublish);
+			this.panelDerivative.Controls.Add(this.cbValidity);
+			this.panelDerivative.Controls.Add(this.lbPriceT);
+			this.panelDerivative.Controls.Add(this.cbType);
+			this.panelDerivative.Controls.Add(this.lbVolumeT);
+			this.panelDerivative.Controls.Add(this.lbSeries);
+			this.panelDerivative.Location = new Point(7, 124);
+			this.panelDerivative.Name = "panelDerivative";
+			this.panelDerivative.Size = new Size(827, 58);
+			this.panelDerivative.TabIndex = 83;
+			this.cbPosition.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"OPEN",
+				"CLOSE"
+			});
+			this.cbPosition.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbPosition.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbPosition.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbPosition.FlatStyle = FlatStyle.Popup;
+			this.cbPosition.FormattingEnabled = true;
+			this.cbPosition.Items.AddRange(new object[]
+			{
+				"OPEN",
+				"CLOSE"
+			});
+			this.cbPosition.Location = new Point(160, 28);
+			this.cbPosition.Name = "cbPosition";
+			this.cbPosition.Size = new Size(90, 21);
+			this.cbPosition.TabIndex = 117;
+			this.cbPosition.Text = "OPEN";
+			this.cbPosition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.cbPosition.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbPosition.KeyDown += new KeyEventHandler(this.cbPosition_KeyDown);
+			this.rdbTfexSell.AutoSize = true;
+			this.rdbTfexSell.ForeColor = Color.LightGray;
+			this.rdbTfexSell.Location = new Point(59, 4);
+			this.rdbTfexSell.Name = "rdbTfexSell";
+			this.rdbTfexSell.Size = new Size(42, 17);
+			this.rdbTfexSell.TabIndex = 116;
+			this.rdbTfexSell.TabStop = true;
+			this.rdbTfexSell.Text = "Sell";
+			this.rdbTfexSell.UseVisualStyleBackColor = true;
+			this.rdbTfexSell.CheckedChanged += new EventHandler(this.rdbTfexSell_CheckedChanged);
+			this.rdbTfexBuy.AutoSize = true;
+			this.rdbTfexBuy.ForeColor = Color.LightGray;
+			this.rdbTfexBuy.Location = new Point(13, 4);
+			this.rdbTfexBuy.Name = "rdbTfexBuy";
+			this.rdbTfexBuy.Size = new Size(43, 17);
+			this.rdbTfexBuy.TabIndex = 115;
+			this.rdbTfexBuy.TabStop = true;
+			this.rdbTfexBuy.Text = "Buy";
+			this.rdbTfexBuy.UseVisualStyleBackColor = true;
+			this.rdbTfexBuy.CheckedChanged += new EventHandler(this.rdbTfexBuy_CheckedChanged);
+			this.tbTfexPriceCondition.AllowDrop = true;
+			this.tbTfexPriceCondition.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"ATO",
+				"ATC",
+				"MP"
+			});
+			this.tbTfexPriceCondition.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			this.tbTfexPriceCondition.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.tbTfexPriceCondition.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbTfexPriceCondition.BorderStyle = BorderStyle.FixedSingle;
+			this.tbTfexPriceCondition.CharacterCasing = CharacterCasing.Upper;
+			this.tbTfexPriceCondition.Location = new Point(761, 29);
+			this.tbTfexPriceCondition.Margin = new Padding(2, 3, 2, 3);
+			this.tbTfexPriceCondition.MaxLength = 10;
+			this.tbTfexPriceCondition.Name = "tbTfexPriceCondition";
+			this.tbTfexPriceCondition.Size = new Size(61, 20);
+			this.tbTfexPriceCondition.TabIndex = 114;
+			this.tbTfexPriceCondition.Visible = false;
+			this.tbTfexPriceCondition.KeyDown += new KeyEventHandler(this.tbTfexPriceCondition_KeyDown);
+			this.tbTfexPriceCondition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbTfexPriceCondition.KeyPress += new KeyPressEventHandler(this.tbTfexPriceCondition_KeyPress);
+			this.tbTfexPriceCondition.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbTfexConStopOrder.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbTfexConStopOrder.FlatStyle = FlatStyle.Popup;
+			this.cbTfexConStopOrder.FormattingEnabled = true;
+			this.cbTfexConStopOrder.Items.AddRange(new object[]
+			{
+				"Bid >=",
+				"Bid <=",
+				"Ask >=",
+				"Ask <=",
+				"Last >=",
+				"Last <="
+			});
+			this.cbTfexConStopOrder.Location = new Point(688, 28);
+			this.cbTfexConStopOrder.Name = "cbTfexConStopOrder";
+			this.cbTfexConStopOrder.Size = new Size(68, 21);
+			this.cbTfexConStopOrder.TabIndex = 113;
+			this.cbTfexConStopOrder.TabStop = false;
+			this.cbTfexConStopOrder.Visible = false;
+			this.cbTfexConStopOrder.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.cbTfexConStopOrder.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbTfexConStopOrder.KeyDown += new KeyEventHandler(this.cbTfexConStopOrder_KeyDown);
+			this.tbPriceT.AllowDrop = true;
+			this.tbPriceT.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbPriceT.BorderStyle = BorderStyle.FixedSingle;
+			this.tbPriceT.CharacterCasing = CharacterCasing.Upper;
+			this.tbPriceT.Location = new Point(444, 4);
+			this.tbPriceT.Margin = new Padding(2, 3, 2, 3);
+			this.tbPriceT.MaxLength = 10;
+			this.tbPriceT.Name = "tbPriceT";
+			this.tbPriceT.Size = new Size(70, 20);
+			this.tbPriceT.TabIndex = 96;
+			this.tbPriceT.KeyDown += new KeyEventHandler(this.tbPriceT_KeyDown);
+			this.tbPriceT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbPriceT.KeyPress += new KeyPressEventHandler(this.tbTfexPriceCondition_KeyPress);
+			this.tbPriceT.Enter += new EventHandler(this.controlOrder_Enter);
+			this.tbSeriesCondition.AllowDrop = true;
+			this.tbSeriesCondition.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbSeriesCondition.BorderStyle = BorderStyle.FixedSingle;
+			this.tbSeriesCondition.CharacterCasing = CharacterCasing.Upper;
+			this.tbSeriesCondition.ForeColor = Color.Silver;
+			this.tbSeriesCondition.Location = new Point(606, 29);
+			this.tbSeriesCondition.Margin = new Padding(2, 3, 2, 3);
+			this.tbSeriesCondition.MaxLength = 10;
+			this.tbSeriesCondition.Name = "tbSeriesCondition";
+			this.tbSeriesCondition.Size = new Size(77, 20);
+			this.tbSeriesCondition.TabIndex = 112;
+			this.tbSeriesCondition.Visible = false;
+			this.tbSeriesCondition.KeyDown += new KeyEventHandler(this.tbSeriesCondition_KeyDown);
+			this.tbSeriesCondition.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbSeriesCondition.Enter += new EventHandler(this.controlOrder_Enter);
+			this.tbSeries.AllowDrop = true;
+			this.tbSeries.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbSeries.BorderStyle = BorderStyle.FixedSingle;
+			this.tbSeries.CharacterCasing = CharacterCasing.Upper;
+			this.tbSeries.Location = new Point(160, 4);
+			this.tbSeries.Margin = new Padding(2, 3, 2, 3);
+			this.tbSeries.MaxLength = 32;
+			this.tbSeries.Name = "tbSeries";
+			this.tbSeries.Size = new Size(90, 20);
+			this.tbSeries.TabIndex = 94;
+			this.tbSeries.KeyDown += new KeyEventHandler(this.tbSeries_KeyDown);
+			this.tbSeries.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbSeries.Enter += new EventHandler(this.controlOrder_Enter);
+			this.chbTfexStopOrder.AutoSize = true;
+			this.chbTfexStopOrder.ForeColor = Color.LightGray;
+			this.chbTfexStopOrder.Location = new Point(528, 30);
+			this.chbTfexStopOrder.Name = "chbTfexStopOrder";
+			this.chbTfexStopOrder.Size = new Size(77, 17);
+			this.chbTfexStopOrder.TabIndex = 100;
+			this.chbTfexStopOrder.Text = "Stop Order";
+			this.chbTfexStopOrder.UseVisualStyleBackColor = true;
+			this.chbTfexStopOrder.CheckedChanged += new EventHandler(this.chbTfexStopOrder_CheckedChanged);
+			this.tbPublishT.AllowDrop = true;
+			this.tbPublishT.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+			this.tbPublishT.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.tbPublishT.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbPublishT.BorderStyle = BorderStyle.FixedSingle;
+			this.tbPublishT.CharacterCasing = CharacterCasing.Upper;
+			this.tbPublishT.Location = new Point(580, 4);
+			this.tbPublishT.Margin = new Padding(2, 3, 2, 3);
+			this.tbPublishT.MaxLength = 12;
+			this.tbPublishT.Name = "tbPublishT";
+			this.tbPublishT.Size = new Size(70, 20);
+			this.tbPublishT.TabIndex = 97;
+			this.tbPublishT.KeyDown += new KeyEventHandler(this.tbPublishT_KeyDown);
+			this.tbPublishT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbPublishT.Enter += new EventHandler(this.controlOrder_Enter);
+			this.lbValidity.AutoSize = true;
+			this.lbValidity.ForeColor = Color.LightGray;
+			this.lbValidity.Location = new Point(395, 32);
+			this.lbValidity.Margin = new Padding(2, 0, 2, 0);
+			this.lbValidity.Name = "lbValidity";
+			this.lbValidity.Size = new Size(40, 13);
+			this.lbValidity.TabIndex = 106;
+			this.lbValidity.Text = "Validity";
+			this.lbValidity.TextAlign = ContentAlignment.MiddleLeft;
+			this.tbVolumeT.AllowDrop = true;
+			this.tbVolumeT.BackColor = Color.FromArgb(224, 224, 224);
+			this.tbVolumeT.BorderStyle = BorderStyle.FixedSingle;
+			this.tbVolumeT.Location = new Point(309, 4);
+			this.tbVolumeT.Margin = new Padding(2, 3, 2, 3);
+			this.tbVolumeT.MaxLength = 10;
+			this.tbVolumeT.Name = "tbVolumeT";
+			this.tbVolumeT.Size = new Size(70, 20);
+			this.tbVolumeT.TabIndex = 95;
+			this.tbVolumeT.TextChanged += new EventHandler(this.tbVolumeT_TextChanged);
+			this.tbVolumeT.KeyDown += new KeyEventHandler(this.tbVolumeT_KeyDown);
+			this.tbVolumeT.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.tbVolumeT.Enter += new EventHandler(this.controlOrder_Enter);
+			this.lbType.AutoSize = true;
+			this.lbType.ForeColor = Color.LightGray;
+			this.lbType.Location = new Point(261, 32);
+			this.lbType.Margin = new Padding(2, 0, 2, 0);
+			this.lbType.Name = "lbType";
+			this.lbType.Size = new Size(31, 13);
+			this.lbType.TabIndex = 110;
+			this.lbType.Text = "Type";
+			this.lbType.TextAlign = ContentAlignment.MiddleLeft;
+			this.btnClearTextT.AutoSize = true;
+			this.btnClearTextT.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			this.btnClearTextT.BackColor = Color.WhiteSmoke;
+			this.btnClearTextT.FlatStyle = FlatStyle.Popup;
+			this.btnClearTextT.ForeColor = Color.Black;
+			this.btnClearTextT.Location = new Point(715, 3);
+			this.btnClearTextT.Margin = new Padding(2);
+			this.btnClearTextT.MaximumSize = new Size(68, 27);
+			this.btnClearTextT.Name = "btnClearTextT";
+			this.btnClearTextT.Size = new Size(41, 23);
+			this.btnClearTextT.TabIndex = 108;
+			this.btnClearTextT.TabStop = false;
+			this.btnClearTextT.Text = "Clear";
+			this.btnClearTextT.UseVisualStyleBackColor = false;
+			this.btnClearTextT.Click += new EventHandler(this.btnClearTextT_Click);
+			this.lbPosition.AutoSize = true;
+			this.lbPosition.ForeColor = Color.LightGray;
+			this.lbPosition.Location = new Point(102, 32);
+			this.lbPosition.Margin = new Padding(2, 0, 2, 0);
+			this.lbPosition.Name = "lbPosition";
+			this.lbPosition.Size = new Size(44, 13);
+			this.lbPosition.TabIndex = 109;
+			this.lbPosition.Text = "Position";
+			this.lbPosition.TextAlign = ContentAlignment.MiddleLeft;
+			this.btnSendOrderT.AutoSize = true;
+			this.btnSendOrderT.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+			this.btnSendOrderT.BackColor = Color.WhiteSmoke;
+			this.btnSendOrderT.FlatStyle = FlatStyle.Popup;
+			this.btnSendOrderT.ForeColor = Color.Black;
+			this.btnSendOrderT.Location = new Point(661, 3);
+			this.btnSendOrderT.Margin = new Padding(2);
+			this.btnSendOrderT.MaximumSize = new Size(68, 27);
+			this.btnSendOrderT.Name = "btnSendOrderT";
+			this.btnSendOrderT.Size = new Size(42, 23);
+			this.btnSendOrderT.TabIndex = 107;
+			this.btnSendOrderT.TabStop = false;
+			this.btnSendOrderT.Text = "Send";
+			this.btnSendOrderT.UseVisualStyleBackColor = false;
+			this.btnSendOrderT.Click += new EventHandler(this.btnSendOrderT_Click);
+			this.lbPublish.AutoSize = true;
+			this.lbPublish.ForeColor = Color.LightGray;
+			this.lbPublish.Location = new Point(528, 7);
+			this.lbPublish.Margin = new Padding(2, 0, 2, 0);
+			this.lbPublish.Name = "lbPublish";
+			this.lbPublish.Size = new Size(44, 13);
+			this.lbPublish.TabIndex = 105;
+			this.lbPublish.Text = "P/B Vol";
+			this.lbPublish.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbValidity.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"",
+				"IOC",
+				"FOK"
+			});
+			this.cbValidity.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbValidity.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbValidity.FlatStyle = FlatStyle.Popup;
+			this.cbValidity.FormattingEnabled = true;
+			this.cbValidity.Items.AddRange(new object[]
+			{
+				"DAY",
+				"FAK",
+				"FOK"
+			});
+			this.cbValidity.Location = new Point(444, 28);
+			this.cbValidity.Name = "cbValidity";
+			this.cbValidity.Size = new Size(70, 21);
+			this.cbValidity.TabIndex = 99;
+			this.cbValidity.Leave += new EventHandler(this.controlOrderTFEX_Leave);
+			this.cbValidity.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbValidity.KeyDown += new KeyEventHandler(this.cbValidity_KeyDown);
+			this.lbPriceT.AutoSize = true;
+			this.lbPriceT.ForeColor = Color.LightGray;
+			this.lbPriceT.Location = new Point(395, 7);
+			this.lbPriceT.Margin = new Padding(2, 0, 2, 0);
+			this.lbPriceT.Name = "lbPriceT";
+			this.lbPriceT.Size = new Size(31, 13);
+			this.lbPriceT.TabIndex = 101;
+			this.lbPriceT.Text = "Price";
+			this.lbPriceT.TextAlign = ContentAlignment.MiddleLeft;
+			this.cbType.AutoCompleteCustomSource.AddRange(new string[]
+			{
+				"",
+				"IOC",
+				"FOK"
+			});
+			this.cbType.AutoCompleteMode = AutoCompleteMode.Append;
+			this.cbType.AutoCompleteSource = AutoCompleteSource.CustomSource;
+			this.cbType.BackColor = Color.FromArgb(224, 224, 224);
+			this.cbType.FlatStyle = FlatStyle.Popup;
+			this.cbType.FormattingEnabled = true;
+			this.cbType.Items.AddRange(new object[]
+			{
+				"Limit",
+				"MP",
+				"MO",
+				"ML"
+			});
+			this.cbType.Location = new Point(309, 28);
+			this.cbType.Name = "cbType";
+			this.cbType.Size = new Size(70, 21);
+			this.cbType.TabIndex = 98;
+			this.cbType.Text = "Limit";
+			this.cbType.SelectedIndexChanged += new EventHandler(this.cbType_SelectedIndexChanged);
+			this.cbType.Leave += new EventHandler(this.controlOrder_Enter);
+			this.cbType.Enter += new EventHandler(this.controlOrder_Enter);
+			this.cbType.KeyDown += new KeyEventHandler(this.cbType_KeyDown);
+			this.lbVolumeT.AutoSize = true;
+			this.lbVolumeT.ForeColor = Color.LightGray;
+			this.lbVolumeT.Location = new Point(261, 7);
+			this.lbVolumeT.Margin = new Padding(2, 0, 2, 0);
+			this.lbVolumeT.Name = "lbVolumeT";
+			this.lbVolumeT.Size = new Size(42, 13);
+			this.lbVolumeT.TabIndex = 103;
+			this.lbVolumeT.Text = "Volume";
+			this.lbVolumeT.TextAlign = ContentAlignment.MiddleLeft;
+			this.lbSeries.AutoSize = true;
+			this.lbSeries.ForeColor = Color.LightGray;
+			this.lbSeries.Location = new Point(110, 7);
+			this.lbSeries.Margin = new Padding(2, 0, 2, 0);
+			this.lbSeries.Name = "lbSeries";
+			this.lbSeries.Size = new Size(36, 13);
+			this.lbSeries.TabIndex = 102;
+			this.lbSeries.Text = "Series";
+			this.lbSeries.TextAlign = ContentAlignment.MiddleLeft;
+			this.AllowDrop = true;
+			base.AutoScaleDimensions = new SizeF(6f, 13f);
+			base.AutoScaleMode = AutoScaleMode.Font;
+			this.BackColor = Color.DimGray;
+			base.Controls.Add(this.panelDerivative);
+			base.Controls.Add(this.panelEquity);
+			base.Controls.Add(this.panelTop);
+			base.Controls.Add(this.lbLoading);
+			this.ForeColor = Color.Black;
+			base.Margin = new Padding(0);
+			base.Name = "ucSendNewOrder";
+			base.Size = new Size(870, 217);
+			base.Leave += new EventHandler(this.ucSendNewOrder_Leave);
+			base.Enter += new EventHandler(this.ucSendNewOrder_Enter);
+			this.panelTop.ResumeLayout(false);
+			this.panelTop.PerformLayout();
+			this.panelEquity.ResumeLayout(false);
+			this.panelEquity.PerformLayout();
+			this.panelStopOrder.ResumeLayout(false);
+			this.panelStopOrder.PerformLayout();
+			this.panelDerivative.ResumeLayout(false);
+			this.panelDerivative.PerformLayout();
+			base.ResumeLayout(false);
+			base.PerformLayout();
 		}
 	}
 }
