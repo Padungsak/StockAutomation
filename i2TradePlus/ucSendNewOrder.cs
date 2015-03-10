@@ -2533,6 +2533,7 @@ namespace i2TradePlus
 										this._dsSendOrder.Clear();
 									}
 									MyDataHelper.StringToDataSet(text, this._dsSendOrder);
+                                    AutoTradeManager.Instance.UpdateItemList();
 									this._verifyResult = true;
 								}
 								catch (Exception ex)

@@ -34,6 +34,8 @@ namespace i2TradePlus
 		internal delegate void OnMessageRecievedEventHendler(IBroadcastMessage message, StockList.StockInformation stockInfo);
 		internal delegate void OnMessageTfexRecievedEventHendler(IBroadcastMessage message, SeriesList.SeriesInformation seriesInfo);
 		private delegate void OnAlertCallback(AlertItem e);
+        private delegate void OnStartAutoTradeCallback(string message);
+        private delegate void OnEndAutoTradeCallback();
 		private delegate void showSpashFormCallBack(string message);
 		private delegate void LogoutCallBack(bool isForce);
 		private delegate void DisplayMessageBoxCallBack(string message);
@@ -2238,6 +2240,11 @@ namespace i2TradePlus
 
                 if (ApplicationInfo.StopOrderSupported)
                 {
+                    AutoTradeManager.Instance.OnStartAutoTrade -= new AutoTradeManager.OnStartAutoTradeHandler(this.OnStartAutoTrade);
+                    AutoTradeManager.Instance.OnStartAutoTrade += new AutoTradeManager.OnStartAutoTradeHandler(this.OnStartAutoTrade);
+                    AutoTradeManager.Instance.OnEndAutoTrade -= new AutoTradeManager.OnEndAutoTradeHandler(this.OnEndAutoTrade);
+                    AutoTradeManager.Instance.OnEndAutoTrade += new AutoTradeManager.OnEndAutoTradeHandler(this.OnEndAutoTrade);
+
                     frmMain._OnMessageReceived = (frmMain.OnMessageRecievedEventHendler)Delegate.Remove(frmMain._OnMessageReceived, new frmMain.OnMessageRecievedEventHendler(AutoTradeManager.Instance.ReceiveMessage));
                     frmMain._OnMessageReceived = (frmMain.OnMessageRecievedEventHendler)Delegate.Combine(frmMain._OnMessageReceived, new frmMain.OnMessageRecievedEventHendler(AutoTradeManager.Instance.ReceiveMessage));
                     frmMain._OnMessageTfexReceived = (frmMain.OnMessageTfexRecievedEventHendler)Delegate.Remove(frmMain._OnMessageTfexReceived, new frmMain.OnMessageTfexRecievedEventHendler(AutoTradeManager.Instance.ReceiveTfexMessage));
@@ -2664,10 +2671,15 @@ namespace i2TradePlus
 				frmMain._OnMessageReceived = (frmMain.OnMessageRecievedEventHendler)Delegate.Remove(frmMain._OnMessageReceived, new frmMain.OnMessageRecievedEventHendler(this.Smart1ClickBox.ReceiveMessage));
 				frmMain._OnMessageReceived = (frmMain.OnMessageRecievedEventHendler)Delegate.Remove(frmMain._OnMessageReceived, new frmMain.OnMessageRecievedEventHendler(AlertManager.Instance.ReceiveMessage));
 				frmMain._OnMessageTfexReceived = (frmMain.OnMessageTfexRecievedEventHendler)Delegate.Remove(frmMain._OnMessageTfexReceived, new frmMain.OnMessageTfexRecievedEventHendler(AlertManager.Instance.ReceiveTfexMessage));
-				try
+                frmMain._OnMessageReceived = (frmMain.OnMessageRecievedEventHendler)Delegate.Remove(frmMain._OnMessageReceived, new frmMain.OnMessageRecievedEventHendler(AutoTradeManager.Instance.ReceiveMessage));
+                frmMain._OnMessageTfexReceived = (frmMain.OnMessageTfexRecievedEventHendler)Delegate.Remove(frmMain._OnMessageTfexReceived, new frmMain.OnMessageTfexRecievedEventHendler(AutoTradeManager.Instance.ReceiveTfexMessage));
+                try
 				{
-					AlertManager.Instance.OnAlert -= new AlertManager.OnAlertHandler(this.OnAlert);
+					AlertManager.Instance.OnAlert -= new AlertManager.OnAlertHandler(this.OnAlert);                  
 					AlertManager.Instance.SaveXML();
+
+                    AutoTradeManager.Instance.OnStartAutoTrade -= new AutoTradeManager.OnStartAutoTradeHandler(this.OnStartAutoTrade);
+                    AutoTradeManager.Instance.OnEndAutoTrade -= new AutoTradeManager.OnEndAutoTradeHandler(this.OnEndAutoTrade);
 				}
 				catch (Exception ex)
 				{
@@ -3674,6 +3686,7 @@ namespace i2TradePlus
 					}
                     //<PS> Enable stop order feature
                     ApplicationInfo.StopOrderAccepted = true;
+                    AutoTradeManager.Instance.Init();
 
 					data = string.Empty;
 					if (ApplicationInfo.IsSupportTfex)
@@ -5055,5 +5068,34 @@ namespace i2TradePlus
 				this.ShowError("timer1_Tick", ex);
 			}
 		}
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void OnStartAutoTrade(string message)
+        {
+            if (base.InvokeRequired)
+            {
+                base.Invoke(new frmMain.OnStartAutoTradeCallback(this.OnStartAutoTrade), new object[]
+				{
+					message
+				});
+            }
+            else
+            {
+                ShowSpashForm(message);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void OnEndAutoTrade()
+        {
+            if (base.InvokeRequired)
+            {
+                base.Invoke(new MethodInvoker(this.OnEndAutoTrade));
+            }
+            else
+            {
+                CloseSpashForm();
+            }
+        }
 	}
 }
