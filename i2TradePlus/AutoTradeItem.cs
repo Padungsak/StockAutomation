@@ -13,7 +13,7 @@ namespace i2TradePlus
         private string ordSide;
         private long ordVolume;
         private long ordPubvol;
-        private decimal ordPrice;
+        private string ordPrice;
         private string ordCondition;
         private string status;
         private int time;
@@ -125,7 +125,7 @@ namespace i2TradePlus
                 this.ordPubvol = value;
             }
         }
-        public decimal OrdPrice
+        public string OrdPrice
         {
             [MethodImpl(MethodImplOptions.NoInlining)]
             get

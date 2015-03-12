@@ -109,7 +109,7 @@ namespace i2TradePlus
                      ApplicationInfo.SendNewOrderResult newOrderRet = ApplicationInfo.SendNewOrder(stockInformation.Symbol,
                                                                                                      _currentAutoItem.OrdSide,
                                                                                                      _currentAutoItem.OrdVolume,
-                                                                                                     _currentAutoItem.OrdPrice.ToString(),
+                                                                                                     _currentAutoItem.OrdPrice,
                                                                                                      _currentAutoItem.OrdPubvol,
                                                                                                      _currentAutoItem.OrdCondition,
                                                                                                      0,
@@ -189,7 +189,7 @@ namespace i2TradePlus
                                 item.OrdSide = dr["ord_side"].ToString();
                                 item.OrdVolume = int.Parse(dr["ord_volume"].ToString());
                                 item.OrdPubvol = int.Parse(dr["ord_pubvol"].ToString());
-                                item.OrdPrice = decimal.Parse(Utilities.PriceFormat(dr["ord_price"].ToString()));
+                                item.OrdPrice = dr["ord_price"].ToString();
                                 item.OrdCondition = dr["ord_condition"].ToString();
                                 item.Status = dr["status"].ToString();
                                 item.Time = int.Parse(dr["time"].ToString());
